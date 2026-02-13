@@ -68,13 +68,17 @@ Plans:
   3. Organizer can search mock SIMV registry by name or registration number to add participants
   4. Organizer can pre-populate participant list before event starts
   5. Organizer can add/remove participants from list
-  6. Event transitions through: draft → open → finalized status workflow
+  6. Event transitions through: draft -> open -> finalized status workflow
   7. Organizer can view list of past events
   8. Organizer can see real-time attendance dashboard showing who has signed
-**Plans**: TBD
+**Plans:** 5 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Backend schema updates (status field, participants relationship) + frontend deps + MSW mock SIMV registry
+- [ ] 03-02-PLAN.md — Auth flow (login page, useAuth hook, ProtectedRoute, OrganizerLayout shell)
+- [ ] 03-03-PLAN.md — Event CRUD (creation form with DateSelector, dashboard page with event list)
+- [ ] 03-04-PLAN.md — Event detail with participant management (SIMV search, add/remove, walk-ins) + attendance dashboard
+- [ ] 03-05-PLAN.md — End-to-end automated checks + human verification of complete organizer workflow
 
 ### Phase 4: Export & Email
 **Goal**: Organizers can finalize events and receive XLSX export with embedded signatures via email.
@@ -125,13 +129,13 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Model | 3/3 | ✓ Complete | 2026-02-13 |
 | 2. Public Signature Flow | 4/4 | ✓ Complete | 2026-02-13 |
-| 3. Event Management | 0/TBD | Not started | - |
+| 3. Event Management | 0/5 | Not started | - |
 | 4. Export & Email | 0/TBD | Not started | - |
 | 5. Platform Polish | 0/TBD | Not started | - |
 | 6. Advanced Features | 0/TBD | Not started | - |
