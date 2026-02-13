@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 3 - Event Management
+**Current focus:** Phase 3 - Event Management — COMPLETE
 
 ## Current Position
 
-Phase: 3 of 6 (Event Management)
-Plan: 4 of 5 in current phase
-Status: In Progress
-Last activity: 2026-02-13 — Completed 03-04 event detail page with participant management, SIMV search, attendance dashboard, and status workflow error handling
+Phase: 3 of 6 (Event Management) — COMPLETE
+Plan: 5 of 5 in current phase
+Status: Complete — ready for Phase 4
+Last activity: 2026-02-13 — Phase 3 complete (all 5 plans + human verification passed, 2 bugs fixed)
 
-Progress: [▓▓▓▓▓▓░░░░] 60%
+Progress: [▓▓▓▓▓░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 3 min
-- Total execution time: 0.65 hours
+- Total plans completed: 11
+- Average duration: 4 min
+- Total execution time: 1.1 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [▓▓▓▓▓▓░░░░] 60%
 |-------|-------|-------|----------|
 | 01    | 3     | 23m   | 8m       |
 | 02    | 3     | 9m    | 3m       |
-| 03    | 4     | 12m   | 3m       |
+| 03    | 5     | 27m   | 5m       |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (3m), 03-01 (4m), 03-02 (2m), 03-03 (3m), 03-04 (3m)
-- Trend: Consistent 3m average on Phase 3 frontend work (forms, tables, hooks)
+- Last 5 plans: 03-01 (4m), 03-02 (2m), 03-03 (3m), 03-04 (3m), 03-05 (15m)
+- Trend: 03-05 longer due to human verification + 2 bug fixes
 
 *Updated after each plan completion*
 
@@ -75,6 +75,9 @@ Recent decisions affecting current work:
 - [Phase 03-04]: SIMV search debounced at 2 chars minimum to reduce unnecessary API calls
 - [Phase 03-04]: Parallel fetching via Promise.all reduces waterfall requests in attendance dashboard
 - [Phase 03-04]: Status error handling parses Payload errors and displays user-friendly messages for invalid transitions
+- 03-05: afterEventChange hook must auto-create "Session principale" per new AttendanceDay — sign page requires at least one session
+- 03-05: Signatures beforeChange hook validates event status (only open events accept signatures) — prevents signing on draft/finalized events
+- 03-05: Frontend SignPage checks event.status and hides form for non-open events with French status message
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-13T21:29:11Z
-Stopped at: Completed 03-04-PLAN.md
+Last session: 2026-02-13T22:00:00Z
+Stopped at: Completed Phase 3 (all 5 plans + human verification)
 Resume file: None
