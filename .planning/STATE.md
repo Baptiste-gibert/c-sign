@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 1 of 6 (Foundation & Data Model)
-Plan: 1 of TBD in current phase
+Plan: 2 of TBD in current phase
 Status: Executing
-Last activity: 2026-02-13 — Completed 01-01: Backend foundation with Payload CMS 3.x, Users/Media collections, RBAC
+Last activity: 2026-02-13 — Completed 01-02: Domain collections (Events, AttendanceDays, Sessions, Participants, Signatures) with auto-generation hook
 
-Progress: [▓░░░░░░░░░] 10%
+Progress: [▓▓░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 6 min
-- Total execution time: 0.1 hours
+- Total plans completed: 2
+- Average duration: 4 min
+- Total execution time: 0.13 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01    | 1     | 6m    | 6m       |
+| 01    | 2     | 8m    | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (6m)
-- Trend: Establishing baseline
+- Last 5 plans: 01-01 (6m), 01-02 (2m)
+- Trend: Improving velocity
 
 *Updated after each plan completion*
 
@@ -47,6 +47,10 @@ Recent decisions affecting current work:
 - Phase 2: Public signing flow is highest priority — core product value, must work before organizer features
 - 01-01: Fixed Next.js to version 15.4.11 for @payloadcms/next@3.76.1 compatibility
 - 01-01: Implemented ServerFunctionClient wrapper pattern for Payload RootLayout (Next.js 15 async API requirement)
+- 01-02: selectedDates array field supports non-consecutive multi-day events
+- 01-02: Orphaned AttendanceDays preserved (not auto-deleted) when Event dates removed
+- 01-02: Seven beneficiary types in alphabetical order with French labels
+- 01-02: Signature uniqueness enforced via beforeChange hook (one per participant-session)
 
 ### Pending Todos
 
@@ -60,6 +64,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-13T16:20:50Z
-Stopped at: Completed 01-01-PLAN.md — Backend foundation ready, domain collections next
+Last session: 2026-02-13T16:25:23Z
+Stopped at: Completed 01-02-PLAN.md — Domain collections complete with auto-generation hook
 Resume file: None
