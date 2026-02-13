@@ -45,6 +45,18 @@ export const Events: CollectionConfig = {
               required: true,
               label: "Email de l'organisateur",
             },
+            {
+              name: 'status',
+              type: 'select',
+              required: true,
+              defaultValue: 'draft',
+              label: 'Statut',
+              options: [
+                { label: 'Brouillon', value: 'draft' },
+                { label: 'Ouvert', value: 'open' },
+                { label: 'Finalise', value: 'finalized' },
+              ],
+            },
           ],
         },
         {
@@ -109,6 +121,16 @@ export const Events: CollectionConfig = {
               },
             },
             {
+              name: 'participants',
+              type: 'relationship',
+              relationTo: 'participants',
+              hasMany: true,
+              label: 'Participants attendus',
+              admin: {
+                description: 'Participants pre-inscrits pour cet evenement',
+              },
+            },
+            {
               name: 'createdBy',
               type: 'relationship',
               relationTo: 'users',
@@ -124,6 +146,24 @@ export const Events: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
+      // Validate status transitions
+      async ({ data, req, operation, originalDoc }) => {
+        // Only validate transitions on update when status is changing
+        if (operation === 'update' && data.status && originalDoc?.status && data.status !== originalDoc.status) {
+          const oldStatus = originalDoc.status
+          const newStatus = data.status
+
+          // Invalid transitions
+          if (oldStatus === 'open' && newStatus === 'draft') {
+            throw new Error('Un evenement ouvert ne peut pas revenir en brouillon')
+          }
+          if (oldStatus === 'finalized' && (newStatus === 'draft' || newStatus === 'open')) {
+            throw new Error('Un evenement finalise ne peut pas etre modifie')
+          }
+        }
+        return data
+      },
+      // Set createdBy on creation
       ({ data, req, operation }) => {
         if (operation === 'create' && !data.createdBy && req.user) {
           data.createdBy = req.user.id
