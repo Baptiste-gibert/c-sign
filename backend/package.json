@@ -1,0 +1,36 @@
+{
+  "name": "c-sign-backend",
+  "version": "0.1.0",
+  "description": "c-sign backend - Payload CMS 3.x with Next.js 15",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=\"--no-deprecation\" next dev",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation\" next build",
+    "start": "cross-env NODE_OPTIONS=\"--no-deprecation\" next start",
+    "payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload",
+    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.0.0",
+    "@payloadcms/next": "^3.0.0",
+    "@payloadcms/richtext-lexical": "^3.0.0",
+    "@payloadcms/ui": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.9.0",
+    "next": "15.4.11",
+    "payload": "^3.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.33.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
