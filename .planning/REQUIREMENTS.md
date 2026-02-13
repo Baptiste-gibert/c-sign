@@ -91,39 +91,39 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| EVNT-01 | — | Pending |
-| EVNT-02 | — | Pending |
-| EVNT-03 | — | Pending |
-| EVNT-04 | — | Pending |
-| EVNT-05 | — | Pending |
-| EVNT-06 | — | Pending |
-| EVNT-07 | — | Pending |
-| PART-01 | — | Pending |
-| PART-02 | — | Pending |
-| PART-03 | — | Pending |
-| PART-04 | — | Pending |
-| PART-05 | — | Pending |
-| SIGN-01 | — | Pending |
-| SIGN-02 | — | Pending |
-| SIGN-03 | — | Pending |
-| SIGN-04 | — | Pending |
-| SIGN-05 | — | Pending |
-| SIGN-06 | — | Pending |
-| SIGN-07 | — | Pending |
-| EXPO-01 | — | Pending |
-| EXPO-02 | — | Pending |
-| EXPO-03 | — | Pending |
-| EXPO-04 | — | Pending |
-| PLAT-01 | — | Pending |
-| PLAT-02 | — | Pending |
-| PLAT-03 | — | Pending |
-| PLAT-04 | — | Pending |
+| EVNT-01 | Phase 3 | Pending |
+| EVNT-02 | Phase 6 | Pending |
+| EVNT-03 | Phase 3 | Pending |
+| EVNT-04 | Phase 3 | Pending |
+| EVNT-05 | Phase 6 | Pending |
+| EVNT-06 | Phase 1 | Pending |
+| EVNT-07 | Phase 3 | Pending |
+| PART-01 | Phase 3 | Pending |
+| PART-02 | Phase 3 | Pending |
+| PART-03 | Phase 3 | Pending |
+| PART-04 | Phase 6 | Pending |
+| PART-05 | Phase 1 | Pending |
+| SIGN-01 | Phase 2 | Pending |
+| SIGN-02 | Phase 2 | Pending |
+| SIGN-03 | Phase 2 | Pending |
+| SIGN-04 | Phase 2 | Pending |
+| SIGN-05 | Phase 2 | Pending |
+| SIGN-06 | Phase 2 | Pending |
+| SIGN-07 | Phase 2 | Pending |
+| EXPO-01 | Phase 4 | Pending |
+| EXPO-02 | Phase 4 | Pending |
+| EXPO-03 | Phase 4 | Pending |
+| EXPO-04 | Phase 4 | Pending |
+| PLAT-01 | Phase 5 | Pending |
+| PLAT-02 | Phase 1 | Pending |
+| PLAT-03 | Phase 5 | Pending |
+| PLAT-04 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 27 total
-- Mapped to phases: 0
-- Unmapped: 27 ⚠️
+- Mapped to phases: 27
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-13*
-*Last updated: 2026-02-13 after initial definition*
+*Last updated: 2026-02-13 after roadmap creation*
