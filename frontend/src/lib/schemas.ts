@@ -18,3 +18,23 @@ export const participantSchema = z.object({
 )
 
 export type ParticipantFormData = z.infer<typeof participantSchema>
+
+export const eventSchema = z.object({
+  title: z.string().min(1, "Le titre est requis").max(200, "Le titre est trop long"),
+  location: z.string().min(1, "Le lieu est requis"),
+  organizerName: z.string().min(1, "Le nom de l'organisateur est requis"),
+  organizerEmail: z.string().email("Email invalide"),
+  expenseType: z.enum([
+    'hospitality_snack',
+    'hospitality_catering',
+    'hospitality_accommodation',
+    'event_registration',
+    'meeting_organization',
+    'transport',
+  ], { required_error: "Le type de depense est requis" }),
+  selectedDates: z.array(
+    z.object({ date: z.string() })
+  ).min(1, "Au moins une date est requise"),
+})
+
+export type EventFormData = z.infer<typeof eventSchema>
