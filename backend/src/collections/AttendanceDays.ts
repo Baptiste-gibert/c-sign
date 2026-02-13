@@ -8,9 +8,8 @@ export const AttendanceDays: CollectionConfig = {
     defaultColumns: ['event', 'date'],
   },
   access: {
-    // Phase 1: Allow authenticated users to read (will tighten in Phase 3)
     create: () => false, // Only system hooks can create
-    read: ({ req: { user } }) => !!user,
+    read: () => true, // Public: signing page loads day info
     update: isAdmin,
     delete: isAdmin,
   },

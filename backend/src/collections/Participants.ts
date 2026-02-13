@@ -7,11 +7,10 @@ export const Participants: CollectionConfig = {
     defaultColumns: ['lastName', 'firstName', 'email', 'beneficiaryType'],
   },
   access: {
-    // Phase 1: Open for authenticated users; Phase 2 public form will create these
-    create: ({ req: { user } }) => !!user,
-    read: ({ req: { user } }) => !!user,
-    update: ({ req: { user } }) => !!user,
-    delete: ({ req: { user } }) => !!user,
+    create: () => true, // Public form creates participants
+    read: () => true, // Public: needed for duplicate checking
+    update: ({ req: { user } }) => !!user, // Only authenticated users
+    delete: ({ req: { user } }) => !!user, // Only authenticated users
   },
   fields: [
     {

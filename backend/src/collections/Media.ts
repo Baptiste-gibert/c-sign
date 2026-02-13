@@ -14,8 +14,8 @@ export const Media: CollectionConfig = {
     ]
   },
   access: {
-    create: ({ req: { user } }) => !!user,
-    read: ({ req: { user } }) => !!user,
+    create: () => true, // Public: signature images uploaded by anonymous users
+    read: () => true, // Public: images may need to be served
     update: ({ req: { user } }) => user?.role === 'admin',
     delete: ({ req: { user } }) => user?.role === 'admin'
   },

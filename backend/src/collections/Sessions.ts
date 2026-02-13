@@ -8,8 +8,8 @@ export const Sessions: CollectionConfig = {
     defaultColumns: ['name', 'attendanceDay'],
   },
   access: {
-    create: ({ req: { user } }) => !!user,
-    read: ({ req: { user } }) => !!user,
+    create: ({ req: { user } }) => !!user, // Keep: only organizers create sessions
+    read: () => true, // Public: signing page lists sessions
     update: ({ req: { user } }) => !!user,
     delete: isAdmin,
   },

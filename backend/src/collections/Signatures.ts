@@ -8,9 +8,8 @@ export const Signatures: CollectionConfig = {
     defaultColumns: ['participant', 'session', 'createdAt'],
   },
   access: {
-    // Phase 2 public signing flow will create these
-    create: ({ req: { user } }) => !!user,
-    read: ({ req: { user } }) => !!user,
+    create: () => true, // Public signing flow uploads signatures
+    read: ({ req: { user } }) => !!user, // Only authenticated users can view
     update: isAdmin,
     delete: isAdmin,
   },
