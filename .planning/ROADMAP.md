@@ -31,10 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Event with date range auto-generates one AttendanceDay record per day
   4. Participant record includes beneficiary type taxonomy (Veterinarian, Pharmacist, Student, ASV, Technician, Farmer, Other)
   5. Signature can be associated with AttendanceDay and stored as Media file
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD (will be defined during plan-phase)
+- [ ] 01-01-PLAN.md — Backend scaffold with Payload CMS 3.x, Users collection with Admin/Organizer roles, access control functions
+- [ ] 01-02-PLAN.md — Domain collections (Events, AttendanceDays, Sessions, Participants, Signatures) with afterChange hook
+- [ ] 01-03-PLAN.md — Seed data for development/testing and end-to-end admin UI verification
 
 ### Phase 2: Public Signature Flow
 **Goal**: External participants can scan QR code and submit signature on their phone without logging in.
@@ -124,7 +126,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Model | 0/TBD | Not started | - |
+| 1. Foundation & Data Model | 0/3 | Planning complete | - |
 | 2. Public Signature Flow | 0/TBD | Not started | - |
 | 3. Event Management | 0/TBD | Not started | - |
 | 4. Export & Email | 0/TBD | Not started | - |
