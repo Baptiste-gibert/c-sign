@@ -50,10 +50,13 @@ Plans:
   5. Signature uploads immediately to server as image file (not stored in client memory)
   6. Participant can check right-to-image consent checkbox
   7. Participant sees success confirmation after submission
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — Frontend scaffold: Vite + React 19 + Tailwind v4 + shadcn/ui + React Router + API proxy
+- [ ] 02-02-PLAN.md — Backend public access control updates + QR code generation endpoint
+- [ ] 02-03-PLAN.md — Public signing page: participant form, signature canvas, submission flow, success page
+- [ ] 02-04-PLAN.md — End-to-end human verification of the complete signing flow
 
 ### Phase 3: Event Management
 **Goal**: Organizers can create events, manage participant lists, and monitor attendance in real-time.
@@ -126,8 +129,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Model | 0/3 | Planning complete | - |
-| 2. Public Signature Flow | 0/TBD | Not started | - |
+| 1. Foundation & Data Model | 3/3 | Planning complete | - |
+| 2. Public Signature Flow | 0/4 | Planning complete | - |
 | 3. Event Management | 0/TBD | Not started | - |
 | 4. Export & Email | 0/TBD | Not started | - |
 | 5. Platform Polish | 0/TBD | Not started | - |
