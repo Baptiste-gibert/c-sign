@@ -46,12 +46,12 @@ export function SignPage() {
           fetchSessionsByDay(dayId),
         ])
 
-        setDay(dayData.doc)
+        setDay(dayData)
         setSessions(sessionsData.docs || [])
 
         // Auto-select if only one session
         if (sessionsData.docs?.length === 1) {
-          setSelectedSessionId(sessionsData.docs[0].id)
+          setSelectedSessionId(String(sessionsData.docs[0].id))
         }
 
         if (!sessionsData.docs || sessionsData.docs.length === 0) {
@@ -143,7 +143,7 @@ export function SignPage() {
                         type="radio"
                         name="session"
                         value={session.id}
-                        checked={selectedSessionId === session.id}
+                        checked={selectedSessionId === String(session.id)}
                         onChange={(e) => setSelectedSessionId(e.target.value)}
                         className="min-w-[20px] min-h-[20px]"
                       />

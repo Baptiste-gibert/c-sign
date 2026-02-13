@@ -11,7 +11,7 @@ export const Events: CollectionConfig = {
   },
   access: {
     create: ({ req: { user } }) => !!user,
-    read: organizerScoped,
+    read: () => true, // Public: signing page needs event title/date context
     update: organizerScoped,
     delete: organizerScoped,
   },

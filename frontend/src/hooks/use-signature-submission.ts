@@ -28,7 +28,7 @@ export function useSignatureSubmission() {
       // Step 3: Create signature record linking participant + session + media
       const signature = await createSignature({
         participant: participant.doc.id,
-        session: sessionId,
+        session: Number(sessionId),
         image: media.doc.id,
         rightToImage: formData.consentRightToImage,
       })

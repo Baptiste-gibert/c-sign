@@ -1,9 +1,20 @@
 const API_BASE = '/api'
 
 export async function fetchAttendanceDay(dayId: string) {
-  const res = await fetch(`${API_BASE}/attendance-days/${dayId}?depth=1`)
+  const res = await fetch(`${API_BASE}/attendance-days/${dayId}?depth=0`)
   if (!res.ok) throw new Error('Journée introuvable')
-  return res.json()
+  const day = await res.json()
+
+  // depth doesn't populate event relationship reliably — fetch it separately
+  if (day.event) {
+    const eventId = typeof day.event === 'object' ? day.event.id : day.event
+    const eventRes = await fetch(`${API_BASE}/events/${eventId}?depth=0`)
+    if (eventRes.ok) {
+      day.event = await eventRes.json()
+    }
+  }
+
+  return day
 }
 
 export async function fetchSessionsByDay(dayId: string) {
@@ -37,9 +48,9 @@ export async function uploadSignatureImage(blob: Blob) {
 }
 
 export async function createSignature(data: {
-  participant: string
-  session: string
-  image: string
+  participant: number | string
+  session: number | string
+  image: number | string
   rightToImage: boolean
 }) {
   const res = await fetch(`${API_BASE}/signatures`, {
