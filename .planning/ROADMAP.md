@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Data Model** - Payload collections, auth, per-day attendance architecture
 - [x] **Phase 2: Public Signature Flow** - QR codes, signature canvas, public form (no login)
-- [ ] **Phase 3: Event Management** - Organizer dashboard, event CRUD, participant lists
+- [x] **Phase 3: Event Management** - Organizer dashboard, event CRUD, participant lists
 - [ ] **Phase 4: Export & Email** - XLSX generation with embedded signatures, email delivery
 - [ ] **Phase 5: Platform Polish** - Bilingual UI (FR/EN), mobile-first responsive design
 - [ ] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
@@ -135,7 +135,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Model | 3/3 | ✓ Complete | 2026-02-13 |
 | 2. Public Signature Flow | 4/4 | ✓ Complete | 2026-02-13 |
-| 3. Event Management | 0/5 | Not started | - |
+| 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
 | 4. Export & Email | 0/TBD | Not started | - |
 | 5. Platform Polish | 0/TBD | Not started | - |
 | 6. Advanced Features | 0/TBD | Not started | - |
