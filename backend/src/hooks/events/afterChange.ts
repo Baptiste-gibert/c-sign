@@ -52,6 +52,16 @@ export const afterEventChange: CollectionAfterChangeHook = async ({
         req,
       })
       allAttendanceDayIds.push(newDay.id)
+
+      // Auto-create a default session for the new attendance day
+      await req.payload.create({
+        collection: 'sessions',
+        data: {
+          name: 'Session principale',
+          attendanceDay: newDay.id,
+        },
+        req,
+      })
     }
   }
 

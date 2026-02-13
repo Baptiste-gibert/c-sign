@@ -101,14 +101,14 @@
 
 | Test | Status | Notes |
 |------|--------|-------|
-| 1. Page Load | | |
-| 2. Form Validation | | |
-| 3. Beneficiary Type | | |
-| 4. Signature Canvas | | |
-| 5. Successful Submission | | |
-| 6. Data Verification | | |
-| 7. QR Code API | | |
+| 1. Page Load | ✓ Pass | |
+| 2. Form Validation | ✓ Pass | |
+| 3. Beneficiary Type | ✓ Pass | |
+| 4. Signature Canvas | ✓ Pass | |
+| 5. Successful Submission | ✓ Pass | |
+| 6. Data Verification | ✓ Pass | |
+| 7. QR Code API | ✓ Pass | |
 
-**Tested by:**
-**Date:**
-**Verdict:**
+**Tested by:** Baptiste Gibert
+**Date:** 2026-02-13
+**Verdict:** PASS

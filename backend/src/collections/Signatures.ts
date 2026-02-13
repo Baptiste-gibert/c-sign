@@ -45,6 +45,38 @@ export const Signatures: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ data, req, operation }) => {
+        // Block signatures on finalized events
+        if (operation === 'create' && data.session) {
+          const session = await req.payload.findByID({
+            collection: 'sessions',
+            id: data.session,
+            depth: 0,
+            req,
+          })
+          if (session?.attendanceDay) {
+            const day = await req.payload.findByID({
+              collection: 'attendance-days',
+              id: typeof session.attendanceDay === 'object' ? session.attendanceDay.id : session.attendanceDay,
+              depth: 0,
+              req,
+            })
+            if (day?.event) {
+              const event = await req.payload.findByID({
+                collection: 'events',
+                id: typeof day.event === 'object' ? day.event.id : day.event,
+                depth: 0,
+                req,
+              })
+              if (event?.status === 'finalized') {
+                throw new Error('Cet evenement est finalise, les signatures ne sont plus acceptees')
+              }
+              if (event?.status === 'draft') {
+                throw new Error('Cet evenement n\'est pas encore ouvert aux signatures')
+              }
+            }
+          }
+        }
+
         // Enforce uniqueness: one signature per participant per session
         if (operation === 'create' && data.participant && data.session) {
           const existing = await req.payload.find({

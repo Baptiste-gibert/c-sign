@@ -30,6 +30,7 @@ export function SignPage() {
   const [day, setDay] = useState<AttendanceDay | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
+  const [eventStatus, setEventStatus] = useState<string | null>(null)
 
   const mutation = useSignatureSubmission()
 
@@ -47,6 +48,7 @@ export function SignPage() {
         ])
 
         setDay(dayData)
+        setEventStatus(dayData.event?.status || null)
         setSessions(sessionsData.docs || [])
 
         // Auto-select if only one session
@@ -126,8 +128,21 @@ export function SignPage() {
         </div>
       )}
 
+      {/* Event not open block */}
+      {eventStatus && eventStatus !== 'open' && (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center text-red-600 font-medium">
+              {eventStatus === 'finalized'
+                ? 'Cet evenement est finalise. Les signatures ne sont plus acceptees.'
+                : 'Cet evenement n\'est pas encore ouvert aux signatures.'}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Session selection */}
-      {sessions.length > 1 && (
+      {eventStatus === 'open' && sessions.length > 1 && (
         <div className="mb-6">
           <Card>
             <CardContent className="pt-6">
@@ -158,11 +173,13 @@ export function SignPage() {
       )}
 
       {/* Participant form */}
-      <ParticipantForm
-        onSubmit={handleSubmit}
-        isPending={mutation.isPending}
-        error={mutation.error}
-      />
+      {eventStatus === 'open' && (
+        <ParticipantForm
+          onSubmit={handleSubmit}
+          isPending={mutation.isPending}
+          error={mutation.error}
+        />
+      )}
     </div>
   )
 }
