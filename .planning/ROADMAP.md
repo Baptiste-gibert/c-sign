@@ -91,10 +91,11 @@ Plans:
   4. System auto-emails XLSX to transparence@ceva.com and organizer's email address
   5. Organizer can manually download XLSX from dashboard
   6. XLSX file size stays under 8MB for 50+ participant events
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Backend export pipeline: XLSX generation with ExcelJS, Sharp image optimization, email delivery via Nodemailer adapter, download endpoint
+- [ ] 04-02-PLAN.md — Frontend download button on EventDetailPage + end-to-end human verification
 
 ### Phase 5: Platform Polish
 **Goal**: UI is bilingual (French/English) and mobile-first responsive across all devices.
@@ -136,6 +137,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Foundation & Data Model | 3/3 | ✓ Complete | 2026-02-13 |
 | 2. Public Signature Flow | 4/4 | ✓ Complete | 2026-02-13 |
 | 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
-| 4. Export & Email | 0/TBD | Not started | - |
+| 4. Export & Email | 0/2 | Not started | - |
 | 5. Platform Polish | 0/TBD | Not started | - |
 | 6. Advanced Features | 0/TBD | Not started | - |
