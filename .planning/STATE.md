@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 2 of 6 (Public Signature Flow)
-Plan: 2 of TBD in current phase
+Plan: 1 of TBD in current phase
 Status: In progress
-Last activity: 2026-02-13 — Completed 02-02-PLAN.md (Public Access Control)
+Last activity: 2026-02-13 — Completed 02-01-PLAN.md (Frontend Scaffold)
 
 Progress: [▓▓░░░░░░░░] 17%
 
@@ -20,19 +20,19 @@ Progress: [▓▓░░░░░░░░] 17%
 
 **Velocity:**
 - Total plans completed: 4
-- Average duration: 6 min
-- Total execution time: 0.42 hours
+- Average duration: 7 min
+- Total execution time: 0.45 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01    | 3     | 23m   | 8m       |
-| 02    | 1     | 2m    | 2m       |
+| 02    | 1     | 4m    | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (6m), 01-02 (2m), 01-03 (15m), 02-02 (2m)
-- Trend: 02-02 fast due to surgical access control changes only
+- Last 5 plans: 01-01 (6m), 01-02 (2m), 01-03 (15m), 02-01 (4m)
+- Trend: 02-01 faster than Phase 1 average due to modern tooling setup
 
 *Updated after each plan completion*
 
@@ -53,9 +53,9 @@ Recent decisions affecting current work:
 - 01-02: Signature uniqueness enforced via beforeChange hook (one per participant-session)
 - 01-03: Payload admin files must match official template exactly — deviations cause CSS/hydration failures
 - 01-03: Seed script runs via API route (`/api/seed`) not standalone tsx due to Payload 3.x compatibility
-- 02-02: Public create access for Participants, Signatures, Media enables anonymous signature submission
-- 02-02: QR code error correction level M provides 15% recovery (balance of density vs resilience)
-- 02-02: No rate limiting needed for MVP (internal use case, ~800 events/year)
+- 02-01: Tailwind v4 uses @tailwindcss/vite plugin (not PostCSS) for better performance
+- 02-01: Tailwind v4 @apply directive incompatible with CSS variables — use direct CSS properties instead
+- 02-01: All Phase 2 dependencies installed upfront to avoid multiple install cycles
 
 ### Pending Todos
 
@@ -68,6 +68,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-13
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-02-13T19:13:00Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
