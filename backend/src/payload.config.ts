@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -31,5 +32,18 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || ''
     }
+  }),
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',
+    defaultFromName: 'c-sign - Ceva Sante Animale',
+    transportOptions: {
+      host: process.env.SMTP_HOST || 'localhost',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_PORT === '465',
+      auth: process.env.SMTP_USER ? {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      } : undefined,
+    },
   })
 })

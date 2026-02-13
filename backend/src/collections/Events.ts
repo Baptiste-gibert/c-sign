@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { organizerScoped } from '@/access/organizerScoped'
 import { afterEventChange } from '@/hooks/events/afterChange'
+import { afterFinalize } from '@/hooks/events/afterFinalize'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -171,6 +172,6 @@ export const Events: CollectionConfig = {
         return data
       },
     ],
-    afterChange: [afterEventChange],
+    afterChange: [afterEventChange, afterFinalize],
   },
 }
