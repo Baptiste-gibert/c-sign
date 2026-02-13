@@ -7,7 +7,8 @@
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation\" next build",
     "start": "cross-env NODE_OPTIONS=\"--no-deprecation\" next start",
     "payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload",
-    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types"
+    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
+    "seed": "echo 'Note: Direct tsx execution has Payload 3.x compatibility issues. Use: npm run dev, then curl http://localhost:3000/api/seed'"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.0.0",
@@ -28,6 +29,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.17.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
   "engines": {
