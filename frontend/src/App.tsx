@@ -1,4 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { SignPage } from '@/pages/SignPage'
+import { SuccessPage } from '@/pages/SuccessPage'
+
+const queryClient = new QueryClient()
 
 function HomePage() {
   return (
@@ -8,29 +13,15 @@ function HomePage() {
   )
 }
 
-function SignPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-      <p className="text-neutral-600">Sign page - coming soon</p>
-    </div>
-  )
-}
-
-function SuccessPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-      <p className="text-neutral-600">Success page - coming soon</p>
-    </div>
-  )
-}
-
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/sign/:dayId" element={<SignPage />} />
-      <Route path="/success" element={<SuccessPage />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sign/:dayId" element={<SignPage />} />
+        <Route path="/success" element={<SuccessPage />} />
+      </Routes>
+    </QueryClientProvider>
   )
 }
 
