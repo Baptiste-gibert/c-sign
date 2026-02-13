@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 2 - Public Signature Flow
+**Current focus:** Phase 3 - Event Management
 
 ## Current Position
 
-Phase: 2 of 6 (Public Signature Flow) — COMPLETE
-Plan: 4 of 4 in current phase
-Status: Complete — ready for Phase 3
-Last activity: 2026-02-13 — Phase 2 complete (all 4 plans + human verification passed)
+Phase: 3 of 6 (Event Management)
+Plan: 1 of 5 in current phase
+Status: In Progress
+Last activity: 2026-02-13 — Completed 03-01 foundation setup (status workflow, MSW mock, Phase 3 dependencies)
 
-Progress: [▓▓▓▓░░░░░░] 33%
+Progress: [▓▓▓▓▓░░░░░] 39%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 5 min
-- Total execution time: 0.53 hours
+- Total execution time: 0.57 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [▓▓▓▓░░░░░░] 33%
 |-------|-------|-------|----------|
 | 01    | 3     | 23m   | 8m       |
 | 02    | 3     | 9m    | 3m       |
+| 03    | 1     | 4m    | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (2m), 01-03 (15m), 02-01 (4m), 02-02 (2m), 02-03 (3m)
-- Trend: Phase 2 average 3m (faster than Phase 1's 8m) due to frontend-focused work with modern tooling
+- Last 5 plans: 01-03 (15m), 02-01 (4m), 02-02 (2m), 02-03 (3m), 03-01 (4m)
+- Trend: Maintaining fast execution velocity (3-4m average for frontend/infrastructure work)
 
 *Updated after each plan completion*
 
@@ -62,6 +63,9 @@ Recent decisions affecting current work:
 - 02-03: Imperative canvas API (isEmpty, getBlob, clear) provides cleaner validation than lifted state
 - 02-03: Canvas dimensions locked on mount prevents iOS Safari blur/resize bugs
 - 02-03: Auto session selection when count === 1 reduces friction for single-session events
+- 03-01: Status field prevents invalid transitions via beforeChange hook — finalized events cannot be reopened (Phase 6 will add controlled reopen)
+- 03-01: MSW mocks SIMV registry with 100 French participants for dev — 70% have professional numbers
+- 03-01: MSW service worker loads conditionally via dynamic import in dev only — tree-shaken in production
 
 ### Pending Todos
 
@@ -74,6 +78,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-13T19:19:18Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-02-13T21:12:40Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None
