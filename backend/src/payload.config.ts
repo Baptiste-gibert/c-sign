@@ -6,6 +6,11 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Events } from './collections/Events'
+import { AttendanceDays } from './collections/AttendanceDays'
+import { Sessions } from './collections/Sessions'
+import { Participants } from './collections/Participants'
+import { Signatures } from './collections/Signatures'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -16,7 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname)
     }
   },
-  collections: [Users, Media],
+  collections: [Users, Events, AttendanceDays, Sessions, Participants, Signatures, Media],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
