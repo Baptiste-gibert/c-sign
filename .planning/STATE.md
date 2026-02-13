@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 3 - Event Management — COMPLETE
+**Current focus:** Phase 4 - Export & Email
 
 ## Current Position
 
-Phase: 3 of 6 (Event Management) — COMPLETE
-Plan: 5 of 5 in current phase
-Status: Complete — ready for Phase 4
-Last activity: 2026-02-13 — Phase 3 complete (all 5 plans + human verification passed, 2 bugs fixed)
+Phase: 4 of 6 (Export & Email)
+Plan: 1 of 2 in current phase
+Status: In progress — 04-01 complete
+Last activity: 2026-02-13 — Completed 04-01 (XLSX export + email delivery)
 
-Progress: [▓▓▓▓▓░░░░░] 50%
+Progress: [▓▓▓▓▓▓░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
+- Total plans completed: 12
 - Average duration: 4 min
-- Total execution time: 1.1 hours
+- Total execution time: 1.2 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [▓▓▓▓▓░░░░░] 50%
 | 01    | 3     | 23m   | 8m       |
 | 02    | 3     | 9m    | 3m       |
 | 03    | 5     | 27m   | 5m       |
+| 04    | 1     | 4m    | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (4m), 03-02 (2m), 03-03 (3m), 03-04 (3m), 03-05 (15m)
-- Trend: 03-05 longer due to human verification + 2 bug fixes
+- Last 5 plans: 03-02 (2m), 03-03 (3m), 03-04 (3m), 03-05 (15m), 04-01 (4m)
+- Trend: 04-01 quick XLSX export setup, no blockers
 
 *Updated after each plan completion*
 
@@ -78,6 +79,11 @@ Recent decisions affecting current work:
 - 03-05: afterEventChange hook must auto-create "Session principale" per new AttendanceDay — sign page requires at least one session
 - 03-05: Signatures beforeChange hook validates event status (only open events accept signatures) — prevents signing on draft/finalized events
 - 03-05: Frontend SignPage checks event.status and hides form for non-open events with French status message
+- 04-01: Fire-and-forget email delivery prevents blocking HTTP responses on status updates — afterFinalize calls generateAndEmailExport without await
+- 04-01: ExcelJS image anchors use 0-indexed coordinates — use row.number - 1 for tl anchor, row.number for br anchor
+- 04-01: Missing/corrupted signature images gracefully skipped without failing entire export — wrapped in try/catch with logging
+- 04-01: SMTP auth is conditional in Payload config — undefined when SMTP_USER not set, allows dev without SMTP credentials
+- 04-01: 8MB file size warning for XLSX exports — logs warning but doesn't block export
 
 ### Pending Todos
 
@@ -90,6 +96,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-13T22:00:00Z
-Stopped at: Completed Phase 3 (all 5 plans + human verification)
+Last session: 2026-02-13T22:45:30Z
+Stopped at: Completed 04-01-PLAN.md (XLSX export + email delivery)
 Resume file: None
