@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 2 of 6 (Public Signature Flow)
-Plan: 1 of TBD in current phase
+Plan: 3 of TBD in current phase
 Status: In progress
-Last activity: 2026-02-13 — Completed 02-01-PLAN.md (Frontend Scaffold)
+Last activity: 2026-02-13 — Completed 02-03-PLAN.md (Public Signing Interface)
 
-Progress: [▓▓░░░░░░░░] 17%
+Progress: [▓▓░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 7 min
-- Total execution time: 0.45 hours
+- Total plans completed: 6
+- Average duration: 5 min
+- Total execution time: 0.53 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01    | 3     | 23m   | 8m       |
-| 02    | 1     | 4m    | 4m       |
+| 02    | 3     | 9m    | 3m       |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (6m), 01-02 (2m), 01-03 (15m), 02-01 (4m)
-- Trend: 02-01 faster than Phase 1 average due to modern tooling setup
+- Last 5 plans: 01-02 (2m), 01-03 (15m), 02-01 (4m), 02-02 (2m), 02-03 (3m)
+- Trend: Phase 2 average 3m (faster than Phase 1's 8m) due to frontend-focused work with modern tooling
 
 *Updated after each plan completion*
 
@@ -56,6 +56,12 @@ Recent decisions affecting current work:
 - 02-01: Tailwind v4 uses @tailwindcss/vite plugin (not PostCSS) for better performance
 - 02-01: Tailwind v4 @apply directive incompatible with CSS variables — use direct CSS properties instead
 - 02-01: All Phase 2 dependencies installed upfront to avoid multiple install cycles
+- 02-02: Public create access for Participants/Signatures/Media enables anonymous submission
+- 02-02: Public read access for AttendanceDays/Sessions allows form context loading
+- 02-03: 3-step submission flow (participant -> media -> signature) preferred over single FormData with _payload
+- 02-03: Imperative canvas API (isEmpty, getBlob, clear) provides cleaner validation than lifted state
+- 02-03: Canvas dimensions locked on mount prevents iOS Safari blur/resize bugs
+- 02-03: Auto session selection when count === 1 reduces friction for single-session events
 
 ### Pending Todos
 
@@ -68,6 +74,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-13T19:13:00Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-02-13T19:19:18Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
