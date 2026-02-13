@@ -65,7 +65,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- Data model review: Sessions have no direct link to Event (must traverse Session → AttendanceDay → Event). Consider simplifying the Event > Session > AttendanceDay hierarchy before Phase 3 organizer dashboard. May also want to add Session.event convenience relationship.
 
 ### Blockers/Concerns
 
