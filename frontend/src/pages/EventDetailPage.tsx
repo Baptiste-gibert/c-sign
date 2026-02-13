@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { QRCodeSVG } from 'qrcode.react'
 import { useEvent, useUpdateEvent, type PayloadEvent } from '@/hooks/use-events'
+import { useDownloadExport } from '@/hooks/use-export'
 import {
   useAddParticipant,
   useRemoveParticipant,
@@ -33,7 +34,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, QrCode, UserPlus } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, QrCode, UserPlus, Download } from 'lucide-react'
 
 const statusLabels: Record<string, string> = {
   draft: 'Brouillon',
@@ -71,6 +72,7 @@ export function EventDetailPage() {
   const { mutate: addParticipant } = useAddParticipant(id || '')
   const { mutate: removeParticipant } = useRemoveParticipant(id || '')
   const { mutate: addWalkIn } = useAddWalkIn(id || '')
+  const downloadMutation = useDownloadExport()
 
   const [showWalkInForm, setShowWalkInForm] = useState(false)
   const [walkInData, setWalkInData] = useState({
@@ -113,6 +115,10 @@ export function EventDetailPage() {
     }
     setStatusErrorDismissed(false)
     updateEvent({ status: newStatus })
+  }
+
+  const handleDownload = () => {
+    downloadMutation.mutate(id!)
   }
 
   const handleAddFromSimv = (participant: SimvParticipant) => {
@@ -260,9 +266,34 @@ export function EventDetailPage() {
             )}
 
             {event.status === 'finalized' && (
-              <p className="text-neutral-500">Événement finalisé</p>
+              <>
+                <p className="text-neutral-500">Événement finalisé</p>
+                <Button
+                  variant="outline"
+                  onClick={handleDownload}
+                  disabled={downloadMutation.isPending}
+                >
+                  {downloadMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Génération...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      Télécharger XLSX
+                    </>
+                  )}
+                </Button>
+              </>
             )}
           </div>
+
+          {downloadMutation.isError && (
+            <p className="text-sm text-red-600">
+              Échec du téléchargement, veuillez réessayer
+            </p>
+          )}
         </CardContent>
       </Card>
 
