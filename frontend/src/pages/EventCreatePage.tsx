@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCreateEvent } from '@/hooks/use-events'
 import { EventForm } from '@/components/EventForm'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import type { EventFormData } from '@/lib/schemas'
 
 export function EventCreatePage() {
@@ -20,17 +19,18 @@ export function EventCreatePage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header with back button */}
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
+    <div className="max-w-[640px] mx-auto space-y-4 py-6">
+      {/* Header */}
+      <div className="space-y-1">
+        <button
           onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-0.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('dashboard.newEvent')}</h1>
+          <ChevronLeft className="h-3.5 w-3.5" />
+          {t('eventDetail.backToDashboard')}
+        </button>
+        <h1 className="text-xl font-bold text-gray-900">{t('eventCreate.pageTitle')}</h1>
+        <p className="text-xs text-gray-400">{t('eventCreate.pageSubtitle')}</p>
       </div>
 
       {/* Error Message */}

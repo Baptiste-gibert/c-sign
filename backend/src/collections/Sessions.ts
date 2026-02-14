@@ -21,6 +21,16 @@ export const Sessions: CollectionConfig = {
       label: 'Nom de la session',
     },
     {
+      name: 'startTime',
+      type: 'text',
+      label: 'Heure de debut',
+    },
+    {
+      name: 'endTime',
+      type: 'text',
+      label: 'Heure de fin',
+    },
+    {
       name: 'attendanceDay',
       type: 'relationship',
       relationTo: 'attendance-days',

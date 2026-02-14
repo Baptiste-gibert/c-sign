@@ -3,6 +3,7 @@ import { isAdmin } from '@/access/isAdmin'
 import { organizerScoped } from '@/access/organizerScoped'
 import { afterEventChange } from '@/hooks/events/afterChange'
 import { afterFinalize } from '@/hooks/events/afterFinalize'
+import { afterEventRead } from '@/hooks/events/afterRead'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -67,6 +68,17 @@ export const Events: CollectionConfig = {
                 description: 'Theme configuration for public signing page',
               },
             },
+            {
+              name: 'qrGranularity',
+              type: 'select',
+              label: 'Granularite QR',
+              defaultValue: 'day',
+              options: [
+                { label: 'Par evenement', value: 'event' },
+                { label: 'Par journee', value: 'day' },
+                { label: 'Par session', value: 'session' },
+              ],
+            },
           ],
         },
         {
@@ -96,6 +108,14 @@ export const Events: CollectionConfig = {
         {
           label: 'Dates',
           fields: [
+            {
+              name: 'daySessionConfig',
+              type: 'json',
+              label: 'Configuration des sessions par jour',
+              admin: {
+                description: 'Configuration detaillee des sessions pour chaque journee (genere par le formulaire)',
+              },
+            },
             {
               name: 'selectedDates',
               type: 'array',
@@ -204,5 +224,6 @@ export const Events: CollectionConfig = {
       },
     ],
     afterChange: [afterEventChange, afterFinalize],
+    afterRead: [afterEventRead],
   },
 }

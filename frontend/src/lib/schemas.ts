@@ -22,6 +22,24 @@ export function createParticipantSchema() {
 
 export type ParticipantFormData = z.infer<ReturnType<typeof createParticipantSchema>>
 
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
+
+const sessionConfigSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  startTime: z.string().regex(timeRegex),
+  endTime: z.string().regex(timeRegex),
+}).refine(
+  (s) => s.endTime > s.startTime,
+  { message: 'End time must be after start time', path: ['endTime'] }
+)
+
+const attendanceDaySchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  fullDay: z.boolean(),
+  sessions: z.array(sessionConfigSchema).min(1),
+})
+
 export function createEventSchema() {
   return z.object({
     title: z.string().min(1, i18n.t('organizer:validation.titleRequired')).max(200, i18n.t('organizer:validation.titleTooLong')),
@@ -41,10 +59,16 @@ export function createEventSchema() {
       themeId: z.string().optional(),
       customAccent: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
     }).nullable().optional(),
-    selectedDates: z.array(
-      z.object({ date: z.string() })
-    ).min(1, i18n.t('organizer:validation.atLeastOneDateRequired')),
-  })
+    days: z.array(attendanceDaySchema).min(1, i18n.t('organizer:validation.atLeastOneDateRequired')),
+    qrGranularity: z.enum(['event', 'day', 'session']).default('day'),
+  }).refine(
+    (data) => {
+      // No duplicate dates
+      const dates = data.days.map((d) => d.date)
+      return new Set(dates).size === dates.length
+    },
+    { message: 'Duplicate dates are not allowed', path: ['days'] }
+  )
 }
 
 export type EventFormData = z.infer<ReturnType<typeof createEventSchema>>

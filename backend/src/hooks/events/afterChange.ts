@@ -53,15 +53,37 @@ export const afterEventChange: CollectionAfterChangeHook = async ({
       })
       allAttendanceDayIds.push(newDay.id)
 
-      // Auto-create a default session for the new attendance day
-      await req.payload.create({
-        collection: 'sessions',
-        data: {
-          name: 'Session principale',
-          attendanceDay: newDay.id,
-        },
-        req,
+      // Check if daySessionConfig has session config for this date
+      const dayConfig = (doc.daySessionConfig as any[])?.find((cfg: any) => {
+        const cfgDate = new Date(cfg.date).toISOString().split('T')[0]
+        return cfgDate === dateStr
       })
+
+      if (dayConfig && Array.isArray(dayConfig.sessions) && dayConfig.sessions.length > 0) {
+        // Create sessions from config
+        for (const sessionCfg of dayConfig.sessions) {
+          await req.payload.create({
+            collection: 'sessions',
+            data: {
+              name: sessionCfg.name || 'Session principale',
+              startTime: sessionCfg.startTime || undefined,
+              endTime: sessionCfg.endTime || undefined,
+              attendanceDay: newDay.id,
+            },
+            req,
+          })
+        }
+      } else {
+        // Fallback: create default session
+        await req.payload.create({
+          collection: 'sessions',
+          data: {
+            name: 'Session principale',
+            attendanceDay: newDay.id,
+          },
+          req,
+        })
+      }
     }
   }
 
