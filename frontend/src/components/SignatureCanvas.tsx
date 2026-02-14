@@ -58,30 +58,36 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
 
   return (
     <div className="space-y-2">
-      <div className="relative w-full h-40 sm:h-48 md:h-56 border border-border rounded-md overflow-hidden">
+      <div
+        className="relative w-full h-40 sm:h-48 md:h-56 rounded-md overflow-hidden"
+        style={{ border: '2px solid var(--accent)' }}
+      >
         {!hasDrawn && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-muted-foreground text-sm">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-[13px]" style={{ color: 'var(--text-sec)', opacity: 0.5 }}>
             {t('signHere')}
           </div>
         )}
         <SignatureCanvasLib
           ref={canvasRef}
           canvasProps={{
-            className: 'w-full h-full touch-none',
+            className: 'w-full h-full touch-none cursor-crosshair',
           }}
           backgroundColor="rgb(255, 255, 255)"
+          penColor="#1a1a2e"
+          minWidth={2.5}
+          maxWidth={2.5}
           onBegin={handleBegin}
         />
       </div>
       <Button
         type="button"
         variant="outline"
-        size="sm"
         onClick={() => {
           canvasRef.current?.clear()
           setHasDrawn(false)
         }}
-        className="min-h-[36px]"
+        className="h-7 text-xs"
+        style={{ borderColor: 'var(--border-c)', color: 'var(--accent)' }}
       >
         {t('clear')}
       </Button>

@@ -8,6 +8,8 @@ import type { ParticipantFormData } from '@/lib/schemas'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { PublicPageLayout } from '@/components/PublicPageLayout'
 
 interface Session {
   id: string
@@ -16,6 +18,11 @@ interface Session {
 
 interface Event {
   title: string
+  status?: string
+  theme?: {
+    themeId?: string
+    customAccent?: string
+  } | null
 }
 
 interface AttendanceDay {
@@ -94,100 +101,107 @@ export function SignPage() {
     )
   }
 
+  // Format date for header
+  const formattedDate = day
+    ? new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : undefined
+
   if (loading) {
     return (
-      <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
-        <p className="text-center text-muted-foreground">{t('common:loading')}</p>
-      </div>
+      <ThemeProvider>
+        <PublicPageLayout>
+          <div className="text-center" style={{ color: 'var(--text-sec)' }}>
+            {t('common:loading')}
+          </div>
+        </PublicPageLayout>
+      </ThemeProvider>
     )
   }
 
   if (error && !day) {
     return (
-      <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-red-600">{error}</p>
-          </CardContent>
-        </Card>
-      </div>
+      <ThemeProvider>
+        <PublicPageLayout>
+          <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+            <CardContent className="pt-6">
+              <p className="text-center" style={{ color: 'var(--error)' }}>
+                {error}
+              </p>
+            </CardContent>
+          </Card>
+        </PublicPageLayout>
+      </ThemeProvider>
     )
   }
 
   return (
-    <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
-      {/* Language switcher */}
-      <div className="flex justify-end mb-4">
-        <LanguageSwitcher />
-      </div>
-
-      {/* Event context */}
-      {day && (
-        <div className="mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold">{day.event.title}</h1>
-          <p className="text-muted-foreground">
-            {new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
-        </div>
-      )}
-
-      {/* Event not open block */}
-      {eventStatus && eventStatus !== 'open' && eventStatus !== 'reopened' && (
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-red-600 font-medium">
-              {eventStatus === 'finalized'
-                ? t('public:eventFinalized')
-                : t('public:eventNotOpen')}
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Session selection */}
-      {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && (
-        <div className="mb-6">
-          <Card>
+    <ThemeProvider themeId={day?.event.theme?.themeId} customAccent={day?.event.theme?.customAccent}>
+      <PublicPageLayout
+        eventTitle={day?.event.title}
+        eventDate={formattedDate}
+        headerRight={<LanguageSwitcher />}
+      >
+        {/* Event not open block */}
+        {eventStatus && eventStatus !== 'open' && eventStatus !== 'reopened' && (
+          <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
             <CardContent className="pt-6">
-              <div className="space-y-2">
-                <Label>{t('public:selectSession')} *</Label>
-                <div className="space-y-2">
-                  {sessions.map((session) => (
-                    <label
-                      key={session.id}
-                      className="flex items-center space-x-2 cursor-pointer min-h-[44px]"
-                    >
-                      <input
-                        type="radio"
-                        name="session"
-                        value={session.id}
-                        checked={selectedSessionId === String(session.id)}
-                        onChange={(e) => setSelectedSessionId(e.target.value)}
-                        className="min-w-[20px] min-h-[20px]"
-                      />
-                      <span>{session.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <p className="text-center font-medium" style={{ color: 'var(--error)' }}>
+                {eventStatus === 'finalized'
+                  ? t('public:eventFinalized')
+                  : t('public:eventNotOpen')}
+              </p>
             </CardContent>
           </Card>
-        </div>
-      )}
+        )}
 
-      {/* Participant form */}
-      {(eventStatus === 'open' || eventStatus === 'reopened') && (
-        <ParticipantForm
-          onSubmit={handleSubmit}
-          isPending={mutation.isPending}
-          error={mutation.error}
-        />
-      )}
-    </div>
+        {/* Session selection */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && (
+          <div className="mb-6">
+            <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
+                    {t('public:selectSession')} *
+                  </Label>
+                  <div className="space-y-2">
+                    {sessions.map((session) => (
+                      <label
+                        key={session.id}
+                        className="flex items-center space-x-2 cursor-pointer min-h-[44px] text-[13px]"
+                        style={{ color: 'var(--text)' }}
+                      >
+                        <input
+                          type="radio"
+                          name="session"
+                          value={session.id}
+                          checked={selectedSessionId === String(session.id)}
+                          onChange={(e) => setSelectedSessionId(e.target.value)}
+                          className="min-w-[20px] min-h-[20px]"
+                        />
+                        <span>{session.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Participant form */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') && (
+          <ParticipantForm
+            onSubmit={handleSubmit}
+            isPending={mutation.isPending}
+            error={mutation.error}
+          />
+        )}
+      </PublicPageLayout>
+    </ThemeProvider>
   )
 }

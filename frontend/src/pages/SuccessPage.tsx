@@ -1,7 +1,9 @@
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { CheckCircle } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { PublicPageLayout } from '@/components/PublicPageLayout'
 
 export function SuccessPage() {
   const { t } = useTranslation('public')
@@ -9,22 +11,43 @@ export function SuccessPage() {
   const participantName = location.state?.participantName
 
   return (
-    <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6 min-h-screen flex items-center justify-center">
-      <Card className="w-full">
-        <CardContent className="pt-6">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <CheckCircle className="w-16 h-16 text-green-600" />
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold">
-                {participantName ? t('successTitle', { name: participantName }) : t('successTitleDefault')}
-              </h1>
-              <p className="text-muted-foreground">
-                {t('successMessage')}
-              </p>
-            </div>
+    <ThemeProvider>
+      <PublicPageLayout>
+        <div className="flex flex-col items-center text-center space-y-6 py-8 animate-success-appear">
+          {/* Success icon with themed colors */}
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center"
+            style={{
+              backgroundColor: 'color-mix(in srgb, var(--success) 15%, transparent)',
+              border: '2px solid var(--success)',
+            }}
+          >
+            <CheckCircle style={{ color: 'var(--success)' }} className="w-10 h-10" />
           </div>
-        </CardContent>
-      </Card>
-    </div>
+
+          {/* Title */}
+          <div className="space-y-3">
+            <h1 className="text-[30px] font-bold tracking-[-0.5px]" style={{ color: 'var(--text)' }}>
+              {participantName ? t('successTitle', { name: participantName }) : t('successTitleDefault')}
+            </h1>
+            <p className="text-[13px]" style={{ color: 'var(--text-sec)' }}>
+              {t('successMessage')}
+            </p>
+          </div>
+
+          {/* New signature button */}
+          <Button
+            asChild
+            variant="outline"
+            className="mt-4 h-10 px-6 rounded-lg text-[13px] font-semibold"
+            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
+          >
+            <Link to="/">
+              {t('newSignature') || 'Nouvelle signature'}
+            </Link>
+          </Button>
+        </div>
+      </PublicPageLayout>
+    </ThemeProvider>
   )
 }

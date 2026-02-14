@@ -63,156 +63,196 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
   }
 
   return (
-    <Card>
+    <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
       <CardHeader>
-        <CardTitle>{t('public:attendanceSheet')}</CardTitle>
+        <CardTitle className="text-[20px] font-bold tracking-[-0.25px]" style={{ color: 'var(--text)' }}>
+          {t('public:attendanceSheet')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-          {/* Nom */}
-          <div className="space-y-1">
-            <Label htmlFor="lastName">{t('common:form.labels.lastName')} *</Label>
-            <Input
-              id="lastName"
-              {...register('lastName')}
-              className="min-h-[44px]"
-            />
-            {errors.lastName && (
-              <p className="text-sm text-red-600">{errors.lastName.message}</p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-3.5">
+          {/* Nom / Prénom - 2-col grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div className="space-y-1.5">
+              <Label htmlFor="lastName" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+                {t('common:form.labels.lastName')} *
+              </Label>
+              <Input
+                id="lastName"
+                {...register('lastName')}
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
+              />
+              {errors.lastName && (
+                <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.lastName.message}</p>
+              )}
+            </div>
 
-          {/* Prénom */}
-          <div className="space-y-1">
-            <Label htmlFor="firstName">{t('common:form.labels.firstName')} *</Label>
-            <Input
-              id="firstName"
-              {...register('firstName')}
-              className="min-h-[44px]"
-            />
-            {errors.firstName && (
-              <p className="text-sm text-red-600">{errors.firstName.message}</p>
-            )}
+            <div className="space-y-1.5">
+              <Label htmlFor="firstName" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+                {t('common:form.labels.firstName')} *
+              </Label>
+              <Input
+                id="firstName"
+                {...register('firstName')}
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
+              />
+              {errors.firstName && (
+                <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.firstName.message}</p>
+              )}
+            </div>
           </div>
 
           {/* Email */}
-          <div className="space-y-1">
-            <Label htmlFor="email">{t('common:form.labels.email')} *</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+              {t('common:form.labels.email')} *
+            </Label>
             <Input
               id="email"
               type="email"
               inputMode="email"
               autoComplete="email"
               {...register('email')}
-              className="min-h-[44px]"
+              className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+              style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
             />
             {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
+              <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.email.message}</p>
             )}
           </div>
 
-          {/* Ville */}
-          <div className="space-y-1">
-            <Label htmlFor="city">{t('common:form.labels.city')} *</Label>
-            <Input
-              id="city"
-              {...register('city')}
-              className="min-h-[44px]"
-            />
-            {errors.city && (
-              <p className="text-sm text-red-600">{errors.city.message}</p>
-            )}
-          </div>
+          {/* Ville / N° pro - 2-col grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div className="space-y-1.5">
+              <Label htmlFor="city" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+                {t('common:form.labels.city')} *
+              </Label>
+              <Input
+                id="city"
+                {...register('city')}
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
+              />
+              {errors.city && (
+                <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.city.message}</p>
+              )}
+            </div>
 
-          {/* Numéro d'inscription professionnelle */}
-          <div className="space-y-1">
-            <Label htmlFor="professionalNumber">{t('public:professionalNumber')}</Label>
-            <Input
-              id="professionalNumber"
-              {...register('professionalNumber')}
-              className="min-h-[44px]"
-            />
-            <p className="text-sm text-muted-foreground">
-              {t('public:professionalNumberHelp')}
-            </p>
-            {errors.professionalNumber && (
-              <p className="text-sm text-red-600">{errors.professionalNumber.message}</p>
-            )}
+            <div className="space-y-1.5">
+              <Label htmlFor="professionalNumber" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+                {t('public:professionalNumber')}
+              </Label>
+              <Input
+                id="professionalNumber"
+                {...register('professionalNumber')}
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
+              />
+              {errors.professionalNumber && (
+                <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.professionalNumber.message}</p>
+              )}
+            </div>
           </div>
+          <p className="text-sm -mt-2" style={{ color: 'var(--text-sec)' }}>
+            {t('public:professionalNumberHelp')}
+          </p>
 
           {/* Type de bénéficiaire */}
-          <div className="space-y-1">
-            <Label htmlFor="beneficiaryType">{t('public:beneficiaryType')} *</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="beneficiaryType" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+              {t('public:beneficiaryType')} *
+            </Label>
             <Select
               onValueChange={(value) => setValue('beneficiaryType', value as ParticipantFormData['beneficiaryType'])}
             >
-              <SelectTrigger className="min-h-[44px]">
+              <SelectTrigger
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
+              >
                 <SelectValue placeholder={t('public:selectPlaceholder')} />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asv">{t('common:beneficiaryTypes.asv')}</SelectItem>
-                <SelectItem value="autre">{t('common:beneficiaryTypes.autre')}</SelectItem>
-                <SelectItem value="eleveur">{t('common:beneficiaryTypes.eleveur')}</SelectItem>
-                <SelectItem value="etudiant">{t('common:beneficiaryTypes.etudiant')}</SelectItem>
-                <SelectItem value="pharmacien">{t('common:beneficiaryTypes.pharmacien')}</SelectItem>
-                <SelectItem value="technicien">{t('common:beneficiaryTypes.technicien')}</SelectItem>
-                <SelectItem value="veterinaire">{t('common:beneficiaryTypes.veterinaire')}</SelectItem>
+              <SelectContent style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+                <SelectItem value="asv" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.asv')}</SelectItem>
+                <SelectItem value="autre" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.autre')}</SelectItem>
+                <SelectItem value="eleveur" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.eleveur')}</SelectItem>
+                <SelectItem value="etudiant" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.etudiant')}</SelectItem>
+                <SelectItem value="pharmacien" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.pharmacien')}</SelectItem>
+                <SelectItem value="technicien" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.technicien')}</SelectItem>
+                <SelectItem value="veterinaire" className="text-xs cursor-pointer">{t('common:beneficiaryTypes.veterinaire')}</SelectItem>
               </SelectContent>
             </Select>
             {errors.beneficiaryType && (
-              <p className="text-sm text-red-600">{errors.beneficiaryType.message}</p>
+              <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.beneficiaryType.message}</p>
             )}
           </div>
 
           {/* Préciser le type (conditional) */}
           {beneficiaryType === 'autre' && (
-            <div className="space-y-1">
-              <Label htmlFor="beneficiaryTypeOther">{t('public:specifyType')} *</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="beneficiaryTypeOther" className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+                {t('public:specifyType')} *
+              </Label>
               <Input
                 id="beneficiaryTypeOther"
                 {...register('beneficiaryTypeOther')}
-                className="min-h-[44px]"
+                className="h-9 text-xs rounded-md focus:ring-1 focus:ring-[var(--accent)] focus:ring-offset-0"
+                style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', borderColor: 'var(--border-c)' }}
               />
               {errors.beneficiaryTypeOther && (
-                <p className="text-sm text-red-600">{errors.beneficiaryTypeOther.message}</p>
+                <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.beneficiaryTypeOther.message}</p>
               )}
             </div>
           )}
 
           {/* Signature */}
-          <div className="space-y-1">
-            <Label>{t('public:signature')} *</Label>
+          <div className="space-y-1.5">
+            <Label className="text-[10px] font-medium tracking-[0.2px] uppercase" style={{ color: 'var(--text-sec)' }}>
+              {t('public:signature')} *
+            </Label>
             <SignatureCanvas ref={signatureRef} />
             {signatureError && (
-              <p className="text-sm text-red-600">{signatureError}</p>
+              <p className="text-sm" style={{ color: 'var(--error)' }}>{signatureError}</p>
             )}
           </div>
+
+          {/* Separator before consent */}
+          <div style={{ borderColor: 'var(--border-c)' }} className="border-t my-4" />
 
           {/* Droit à l'image */}
           <div className="flex items-start space-x-2">
             <Checkbox
               id="consentRightToImage"
               onCheckedChange={(checked) => setValue('consentRightToImage', checked === true)}
+              className="data-[state=checked]:bg-[var(--accent)]"
             />
-            <Label htmlFor="consentRightToImage" className="leading-tight cursor-pointer">
+            <Label htmlFor="consentRightToImage" className="leading-snug cursor-pointer text-[11px]" style={{ color: 'var(--text-sec)' }}>
               {t('public:consentRightToImage')}
             </Label>
           </div>
           {errors.consentRightToImage && (
-            <p className="text-sm text-red-600">{errors.consentRightToImage.message}</p>
+            <p className="text-sm" style={{ color: 'var(--error)' }}>{errors.consentRightToImage.message}</p>
           )}
 
           {/* Global error */}
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-800">{error.message}</p>
+            <div
+              className="p-3 rounded-md border"
+              style={{
+                backgroundColor: 'color-mix(in srgb, var(--error) 10%, transparent)',
+                borderColor: 'color-mix(in srgb, var(--error) 30%, transparent)',
+              }}
+            >
+              <p className="text-sm" style={{ color: 'var(--error)' }}>{error.message}</p>
             </div>
           )}
 
           {/* Submit button */}
           <Button
             type="submit"
-            className="w-full min-h-[44px]"
+            className={`h-10 w-full rounded-lg text-[13px] font-semibold ${isPending ? 'opacity-70 cursor-wait' : ''}`}
+            style={{ backgroundColor: 'var(--accent)', color: 'var(--bg)' }}
             disabled={isPending}
           >
             {isPending ? t('public:submitting') : t('public:sign')}
