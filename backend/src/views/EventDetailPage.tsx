@@ -41,7 +41,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList, Palette, FileSpreadsheet, Search } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
 const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
@@ -564,118 +564,159 @@ export function EventDetailPage() {
         {/* Tab: Participants */}
         <TabsContent value="participants">
           <div className="space-y-4">
-            {/* SIMV Search */}
-            <div>
-              <Label className="mb-2 block text-xs">{t('organizer:participants.searchSimv')}</Label>
-              <ParticipantSearch
-                onSelect={handleAddFromSimv}
-                disabled={isLocked}
-              />
-            </div>
-
-            {/* Walk-in form */}
-            <div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowWalkInForm(!showWalkInForm)}
-                disabled={isLocked}
-                className="w-full h-8 text-xs"
-              >
-                <UserPlus className="mr-2 h-3.5 w-3.5" />
-                {t('organizer:participants.addWithoutRegistration')}
-              </Button>
-
-              {showWalkInForm && (
-                <form onSubmit={handleAddWalkIn} className="mt-4 space-y-3 p-4 border rounded-md bg-neutral-50">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="lastName" className="text-xs">{t('common:form.labels.lastName')} *</Label>
-                      <Input
-                        id="lastName"
-                        value={walkInData.lastName}
-                        onChange={(e) => setWalkInData({ ...walkInData, lastName: e.target.value })}
-                        required
-                        className="h-8 text-xs"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="firstName" className="text-xs">{t('common:form.labels.firstName')} *</Label>
-                      <Input
-                        id="firstName"
-                        value={walkInData.firstName}
-                        onChange={(e) => setWalkInData({ ...walkInData, firstName: e.target.value })}
-                        required
-                        className="h-8 text-xs"
-                      />
-                    </div>
+            {/* Add participants section */}
+            <Card className="border border-gray-200 bg-white overflow-hidden p-0 gap-0">
+              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50">
+                    <Search className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <Label htmlFor="email" className="text-xs">{t('common:form.labels.email')} *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={walkInData.email}
-                      onChange={(e) => setWalkInData({ ...walkInData, email: e.target.value })}
-                      required
-                      className="h-8 text-xs"
-                    />
+                    <CardTitle className="text-sm font-semibold text-gray-900">
+                      {t('organizer:participants.searchSimv')}
+                    </CardTitle>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:participants.searchSimvPlaceholder')}</p>
                   </div>
-                  <div>
-                    <Label htmlFor="city" className="text-xs">{t('common:form.labels.city')} *</Label>
-                    <Input
-                      id="city"
-                      value={walkInData.city}
-                      onChange={(e) => setWalkInData({ ...walkInData, city: e.target.value })}
-                      required
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="professionalNumber" className="text-xs">{t('organizer:walkIn.professionalNumber')}</Label>
-                    <Input
-                      id="professionalNumber"
-                      value={walkInData.professionalNumber}
-                      onChange={(e) => setWalkInData({ ...walkInData, professionalNumber: e.target.value })}
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="beneficiaryType" className="text-xs">{t('organizer:walkIn.beneficiaryType')} *</Label>
-                    <Select
-                      value={walkInData.beneficiaryType}
-                      onValueChange={(value) => setWalkInData({ ...walkInData, beneficiaryType: value })}
-                      required
+                </div>
+              </CardHeader>
+              <CardContent className="px-5 pt-4 pb-4">
+                <ParticipantSearch
+                  onSelect={handleAddFromSimv}
+                  disabled={isLocked}
+                />
+              </CardContent>
+              {!isLocked && (
+                <>
+                  <Separator />
+                  <div className="px-5 py-3">
+                    <button
+                      onClick={() => setShowWalkInForm(!showWalkInForm)}
+                      className="flex items-center gap-2 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors w-full"
                     >
-                      <SelectTrigger id="beneficiaryType" className="h-8 text-xs">
-                        <SelectValue placeholder={t('organizer:walkIn.selectType')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {BENEFICIARY_TYPE_KEYS.map((key) => (
-                          <SelectItem key={key} value={key} className="text-xs">
-                            {t(`common:beneficiaryTypes.${key}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <UserPlus className="h-3.5 w-3.5" />
+                      {t('organizer:participants.addWithoutRegistration')}
+                    </button>
+
+                    {showWalkInForm && (
+                      <form onSubmit={handleAddWalkIn} className="mt-4 space-y-3 p-4 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <Label htmlFor="lastName" className="text-xs font-medium text-gray-700">{t('common:form.labels.lastName')} *</Label>
+                            <Input
+                              id="lastName"
+                              value={walkInData.lastName}
+                              onChange={(e) => setWalkInData({ ...walkInData, lastName: e.target.value })}
+                              required
+                              className="h-9 text-xs mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="firstName" className="text-xs font-medium text-gray-700">{t('common:form.labels.firstName')} *</Label>
+                            <Input
+                              id="firstName"
+                              value={walkInData.firstName}
+                              onChange={(e) => setWalkInData({ ...walkInData, firstName: e.target.value })}
+                              required
+                              className="h-9 text-xs mt-1"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <Label htmlFor="email" className="text-xs font-medium text-gray-700">{t('common:form.labels.email')} *</Label>
+                            <Input
+                              id="email"
+                              type="email"
+                              value={walkInData.email}
+                              onChange={(e) => setWalkInData({ ...walkInData, email: e.target.value })}
+                              required
+                              className="h-9 text-xs mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="city" className="text-xs font-medium text-gray-700">{t('common:form.labels.city')} *</Label>
+                            <Input
+                              id="city"
+                              value={walkInData.city}
+                              onChange={(e) => setWalkInData({ ...walkInData, city: e.target.value })}
+                              required
+                              className="h-9 text-xs mt-1"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <Label htmlFor="professionalNumber" className="text-xs font-medium text-gray-700">{t('organizer:walkIn.professionalNumber')}</Label>
+                            <Input
+                              id="professionalNumber"
+                              value={walkInData.professionalNumber}
+                              onChange={(e) => setWalkInData({ ...walkInData, professionalNumber: e.target.value })}
+                              className="h-9 text-xs mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="beneficiaryType" className="text-xs font-medium text-gray-700">{t('organizer:walkIn.beneficiaryType')} *</Label>
+                            <Select
+                              value={walkInData.beneficiaryType}
+                              onValueChange={(value) => setWalkInData({ ...walkInData, beneficiaryType: value })}
+                              required
+                            >
+                              <SelectTrigger id="beneficiaryType" className="h-9 text-xs mt-1">
+                                <SelectValue placeholder={t('organizer:walkIn.selectType')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {BENEFICIARY_TYPE_KEYS.map((key) => (
+                                  <SelectItem key={key} value={key} className="text-xs">
+                                    {t(`common:beneficiaryTypes.${key}`)}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 pt-1">
+                          <Button type="submit" size="sm" className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700">{t('common:actions.add')}</Button>
+                          <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={() => setShowWalkInForm(false)}>
+                            {t('common:actions.cancel')}
+                          </Button>
+                        </div>
+                      </form>
+                    )}
                   </div>
-                  <div className="flex gap-2">
-                    <Button type="submit" size="sm" className="h-7 text-xs">{t('common:actions.add')}</Button>
-                    <Button type="button" variant="outline" size="sm" className="h-7 text-xs" onClick={() => setShowWalkInForm(false)}>
-                      {t('common:actions.cancel')}
-                    </Button>
-                  </div>
-                </form>
+                </>
               )}
-            </div>
+            </Card>
 
             {/* Participants table */}
-            <ParticipantTable
-              data={participants}
-              onRemove={handleRemoveParticipant}
-              isLoading={isLocked}
-              attendanceData={attendanceData}
-            />
+            <Card className="border border-gray-200 bg-white overflow-hidden p-0 gap-0">
+              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-50">
+                      <Users className="w-4 h-4 text-indigo-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-semibold text-gray-900">
+                        {t('organizer:participants.title')}
+                      </CardTitle>
+                      <p className="text-[11px] text-gray-400 mt-0.5">
+                        {participants.length > 0
+                          ? `${participants.length} ${t('organizer:eventDetail.tabParticipants').toLowerCase()}`
+                          : t('organizer:participants.noParticipants')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                <ParticipantTable
+                  data={participants}
+                  onRemove={handleRemoveParticipant}
+                  isLoading={isLocked}
+                  attendanceData={attendanceData}
+                />
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
 
@@ -683,74 +724,109 @@ export function EventDetailPage() {
         <TabsContent value="settings">
           <div className="space-y-4">
             {/* Theme card */}
-            <Card className="border border-gray-200 bg-white">
-              <CardHeader className="px-5 pt-4 pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-semibold">
-                  {t('organizer:eventDetail.themeTitle')}
-                </CardTitle>
-                {!isLocked && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-[10px] text-gray-500 gap-1"
-                    onClick={() => setEditingTheme(!editingTheme)}
-                  >
-                    <Pencil className="w-3 h-3" />
-                    {editingTheme ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
-                  </Button>
-                )}
+            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
+              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50">
+                      <Palette className="w-4 h-4 text-violet-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-semibold text-gray-900">
+                        {t('organizer:eventDetail.themeTitle')}
+                      </CardTitle>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventCreate.themeDesc')}</p>
+                    </div>
+                  </div>
+                  {!isLocked && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-[10px] gap-1.5"
+                      onClick={() => setEditingTheme(!editingTheme)}
+                    >
+                      <Pencil className="w-3 h-3" />
+                      {editingTheme ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
-              <CardContent className="px-5 pb-5">
+              <CardContent className="px-5 pt-4 pb-5">
                 {!editingTheme ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-5 rounded" style={{ background: currentThemeColor }} />
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 border border-gray-100">
+                    <div className="w-10 h-6 rounded-md shadow-sm border border-white/20" style={{ background: currentThemeColor }} />
                     <span className="text-xs text-gray-700 font-medium">{currentThemeLabel}</span>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <ThemeSelector value={themeValue} onChange={setThemeValue} />
-                    <Button
-                      size="sm"
-                      className="h-7 text-[10px] bg-gray-900 hover:bg-gray-800"
-                      onClick={handleSaveTheme}
-                    >
-                      {t('organizer:eventDetail.saveTheme')}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700"
+                        onClick={handleSaveTheme}
+                      >
+                        {t('organizer:eventDetail.saveTheme')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 text-xs"
+                        onClick={() => setEditingTheme(false)}
+                      >
+                        {t('organizer:eventDetail.cancelTheme')}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* QR Granularity card */}
-            <Card className="border border-gray-200 bg-white">
-              <CardHeader className="px-5 pt-4 pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-semibold">
-                  {t('organizer:eventDetail.qrGranularityTitle')}
-                </CardTitle>
-                {!isLocked && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-[10px] text-gray-500 gap-1"
-                    onClick={() => setEditingQr(!editingQr)}
-                  >
-                    <Pencil className="w-3 h-3" />
-                    {editingQr ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
-                  </Button>
-                )}
+            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
+              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-50">
+                      <QrCode className="w-4 h-4 text-cyan-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-semibold text-gray-900">
+                        {t('organizer:eventDetail.qrGranularityTitle')}
+                      </CardTitle>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventCreate.qrGranularityDesc')}</p>
+                    </div>
+                  </div>
+                  {!isLocked && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-[10px] gap-1.5"
+                      onClick={() => setEditingQr(!editingQr)}
+                    >
+                      <Pencil className="w-3 h-3" />
+                      {editingQr ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
-              <CardContent className="px-5 pb-5">
+              <CardContent className="px-5 pt-4 pb-5">
                 {!editingQr ? (
-                  <p className="text-xs text-gray-700 font-medium">
-                    {qrMode === 'event'
-                      ? `${t('organizer:eventCreate.qrEvent')} — 1 QR`
-                      : qrMode === 'day'
-                        ? `${t('organizer:eventCreate.qrDay')} — ${dayCount} QR codes`
-                        : `${t('organizer:eventCreate.qrSession')} — ${globalMetrics.totalSessions} QR codes`}
-                  </p>
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 border border-gray-100">
+                    <Badge variant="secondary" className="text-[10px] px-2 py-0.5 bg-cyan-50 text-cyan-700 border-0">
+                      {qrCount} QR
+                    </Badge>
+                    <span className="text-xs text-gray-700 font-medium">
+                      {qrMode === 'event'
+                        ? t('organizer:eventCreate.qrEventDesc')
+                        : qrMode === 'day'
+                          ? t('organizer:eventCreate.qrDayDesc')
+                          : t('organizer:eventCreate.qrSessionDesc')}
+                    </span>
+                  </div>
                 ) : (
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-2.5">
                       {(['event', 'day', 'session'] as const).map((opt) => {
                         const isSelected = qrMode === opt
                         const count = opt === 'event' ? 1 : opt === 'day' ? dayCount : globalMetrics.totalSessions
@@ -758,64 +834,78 @@ export function EventDetailPage() {
                           <button
                             key={opt}
                             type="button"
-                            className={`text-left rounded-lg border-2 p-3 transition-all ${
-                              isSelected ? 'border-gray-900 bg-gray-50' : 'border-gray-100 hover:border-gray-200'
+                            className={`text-left rounded-xl border-2 p-3.5 transition-all ${
+                              isSelected ? 'border-blue-500 bg-blue-50/50' : 'border-gray-100 hover:border-gray-200 bg-white'
                             }`}
                             onClick={() => setQrMode(opt)}
                           >
-                            <div className="flex items-center justify-between mb-0.5">
-                              <span className="text-[11px] font-semibold text-gray-800">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className={`text-xs font-semibold ${isSelected ? 'text-blue-700' : 'text-gray-800'}`}>
                                 {t(`organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}`)}
                               </span>
                               <Badge
-                                variant={isSelected ? 'default' : 'secondary'}
-                                className={`text-[8px] px-1.5 ${isSelected ? 'bg-gray-900' : ''}`}
+                                variant="secondary"
+                                className={`text-[9px] px-1.5 py-0 ${isSelected ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'}`}
                               >
                                 {count}
                               </Badge>
                             </div>
-                            <p className="text-[9px] text-gray-400">
+                            <p className={`text-[10px] leading-snug ${isSelected ? 'text-blue-600/70' : 'text-gray-400'}`}>
                               {t(`organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}Desc`)}
                             </p>
                           </button>
                         )
                       })}
                     </div>
-                    <Button
-                      size="sm"
-                      className="h-7 text-[10px] bg-gray-900 hover:bg-gray-800"
-                      onClick={handleSaveQrGranularity}
-                    >
-                      {t('organizer:eventDetail.saveTheme')}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700"
+                        onClick={handleSaveQrGranularity}
+                      >
+                        {t('organizer:eventDetail.saveTheme')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 text-xs"
+                        onClick={() => setEditingQr(false)}
+                      >
+                        {t('organizer:eventDetail.cancelTheme')}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* Export card */}
-            <Card className="border border-gray-200 bg-white">
-              <CardHeader className="px-5 pt-4 pb-2">
-                <CardTitle className="text-sm font-semibold">Export</CardTitle>
+            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
+              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-50">
+                    <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-sm font-semibold text-gray-900">Export</CardTitle>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventDetail.xlsxDesc')}</p>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent className="px-5 pb-5">
+              <CardContent className="px-5 pt-4 pb-5">
                 <Button
-                  variant="outline"
                   size="sm"
-                  className="h-8 text-xs gap-1.5"
+                  className="h-9 text-xs gap-2 px-4 bg-emerald-600 hover:bg-emerald-700"
                   onClick={handleDownload}
                   disabled={downloadMutation.isPending}
                 >
                   {downloadMutation.isPending ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Download className="w-3.5 h-3.5" />
+                    <Download className="w-4 h-4" />
                   )}
                   {t('organizer:eventDetail.downloadXlsx')}
                 </Button>
-                <p className="text-[10px] text-gray-400 mt-2">
-                  {t('organizer:eventDetail.xlsxDesc')}
-                </p>
               </CardContent>
             </Card>
           </div>
