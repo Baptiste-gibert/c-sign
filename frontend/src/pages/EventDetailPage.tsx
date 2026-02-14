@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
@@ -35,7 +35,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, QrCode, UserPlus, Download } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, QrCode, UserPlus, Download, Pencil } from 'lucide-react'
 
 const statusColors: Record<string, string> = {
   draft: 'bg-neutral-200 text-neutral-800',
@@ -69,6 +69,17 @@ export function EventDetailPage() {
     beneficiaryType: '',
   })
   const [statusErrorDismissed, setStatusErrorDismissed] = useState(false)
+  const [editingCnov, setEditingCnov] = useState(false)
+  const [cnovValue, setCnovValue] = useState('')
+
+  // Sync CNOV value when event data changes
+  useEffect(() => {
+    if (event?.cnovDeclarationNumber) {
+      setCnovValue(event.cnovDeclarationNumber)
+    } else {
+      setCnovValue('')
+    }
+  }, [event?.cnovDeclarationNumber])
 
   if (isLoading) {
     return (
@@ -112,6 +123,16 @@ export function EventDetailPage() {
 
   const handleDownload = () => {
     downloadMutation.mutate(id!)
+  }
+
+  const handleSaveCnov = () => {
+    updateEvent({ cnovDeclarationNumber: cnovValue })
+    setEditingCnov(false)
+  }
+
+  const handleCancelCnov = () => {
+    setCnovValue(event?.cnovDeclarationNumber || '')
+    setEditingCnov(false)
   }
 
   const handleAddFromSimv = (participant: SimvParticipant) => {
@@ -193,10 +214,32 @@ export function EventDetailPage() {
               <span>{t('organizer:eventDetail.organizer')} {event.organizerName}</span>
               <span>•</span>
               <Badge variant="outline">{t(`organizer:expenseTypes.${event.expenseType}`, event.expenseType)}</Badge>
-              {event.cnovDeclarationNumber && (
+              {!editingCnov && event.cnovDeclarationNumber && (
                 <>
                   <span>•</span>
-                  <span>{t('organizer:eventDetail.cnov')} {event.cnovDeclarationNumber}</span>
+                  <span className="flex items-center gap-2">
+                    {t('organizer:eventDetail.cnov')} {event.cnovDeclarationNumber}
+                    {!isLocked && (
+                      <button
+                        onClick={() => setEditingCnov(true)}
+                        className="text-neutral-400 hover:text-neutral-600"
+                        title={t('organizer:eventDetail.editCnov')}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </button>
+                    )}
+                  </span>
+                </>
+              )}
+              {!editingCnov && !event.cnovDeclarationNumber && !isLocked && (
+                <>
+                  <span>•</span>
+                  <button
+                    onClick={() => setEditingCnov(true)}
+                    className="text-blue-600 hover:text-blue-800 text-sm underline"
+                  >
+                    {t('organizer:eventDetail.addCnov')}
+                  </button>
                 </>
               )}
             </div>
@@ -215,6 +258,24 @@ export function EventDetailPage() {
             {t(`common:status.${event.status}`)}
           </Badge>
         </div>
+
+        {/* CNOV inline edit form */}
+        {editingCnov && (
+          <div className="flex items-center gap-2 mt-3">
+            <Input
+              value={cnovValue}
+              onChange={(e) => setCnovValue(e.target.value)}
+              placeholder={t('organizer:eventForm.cnovPlaceholder')}
+              className="w-64"
+            />
+            <Button size="sm" onClick={handleSaveCnov}>
+              {t('organizer:eventDetail.saveCnov')}
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleCancelCnov}>
+              {t('organizer:eventDetail.cancelCnov')}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Status controls */}

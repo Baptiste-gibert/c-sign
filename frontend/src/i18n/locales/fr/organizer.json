@@ -74,6 +74,10 @@
     "eventReopened": "Événement rouvert - les participants peuvent signer",
     "refinalizeEvent": "Finaliser à nouveau",
     "cnov": "CNOV:",
+    "addCnov": "Ajouter CNOV",
+    "editCnov": "Modifier",
+    "saveCnov": "Enregistrer",
+    "cancelCnov": "Annuler",
     "walkInSuccess": "Participant ajouté avec succès"
   },
   "qrCodes": {
