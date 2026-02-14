@@ -1,6 +1,6 @@
 'use client'
 
-import { SuccessPage } from '@/pages/SuccessPage'
+import { SuccessPage } from '@/views/SuccessPage'
 
 export default function Success() {
   return <SuccessPage />

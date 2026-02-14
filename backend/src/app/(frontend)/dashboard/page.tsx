@@ -2,7 +2,7 @@
 
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { OrganizerLayout } from '@/components/OrganizerLayout'
-import { DashboardPage } from '@/pages/DashboardPage'
+import { DashboardPage } from '@/views/DashboardPage'
 
 export default function Dashboard() {
   return (

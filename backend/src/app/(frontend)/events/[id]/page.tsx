@@ -2,7 +2,7 @@
 
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { OrganizerLayout } from '@/components/OrganizerLayout'
-import { EventDetailPage } from '@/pages/EventDetailPage'
+import { EventDetailPage } from '@/views/EventDetailPage'
 
 export default function EventDetail() {
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { SignPage } from '@/pages/SignPage'
+import { SignPage } from '@/views/SignPage'
 
 export default function Sign() {
   return <SignPage />
