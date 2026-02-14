@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 export function OrganizerLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth()
@@ -43,6 +44,7 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
                 {user.firstName} {user.lastName}
               </span>
             )}
+            <LanguageSwitcher />
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               Déconnexion
             </Button>

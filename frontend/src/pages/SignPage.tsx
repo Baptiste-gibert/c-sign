@@ -6,6 +6,7 @@ import { ParticipantForm } from '@/components/ParticipantForm'
 import type { ParticipantFormData } from '@/lib/schemas'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 interface Session {
   id: string
@@ -113,6 +114,11 @@ export function SignPage() {
 
   return (
     <div className="max-w-lg mx-auto px-4 py-6">
+      {/* Language switcher */}
+      <div className="flex justify-end mb-4">
+        <LanguageSwitcher />
+      </div>
+
       {/* Event context */}
       {day && (
         <div className="mb-6">
