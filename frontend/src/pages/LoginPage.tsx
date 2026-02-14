@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,24 +12,27 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
-const loginSchema = z.object({
-  email: z.string().email(() => i18n.t('common:validation.emailInvalid')),
-  password: z.string().min(1, () => i18n.t('organizer:validation.passwordRequired')),
-})
+function createLoginSchema() {
+  return z.object({
+    email: z.string().email(i18n.t('common:validation.emailInvalid')),
+    password: z.string().min(1, i18n.t('organizer:validation.passwordRequired')),
+  })
+}
 
-type LoginFormData = z.infer<typeof loginSchema>
+type LoginFormData = z.infer<ReturnType<typeof createLoginSchema>>
 
 export function LoginPage() {
-  const { t } = useTranslation('organizer')
+  const { t, i18n: i18nInstance } = useTranslation('organizer')
   const navigate = useNavigate()
   const { user, login, loginError, isLoggingIn } = useAuth()
+  const resolver = useMemo(() => zodResolver(createLoginSchema()), [i18nInstance.language])
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver,
   })
 
   // Redirect if already authenticated

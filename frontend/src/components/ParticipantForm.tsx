@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { participantSchema, type ParticipantFormData } from '@/lib/schemas'
+import { createParticipantSchema, type ParticipantFormData } from '@/lib/schemas'
 import { SignatureCanvas, type SignatureCanvasHandle } from '@/components/SignatureCanvas'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,9 +24,10 @@ interface ParticipantFormProps {
 }
 
 export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormProps) {
-  const { t } = useTranslation(['public', 'common'])
+  const { t, i18n } = useTranslation(['public', 'common'])
   const signatureRef = useRef<SignatureCanvasHandle>(null)
   const [signatureError, setSignatureError] = useState<string | null>(null)
+  const resolver = useMemo(() => zodResolver(createParticipantSchema()), [i18n.language])
 
   const {
     register,
@@ -35,7 +36,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
     watch,
     setValue,
   } = useForm<ParticipantFormData>({
-    resolver: zodResolver(participantSchema),
+    resolver,
     defaultValues: {
       consentRightToImage: false,
     },

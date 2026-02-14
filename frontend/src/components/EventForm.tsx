@@ -1,7 +1,8 @@
+import { useMemo } from 'react'
 import { useForm, FormProvider, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import { eventSchema, type EventFormData } from '@/lib/schemas'
+import { createEventSchema, type EventFormData } from '@/lib/schemas'
 import { useAuth } from '@/hooks/use-auth'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,11 +31,12 @@ const EXPENSE_TYPE_KEYS = [
 ] as const
 
 export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
-  const { t } = useTranslation('organizer')
+  const { t, i18n } = useTranslation('organizer')
   const { user } = useAuth()
+  const resolver = useMemo(() => zodResolver(createEventSchema()), [i18n.language])
 
   const form = useForm<EventFormData>({
-    resolver: zodResolver(eventSchema),
+    resolver,
     defaultValues: {
       title: '',
       location: '',
