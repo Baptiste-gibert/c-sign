@@ -144,3 +144,21 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
 | 5. Platform Polish | 3/3 | ✓ Complete | 2026-02-14 |
 | 6. Advanced Features | 3/3 | ✓ Complete | 2026-02-14 |
+
+### Phase 7: UI Design & Style Guide Application
+
+**Goal**: Public signing pages are styled with the C-SIGN Design System v2.0 (dark-mode themed, per-event color customization via 4 built-in palettes + custom accent generator).
+**Depends on**: Phase 6
+**Requirements**: None (post-v1 visual polish — no new functional requirements)
+**Success Criteria** (what must be TRUE):
+  1. Public signing page uses dark-mode themed design with CSS custom properties per the design system
+  2. 4 built-in color palettes available (Tech Modern, Vibrant Purple, Nature Teal, Energy Orange)
+  3. Organizer can select a theme or custom accent color per event
+  4. Public signing page renders using the event's chosen theme
+  5. Theme generation algorithm derives full palette from a single accent color
+  6. Typography follows Inter font stack with defined scale (h1: 30px, body: 13px, label: 10px)
+  7. WCAG AA contrast ratios maintained across all generated themes
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7 to break down)
