@@ -1,0 +1,118 @@
+{
+  "login": {
+    "title": "Connectez-vous pour gérer vos événements",
+    "connection": "Connexion",
+    "description": "Entrez vos identifiants pour accéder à votre espace organisateur",
+    "password": "Mot de passe",
+    "emailPlaceholder": "vous@example.com",
+    "passwordPlaceholder": "••••••••",
+    "invalidCredentials": "Email ou mot de passe incorrect",
+    "submit": "Se connecter",
+    "submitting": "Connexion..."
+  },
+  "navigation": {
+    "events": "Événements",
+    "newEvent": "Nouvel événement",
+    "logout": "Déconnexion"
+  },
+  "dashboard": {
+    "title": "Mes evenements",
+    "newEvent": "Nouvel evenement",
+    "noEvents": "Aucun evenement",
+    "createFirst": "Creez votre premier evenement"
+  },
+  "table": {
+    "headers": {
+      "title": "Titre",
+      "location": "Lieu",
+      "dates": "Dates",
+      "expenseType": "Type de depense",
+      "status": "Statut",
+      "actions": "Actions"
+    }
+  },
+  "expenseTypes": {
+    "hospitality_snack": "Hospitalite - Collation",
+    "hospitality_catering": "Hospitalite - Restauration",
+    "hospitality_accommodation": "Hospitalite - Hebergement",
+    "event_registration": "Frais d'inscription evenement",
+    "meeting_organization": "Frais de reunion/organisation",
+    "transport": "Frais de transport"
+  },
+  "eventForm": {
+    "title": "Titre de l'evenement",
+    "titlePlaceholder": "Reunion veterinaire...",
+    "location": "Lieu",
+    "locationPlaceholder": "Paris, France",
+    "organizerName": "Nom de l'organisateur",
+    "organizerNamePlaceholder": "Jean Dupont",
+    "organizerEmail": "Email de l'organisateur",
+    "organizerEmailPlaceholder": "jean.dupont@example.com",
+    "expenseType": "Type de depense",
+    "expenseTypePlaceholder": "Selectionnez un type de depense",
+    "eventDates": "Dates de l'evenement",
+    "submitting": "Creation en cours...",
+    "submit": "Creer l'evenement"
+  },
+  "eventDetail": {
+    "backToDashboard": "Retour au tableau de bord",
+    "eventNotFound": "Événement introuvable",
+    "organizer": "Organisateur:",
+    "dates": "Dates:",
+    "statusTitle": "Statut de l'événement",
+    "openEvent": "Ouvrir l'événement",
+    "finalizeEvent": "Finaliser l'événement",
+    "eventFinalized": "Événement finalisé",
+    "finalizeConfirm": "Finaliser cet événement ? Cette action est définitive.",
+    "generating": "Génération...",
+    "downloadXlsx": "Télécharger XLSX",
+    "downloadError": "Échec du téléchargement, veuillez réessayer"
+  },
+  "qrCodes": {
+    "title": "QR Codes pour signature",
+    "scanPrompt": "Scannez ce code pour accéder à la page de signature"
+  },
+  "participants": {
+    "title": "Participants",
+    "searchSimv": "Rechercher dans le registre SIMV",
+    "searchSimvPlaceholder": "Rechercher dans le registre SIMV...",
+    "searchPlaceholder": "Nom ou numéro d'inscription...",
+    "noNumber": "Sans numéro",
+    "noResults": "Aucun résultat",
+    "addWithoutRegistration": "Ajouter un participant sans inscription",
+    "professionalNumberShort": "N° d'inscription",
+    "noParticipants": "Aucun participant pré-inscrit",
+    "removeConfirm": "Retirer ce participant de la liste ?"
+  },
+  "walkIn": {
+    "professionalNumber": "Numéro d'inscription",
+    "beneficiaryType": "Type de bénéficiaire",
+    "selectType": "Sélectionner un type"
+  },
+  "attendance": {
+    "title": "Présence en direct",
+    "loading": "Chargement de la présence...",
+    "noDays": "Aucune journée de présence",
+    "autoUpdate": "Mise à jour automatique",
+    "present": "présents",
+    "signed": "Signé",
+    "noSignatures": "Aucune signature pour le moment",
+    "openEventPrompt": "Ouvrez l'événement pour voir la présence en direct"
+  },
+  "dateSelector": {
+    "clickPrompt": "Cliquez sur le calendrier pour selectionner des dates",
+    "selectedDates": "Dates selectionnees :"
+  },
+  "eventCreate": {
+    "createError": "Erreur lors de la creation de l'evenement. Veuillez reessayer."
+  },
+  "validation": {
+    "titleRequired": "Le titre est requis",
+    "titleTooLong": "Le titre est trop long",
+    "locationRequired": "Le lieu est requis",
+    "organizerNameRequired": "Le nom de l'organisateur est requis",
+    "expenseTypeRequired": "Le type de depense est requis",
+    "atLeastOneDate": "Au moins une date est requise",
+    "passwordRequired": "Mot de passe requis"
+  }
+}

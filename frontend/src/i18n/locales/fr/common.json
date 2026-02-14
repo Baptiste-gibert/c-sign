@@ -1,0 +1,54 @@
+{
+  "loading": "Chargement...",
+  "searching": "Recherche...",
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "add": "Ajouter",
+    "view": "Voir"
+  },
+  "errors": {
+    "error": "Erreur",
+    "unknownError": "Erreur inconnue",
+    "connectionError": "Erreur de connexion, veuillez réessayer"
+  },
+  "form": {
+    "labels": {
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "email": "Email",
+      "city": "Ville"
+    }
+  },
+  "status": {
+    "draft": "Brouillon",
+    "open": "Ouvert",
+    "finalized": "Finalisé"
+  },
+  "beneficiaryTypes": {
+    "asv": "ASV",
+    "autre": "Autre",
+    "eleveur": "Éleveur",
+    "etudiant": "Étudiant",
+    "pharmacien": "Pharmacien",
+    "technicien": "Technicien",
+    "veterinaire": "Vétérinaire"
+  },
+  "validation": {
+    "lastNameRequired": "Le nom est requis",
+    "firstNameRequired": "Le prénom est requis",
+    "emailInvalid": "Email invalide",
+    "cityRequired": "La ville est requise",
+    "beneficiaryTypeRequired": "Le type de bénéficiaire est requis",
+    "beneficiaryTypeOtherRequired": "Veuillez préciser le type de bénéficiaire"
+  },
+  "plurals": {
+    "participant_one": "{{count}} participant",
+    "participant_other": "{{count}} participants",
+    "days_one": "{{count}} jour",
+    "days_other": "{{count}} jours"
+  }
+}

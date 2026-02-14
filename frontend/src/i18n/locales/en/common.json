@@ -1,0 +1,54 @@
+{
+  "loading": "Loading...",
+  "searching": "Searching...",
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "add": "Add",
+    "view": "View"
+  },
+  "errors": {
+    "error": "Error",
+    "unknownError": "Unknown error",
+    "connectionError": "Connection error, please try again"
+  },
+  "form": {
+    "labels": {
+      "lastName": "Last name",
+      "firstName": "First name",
+      "email": "Email",
+      "city": "City"
+    }
+  },
+  "status": {
+    "draft": "Draft",
+    "open": "Open",
+    "finalized": "Finalized"
+  },
+  "beneficiaryTypes": {
+    "asv": "AVN",
+    "autre": "Other",
+    "eleveur": "Farmer",
+    "etudiant": "Student",
+    "pharmacien": "Pharmacist",
+    "technicien": "Technician",
+    "veterinaire": "Veterinarian"
+  },
+  "validation": {
+    "lastNameRequired": "Last name is required",
+    "firstNameRequired": "First name is required",
+    "emailInvalid": "Invalid email",
+    "cityRequired": "City is required",
+    "beneficiaryTypeRequired": "Beneficiary type is required",
+    "beneficiaryTypeOtherRequired": "Please specify the beneficiary type"
+  },
+  "plurals": {
+    "participant_one": "{{count}} participant",
+    "participant_other": "{{count}} participants",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days"
+  }
+}

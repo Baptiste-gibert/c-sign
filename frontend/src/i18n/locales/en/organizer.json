@@ -1,0 +1,118 @@
+{
+  "login": {
+    "title": "Sign in to manage your events",
+    "connection": "Login",
+    "description": "Enter your credentials to access your organizer workspace",
+    "password": "Password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "invalidCredentials": "Invalid email or password",
+    "submit": "Sign in",
+    "submitting": "Signing in..."
+  },
+  "navigation": {
+    "events": "Events",
+    "newEvent": "New event",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "My events",
+    "newEvent": "New event",
+    "noEvents": "No events",
+    "createFirst": "Create your first event"
+  },
+  "table": {
+    "headers": {
+      "title": "Title",
+      "location": "Location",
+      "dates": "Dates",
+      "expenseType": "Expense type",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+  "expenseTypes": {
+    "hospitality_snack": "Hospitality - Snack",
+    "hospitality_catering": "Hospitality - Catering",
+    "hospitality_accommodation": "Hospitality - Accommodation",
+    "event_registration": "Event registration fees",
+    "meeting_organization": "Meeting/organization fees",
+    "transport": "Transport fees"
+  },
+  "eventForm": {
+    "title": "Event title",
+    "titlePlaceholder": "Veterinary meeting...",
+    "location": "Location",
+    "locationPlaceholder": "Paris, France",
+    "organizerName": "Organizer name",
+    "organizerNamePlaceholder": "John Doe",
+    "organizerEmail": "Organizer email",
+    "organizerEmailPlaceholder": "john.doe@example.com",
+    "expenseType": "Expense type",
+    "expenseTypePlaceholder": "Select an expense type",
+    "eventDates": "Event dates",
+    "submitting": "Creating...",
+    "submit": "Create event"
+  },
+  "eventDetail": {
+    "backToDashboard": "Back to dashboard",
+    "eventNotFound": "Event not found",
+    "organizer": "Organizer:",
+    "dates": "Dates:",
+    "statusTitle": "Event status",
+    "openEvent": "Open event",
+    "finalizeEvent": "Finalize event",
+    "eventFinalized": "Event finalized",
+    "finalizeConfirm": "Finalize this event? This action is final.",
+    "generating": "Generating...",
+    "downloadXlsx": "Download XLSX",
+    "downloadError": "Download failed, please try again"
+  },
+  "qrCodes": {
+    "title": "QR Codes for signing",
+    "scanPrompt": "Scan this code to access the signing page"
+  },
+  "participants": {
+    "title": "Participants",
+    "searchSimv": "Search in SIMV registry",
+    "searchSimvPlaceholder": "Search in SIMV registry...",
+    "searchPlaceholder": "Name or registration number...",
+    "noNumber": "No number",
+    "noResults": "No results",
+    "addWithoutRegistration": "Add participant without registration",
+    "professionalNumberShort": "Reg. number",
+    "noParticipants": "No pre-registered participants",
+    "removeConfirm": "Remove this participant from the list?"
+  },
+  "walkIn": {
+    "professionalNumber": "Registration number",
+    "beneficiaryType": "Beneficiary type",
+    "selectType": "Select a type"
+  },
+  "attendance": {
+    "title": "Live attendance",
+    "loading": "Loading attendance...",
+    "noDays": "No attendance days",
+    "autoUpdate": "Auto-updating",
+    "present": "present",
+    "signed": "Signed",
+    "noSignatures": "No signatures yet",
+    "openEventPrompt": "Open the event to see live attendance"
+  },
+  "dateSelector": {
+    "clickPrompt": "Click on the calendar to select dates",
+    "selectedDates": "Selected dates:"
+  },
+  "eventCreate": {
+    "createError": "Error creating event. Please try again."
+  },
+  "validation": {
+    "titleRequired": "Title is required",
+    "titleTooLong": "Title is too long",
+    "locationRequired": "Location is required",
+    "organizerNameRequired": "Organizer name is required",
+    "expenseTypeRequired": "Expense type is required",
+    "atLeastOneDate": "At least one date is required",
+    "passwordRequired": "Password required"
+  }
+}
