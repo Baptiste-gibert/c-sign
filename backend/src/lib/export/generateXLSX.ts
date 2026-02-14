@@ -68,16 +68,20 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
     const dateObj = new Date(attendanceDay.date)
     const dateStr = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`
 
-    const sessions = Array.isArray(attendanceDay.sessions) ? attendanceDay.sessions : []
+    // Query sessions directly — attendanceDay.sessions relationship is not
+    // auto-populated when sessions are created, so we must query by attendanceDay ID
+    const dayId = typeof attendanceDay === 'object' ? attendanceDay.id : attendanceDay
+    const sessionsResult = await payload.find({
+      collection: 'sessions',
+      where: { attendanceDay: { equals: dayId } },
+      depth: 0,
+      limit: 100,
+    })
 
-    for (const session of sessions) {
-      if (typeof session === 'string' || !session.name) {
-        continue
-      }
-
+    for (const session of sessionsResult.docs) {
       // Query signatures directly — session.signatures relationship is not
       // auto-populated when signatures are created, so we must query by session ID
-      const sessionId = typeof session === 'object' ? session.id : session
+      const sessionId = session.id
       const signaturesResult = await payload.find({
         collection: 'signatures',
         where: { session: { equals: sessionId } },
