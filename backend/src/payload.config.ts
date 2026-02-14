@@ -4,6 +4,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -28,10 +29,18 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts')
   },
+  plugins: [
+    ...(process.env.BLOB_READ_WRITE_TOKEN
+      ? [vercelBlobStorage({
+          collections: { media: true },
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        })]
+      : []),
+  ],
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || ''
-    }
+      connectionString: process.env.DATABASE_URI || process.env.POSTGRES_URL || '',
+    },
   }),
   email: nodemailerAdapter({
     defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',

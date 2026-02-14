@@ -1,0 +1,18 @@
+FROM node:22-slim
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl sudo procps ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "node ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/node
+
+# Claude Code CLI
+RUN npm install -g @anthropic-ai/claude-code
+
+# GSD (Get Shit Done) - clone + install global
+RUN git clone https://github.com/gsd-build/get-shit-done.git /tmp/gsd \
+    && cd /tmp/gsd && npm install -g . \
+    && rm -rf /tmp/gsd
+
+WORKDIR /workspace
+USER node

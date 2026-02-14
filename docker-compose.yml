@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: payload_poc
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payload -d payload_poc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/workspace:cached
+      - node_modules_backend:/workspace/backend/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URI: postgresql://payload:payload_secret@postgres:5432/payload_poc
+      PAYLOAD_SECRET: poc-super-secret-change-me-in-prod
+      NODE_ENV: development
+    command: sleep infinity
+
+volumes:
+  pg_data:
+  node_modules_backend:

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   // Construct the public signing URL
   // In production, this would be the public frontend URL
-  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:5173'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   const signUrl = `${baseUrl}/sign/${dayId}`
 
   try {
