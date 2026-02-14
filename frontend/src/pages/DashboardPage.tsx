@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useEvents } from '@/hooks/use-events'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,30 +13,23 @@ import {
 } from '@/components/ui/table'
 import { Plus, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr, enUS } from 'date-fns/locale'
 
-const EXPENSE_TYPE_LABELS: Record<string, string> = {
-  hospitality_snack: 'Hospitalite - Collation',
-  hospitality_catering: 'Hospitalite - Restauration',
-  hospitality_accommodation: 'Hospitalite - Hebergement',
-  event_registration: "Frais d'inscription evenement",
-  meeting_organization: 'Frais de reunion/organisation',
-  transport: 'Frais de transport',
-}
-
-function formatEventDates(dates: Array<{ id: string; date: string }>): string {
-  if (dates.length === 0) return '-'
+function FormatEventDates({ dates, language }: { dates: Array<{ id: string; date: string }>; language: string }) {
+  const { t } = useTranslation('common')
+  if (dates.length === 0) return <>-</>
   if (dates.length === 1) {
-    return format(new Date(dates[0].date), 'PPP', { locale: fr })
+    return <>{format(new Date(dates[0].date), 'PPP', { locale: language === 'en' ? enUS : fr })}</>
   }
-  return `${dates.length} jours`
+  return <>{t('plurals.days', { count: dates.length })}</>
 }
 
 function StatusBadge({ status }: { status: 'draft' | 'open' | 'finalized' }) {
+  const { t } = useTranslation('common')
   const variants = {
-    draft: { variant: 'secondary' as const, label: 'Brouillon' },
-    open: { variant: 'default' as const, label: 'Ouvert' },
-    finalized: { variant: 'outline' as const, label: 'Finalise' },
+    draft: { variant: 'secondary' as const, label: t('status.draft') },
+    open: { variant: 'default' as const, label: t('status.open') },
+    finalized: { variant: 'outline' as const, label: t('status.finalized') },
   }
 
   const config = variants[status]
@@ -43,6 +37,7 @@ function StatusBadge({ status }: { status: 'draft' | 'open' | 'finalized' }) {
 }
 
 export function DashboardPage() {
+  const { t, i18n } = useTranslation('organizer')
   const navigate = useNavigate()
   const { data: events, isLoading } = useEvents()
 
@@ -58,19 +53,19 @@ export function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-neutral-900">Mes evenements</h1>
+        <h1 className="text-3xl font-bold text-neutral-900">{t('dashboard.title')}</h1>
         <Button onClick={() => navigate('/events/new')}>
           <Plus className="h-4 w-4 mr-2" />
-          Nouvel evenement
+          {t('dashboard.newEvent')}
         </Button>
       </div>
 
       {/* Empty State */}
       {events && events.length === 0 && (
         <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <p className="text-neutral-600 text-lg">Aucun evenement</p>
+          <p className="text-neutral-600 text-lg">{t('dashboard.noEvents')}</p>
           <Button onClick={() => navigate('/events/new')}>
-            Creez votre premier evenement
+            {t('dashboard.createFirst')}
           </Button>
         </div>
       )}
@@ -81,12 +76,12 @@ export function DashboardPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Titre</TableHead>
-                <TableHead>Lieu</TableHead>
-                <TableHead>Dates</TableHead>
-                <TableHead>Type de depense</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t('table.headers.title')}</TableHead>
+                <TableHead>{t('table.headers.location')}</TableHead>
+                <TableHead>{t('table.headers.dates')}</TableHead>
+                <TableHead>{t('table.headers.expenseType')}</TableHead>
+                <TableHead>{t('table.headers.status')}</TableHead>
+                <TableHead className="text-right">{t('table.headers.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -101,9 +96,9 @@ export function DashboardPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{event.location}</TableCell>
-                  <TableCell>{formatEventDates(event.selectedDates)}</TableCell>
+                  <TableCell><FormatEventDates dates={event.selectedDates} language={i18n.language} /></TableCell>
                   <TableCell>
-                    {EXPENSE_TYPE_LABELS[event.expenseType] || event.expenseType}
+                    {t(`expenseTypes.${event.expenseType}`, event.expenseType)}
                   </TableCell>
                   <TableCell>
                     <StatusBadge status={event.status} />
@@ -114,7 +109,7 @@ export function DashboardPage() {
                       size="sm"
                       asChild
                     >
-                      <Link to={`/events/${event.id}`}>Voir</Link>
+                      <Link to={`/events/${event.id}`}>{t('common:actions.view')}</Link>
                     </Button>
                   </TableCell>
                 </TableRow>

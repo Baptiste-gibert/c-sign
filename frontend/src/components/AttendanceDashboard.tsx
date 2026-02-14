@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import { useAttendanceDashboard } from '@/hooks/use-attendance'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr, enUS } from 'date-fns/locale'
 import { CheckCircle, Clock, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -9,13 +10,15 @@ interface AttendanceDashboardProps {
 }
 
 export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
+  const { t, i18n } = useTranslation(['organizer', 'common'])
   const { data, isLoading, isError, error } = useAttendanceDashboard(eventId)
+  const locale = i18n.language === 'en' ? enUS : fr
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
         <Loader2 className="h-6 w-6 animate-spin text-neutral-400" />
-        <span className="ml-2 text-neutral-600">Chargement de la présence...</span>
+        <span className="ml-2 text-neutral-600">{t('organizer:attendance.loading')}</span>
       </div>
     )
   }
@@ -23,7 +26,7 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
   if (isError) {
     return (
       <div className="text-red-600 py-4">
-        Erreur: {error instanceof Error ? error.message : 'Erreur inconnue'}
+        {t('common:errors.error')}: {error instanceof Error ? error.message : t('common:errors.unknownError')}
       </div>
     )
   }
@@ -31,7 +34,7 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
   if (!data || data.attendanceDays.length === 0) {
     return (
       <div className="text-center py-8 text-neutral-500">
-        Aucune journée de présence
+        {t('organizer:attendance.noDays')}
       </div>
     )
   }
@@ -40,13 +43,13 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
     <div className="space-y-6">
       <div className="flex items-center gap-2 text-sm text-neutral-600">
         <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-        Mise à jour automatique
+        {t('organizer:attendance.autoUpdate')}
       </div>
 
       {data.attendanceDays.map((day) => (
         <div key={day.id} className="space-y-4">
           <h3 className="text-lg font-semibold text-neutral-900">
-            {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale: fr })}
+            {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale })}
           </h3>
 
           {day.sessions.map((session) => (
@@ -55,7 +58,7 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
                 <CardTitle className="text-base flex items-center justify-between">
                   <span>{session.name}</span>
                   <span className="text-sm font-normal text-neutral-600">
-                    {session.signedCount} / {session.totalExpected} présents
+                    {session.signedCount} / {session.totalExpected} {t('organizer:attendance.present')}
                   </span>
                 </CardTitle>
               </CardHeader>
@@ -89,12 +92,12 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
                           {signature.participant.lastName}{' '}
                           {signature.participant.firstName}
                         </span>
-                        <span className="text-neutral-500">• Signé</span>
+                        <span className="text-neutral-500">• {t('organizer:attendance.signed')}</span>
                         <span className="text-neutral-400 ml-auto">
                           {format(
                             new Date(signature.createdAt),
                             'HH:mm',
-                            { locale: fr }
+                            { locale }
                           )}
                         </span>
                       </div>
@@ -102,7 +105,7 @@ export function AttendanceDashboard({ eventId }: AttendanceDashboardProps) {
                   ) : (
                     <div className="flex items-center gap-3 text-sm text-neutral-500">
                       <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span>Aucune signature pour le moment</span>
+                      <span>{t('organizer:attendance.noSignatures')}</span>
                     </div>
                   )}
                 </div>

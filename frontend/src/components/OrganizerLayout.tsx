@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 export function OrganizerLayout({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation('organizer')
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
@@ -28,13 +30,13 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
                 to="/dashboard"
                 className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
               >
-                Événements
+                {t('navigation.events')}
               </Link>
               <Link
                 to="/events/new"
                 className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
               >
-                Nouvel événement
+                {t('navigation.newEvent')}
               </Link>
             </nav>
           </div>
@@ -46,7 +48,7 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
             )}
             <LanguageSwitcher />
             <Button variant="ghost" size="sm" onClick={handleLogout}>
-              Déconnexion
+              {t('navigation.logout')}
             </Button>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr, enUS } from 'date-fns/locale'
 import { QRCodeSVG } from 'qrcode.react'
 import { useEvent, useUpdateEvent, type PayloadEvent } from '@/hooks/use-events'
 import { useDownloadExport } from '@/hooks/use-export'
@@ -36,36 +37,19 @@ import {
 } from '@/components/ui/dialog'
 import { Loader2, AlertCircle, ChevronLeft, QrCode, UserPlus, Download } from 'lucide-react'
 
-const statusLabels: Record<string, string> = {
-  draft: 'Brouillon',
-  open: 'Ouvert',
-  finalized: 'Finalisé',
-}
-
 const statusColors: Record<string, string> = {
   draft: 'bg-neutral-200 text-neutral-800',
   open: 'bg-green-100 text-green-800',
   finalized: 'bg-blue-100 text-blue-800',
 }
 
-const expenseTypeLabels: Record<string, string> = {
-  internal: 'Interne',
-  external: 'Externe',
-}
-
-const beneficiaryTypeOptions = [
-  { label: 'ASV', value: 'asv' },
-  { label: 'Autre', value: 'autre' },
-  { label: 'Éleveur', value: 'eleveur' },
-  { label: 'Étudiant', value: 'etudiant' },
-  { label: 'Pharmacien', value: 'pharmacien' },
-  { label: 'Technicien', value: 'technicien' },
-  { label: 'Vétérinaire', value: 'veterinaire' },
-]
+const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
 
 export function EventDetailPage() {
+  const { t, i18n } = useTranslation(['organizer', 'common'])
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const locale = i18n.language === 'en' ? enUS : fr
 
   const { data: event, isLoading, isError, error } = useEvent(id || '')
   const { mutate: updateEvent, isPending: isUpdating, isError: isUpdateError, error: updateError } = useUpdateEvent(id || '')
@@ -98,10 +82,10 @@ export function EventDetailPage() {
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate('/dashboard')}>
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Retour au tableau de bord
+          {t('organizer:eventDetail.backToDashboard')}
         </Button>
         <div className="text-red-600">
-          Erreur: {error instanceof Error ? error.message : 'Événement introuvable'}
+          {t('common:errors.error')}: {error instanceof Error ? error.message : t('organizer:eventDetail.eventNotFound')}
         </div>
       </div>
     )
@@ -109,7 +93,7 @@ export function EventDetailPage() {
 
   const handleStatusChange = (newStatus: 'open' | 'finalized') => {
     if (newStatus === 'finalized') {
-      if (!window.confirm('Finaliser cet événement ? Cette action est définitive.')) {
+      if (!window.confirm(t('organizer:eventDetail.finalizeConfirm'))) {
         return
       }
     }
@@ -133,7 +117,7 @@ export function EventDetailPage() {
   }
 
   const handleRemoveParticipant = (participantId: string) => {
-    if (window.confirm('Retirer ce participant de la liste ?')) {
+    if (window.confirm(t('organizer:participants.removeConfirm'))) {
       removeParticipant(participantId)
     }
   }
@@ -174,7 +158,7 @@ export function EventDetailPage() {
       }
     } catch {
       if (updateError.message.includes('Failed to fetch') || updateError.message.includes('network')) {
-        statusErrorMessage = 'Erreur de connexion, veuillez réessayer'
+        statusErrorMessage = t('common:errors.connectionError')
       } else {
         statusErrorMessage = updateError.message
       }
@@ -187,7 +171,7 @@ export function EventDetailPage() {
       <div>
         <Button variant="ghost" onClick={() => navigate('/dashboard')} className="mb-4">
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Retour au tableau de bord
+          {t('organizer:eventDetail.backToDashboard')}
         </Button>
 
         <div className="flex items-start justify-between">
@@ -196,15 +180,15 @@ export function EventDetailPage() {
             <div className="flex items-center gap-4 text-sm text-neutral-600">
               <span>{event.location}</span>
               <span>•</span>
-              <span>Organisateur: {event.organizerName}</span>
+              <span>{t('organizer:eventDetail.organizer')} {event.organizerName}</span>
               <span>•</span>
-              <Badge variant="outline">{expenseTypeLabels[event.expenseType] || event.expenseType}</Badge>
+              <Badge variant="outline">{t(`organizer:expenseTypes.${event.expenseType}`, event.expenseType)}</Badge>
             </div>
             <div className="text-sm text-neutral-600">
               {event.selectedDates && event.selectedDates.length > 0 && (
                 <span>
-                  Dates: {event.selectedDates.map((d: any) =>
-                    format(new Date(d.date), 'd MMM yyyy', { locale: fr })
+                  {t('organizer:eventDetail.dates')} {event.selectedDates.map((d: any) =>
+                    format(new Date(d.date), 'd MMM yyyy', { locale })
                   ).join(', ')}
                 </span>
               )}
@@ -212,7 +196,7 @@ export function EventDetailPage() {
           </div>
 
           <Badge className={statusColors[event.status]}>
-            {statusLabels[event.status]}
+            {t(`common:status.${event.status}`)}
           </Badge>
         </div>
       </div>
@@ -220,7 +204,7 @@ export function EventDetailPage() {
       {/* Status controls */}
       <Card>
         <CardHeader>
-          <CardTitle>Statut de l'événement</CardTitle>
+          <CardTitle>{t('organizer:eventDetail.statusTitle')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {statusErrorMessage && (
@@ -249,7 +233,7 @@ export function EventDetailPage() {
                 {isUpdating ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : null}
-                Ouvrir l'événement
+                {t('organizer:eventDetail.openEvent')}
               </Button>
             )}
 
@@ -261,13 +245,13 @@ export function EventDetailPage() {
                 {isUpdating ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : null}
-                Finaliser l'événement
+                {t('organizer:eventDetail.finalizeEvent')}
               </Button>
             )}
 
             {event.status === 'finalized' && (
               <>
-                <p className="text-neutral-500">Événement finalisé</p>
+                <p className="text-neutral-500">{t('organizer:eventDetail.eventFinalized')}</p>
                 <Button
                   variant="outline"
                   onClick={handleDownload}
@@ -276,12 +260,12 @@ export function EventDetailPage() {
                   {downloadMutation.isPending ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Génération...
+                      {t('organizer:eventDetail.generating')}
                     </>
                   ) : (
                     <>
                       <Download className="mr-2 h-4 w-4" />
-                      Télécharger XLSX
+                      {t('organizer:eventDetail.downloadXlsx')}
                     </>
                   )}
                 </Button>
@@ -291,7 +275,7 @@ export function EventDetailPage() {
 
           {downloadMutation.isError && (
             <p className="text-sm text-red-600">
-              Échec du téléchargement, veuillez réessayer
+              {t('organizer:eventDetail.downloadError')}
             </p>
           )}
         </CardContent>
@@ -301,7 +285,7 @@ export function EventDetailPage() {
       {event.attendanceDays && event.attendanceDays.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>QR Codes pour signature</CardTitle>
+            <CardTitle>{t('organizer:qrCodes.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -311,14 +295,14 @@ export function EventDetailPage() {
                     <Button variant="outline" className="h-auto flex-col gap-2 p-4">
                       <QrCode className="h-6 w-6" />
                       <span className="text-sm">
-                        {format(new Date(day.date), 'd MMM yyyy', { locale: fr })}
+                        {format(new Date(day.date), 'd MMM yyyy', { locale })}
                       </span>
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>
-                        QR Code - {format(new Date(day.date), 'd MMMM yyyy', { locale: fr })}
+                        QR Code - {format(new Date(day.date), 'd MMMM yyyy', { locale })}
                       </DialogTitle>
                     </DialogHeader>
                     <div className="flex flex-col items-center gap-4 py-4">
@@ -328,7 +312,7 @@ export function EventDetailPage() {
                         level="H"
                       />
                       <p className="text-sm text-neutral-600 text-center">
-                        Scannez ce code pour accéder à la page de signature
+                        {t('organizer:qrCodes.scanPrompt')}
                       </p>
                       <code className="text-xs bg-neutral-100 px-2 py-1 rounded">
                         {window.location.origin}/sign/{day.id}
@@ -346,13 +330,13 @@ export function EventDetailPage() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Participants ({participants.length})
+            {t('organizer:participants.title')} ({participants.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* SIMV Search */}
           <div>
-            <Label className="mb-2 block">Rechercher dans le registre SIMV</Label>
+            <Label className="mb-2 block">{t('organizer:participants.searchSimv')}</Label>
             <ParticipantSearch
               onSelect={handleAddFromSimv}
               disabled={isFinalized}
@@ -368,14 +352,14 @@ export function EventDetailPage() {
               className="w-full"
             >
               <UserPlus className="mr-2 h-4 w-4" />
-              Ajouter un participant sans inscription
+              {t('organizer:participants.addWithoutRegistration')}
             </Button>
 
             {showWalkInForm && (
               <form onSubmit={handleAddWalkIn} className="mt-4 space-y-3 p-4 border rounded-md bg-neutral-50">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="lastName">Nom *</Label>
+                    <Label htmlFor="lastName">{t('common:form.labels.lastName')} *</Label>
                     <Input
                       id="lastName"
                       value={walkInData.lastName}
@@ -386,7 +370,7 @@ export function EventDetailPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="firstName">Prénom *</Label>
+                    <Label htmlFor="firstName">{t('common:form.labels.firstName')} *</Label>
                     <Input
                       id="firstName"
                       value={walkInData.firstName}
@@ -399,7 +383,7 @@ export function EventDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email">{t('common:form.labels.email')} *</Label>
                   <Input
                     id="email"
                     type="email"
@@ -412,7 +396,7 @@ export function EventDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="city">Ville *</Label>
+                  <Label htmlFor="city">{t('common:form.labels.city')} *</Label>
                   <Input
                     id="city"
                     value={walkInData.city}
@@ -424,7 +408,7 @@ export function EventDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="professionalNumber">Numéro d'inscription</Label>
+                  <Label htmlFor="professionalNumber">{t('organizer:walkIn.professionalNumber')}</Label>
                   <Input
                     id="professionalNumber"
                     value={walkInData.professionalNumber}
@@ -435,7 +419,7 @@ export function EventDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="beneficiaryType">Type de bénéficiaire *</Label>
+                  <Label htmlFor="beneficiaryType">{t('organizer:walkIn.beneficiaryType')} *</Label>
                   <Select
                     value={walkInData.beneficiaryType}
                     onValueChange={(value) =>
@@ -444,12 +428,12 @@ export function EventDetailPage() {
                     required
                   >
                     <SelectTrigger id="beneficiaryType">
-                      <SelectValue placeholder="Sélectionner un type" />
+                      <SelectValue placeholder={t('organizer:walkIn.selectType')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {beneficiaryTypeOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                      {BENEFICIARY_TYPE_KEYS.map((key) => (
+                        <SelectItem key={key} value={key}>
+                          {t(`common:beneficiaryTypes.${key}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -457,13 +441,13 @@ export function EventDetailPage() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button type="submit">Ajouter</Button>
+                  <Button type="submit">{t('common:actions.add')}</Button>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setShowWalkInForm(false)}
                   >
-                    Annuler
+                    {t('common:actions.cancel')}
                   </Button>
                 </div>
               </form>
@@ -482,12 +466,12 @@ export function EventDetailPage() {
       {/* Attendance section */}
       <Card>
         <CardHeader>
-          <CardTitle>Présence en direct</CardTitle>
+          <CardTitle>{t('organizer:attendance.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           {event.status === 'draft' ? (
             <p className="text-neutral-500 py-4">
-              Ouvrez l'événement pour voir la présence en direct
+              {t('organizer:attendance.openEventPrompt')}
             </p>
           ) : (
             <AttendanceDashboard eventId={event.id} />

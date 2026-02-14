@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search } from 'lucide-react'
 import { useSimvSearch, type SimvParticipant } from '@/hooks/use-participants'
 import { Button } from '@/components/ui/button'
@@ -25,6 +26,7 @@ export function ParticipantSearch({
   onSelect,
   disabled = false,
 }: ParticipantSearchProps) {
+  const { t } = useTranslation('organizer')
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -41,19 +43,19 @@ export function ParticipantSearch({
       <PopoverTrigger asChild>
         <Button variant="outline" disabled={disabled} className="w-full justify-start">
           <Search className="mr-2 h-4 w-4" />
-          Rechercher dans le registre SIMV...
+          {t('participants.searchSimvPlaceholder')}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[400px] p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Nom ou numéro d'inscription..."
+            placeholder={t('participants.searchPlaceholder')}
             value={search}
             onValueChange={setSearch}
           />
           <CommandList>
             <CommandEmpty>
-              {isLoading ? 'Recherche...' : 'Aucun résultat'}
+              {isLoading ? t('common:searching') : t('participants.noResults')}
             </CommandEmpty>
             {results.length > 0 && (
               <CommandGroup>
@@ -68,7 +70,7 @@ export function ParticipantSearch({
                       {participant.lastName} {participant.firstName}
                     </div>
                     <div className="text-sm text-neutral-500">
-                      {participant.professionalNumber || 'Sans numéro'} • {participant.city}
+                      {participant.professionalNumber || t('participants.noNumber')} • {participant.city}
                     </div>
                   </CommandItem>
                 ))}

@@ -7,6 +7,7 @@ import {
   type SortingState,
 } from '@tanstack/react-table'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,51 +28,42 @@ interface ParticipantTableProps {
 
 const columnHelper = createColumnHelper<Participant>()
 
-const beneficiaryTypeLabels: Record<string, string> = {
-  asv: 'ASV',
-  autre: 'Autre',
-  eleveur: 'Éleveur',
-  etudiant: 'Étudiant',
-  pharmacien: 'Pharmacien',
-  technicien: 'Technicien',
-  veterinaire: 'Vétérinaire',
-}
-
 export function ParticipantTable({
   data,
   onRemove,
   isLoading = false,
 }: ParticipantTableProps) {
+  const { t } = useTranslation(['organizer', 'common'])
   const [sorting, setSorting] = useState<SortingState>([])
 
   const columns = [
     columnHelper.accessor('lastName', {
-      header: 'Nom',
+      header: t('common:form.labels.lastName'),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('firstName', {
-      header: 'Prénom',
+      header: t('common:form.labels.firstName'),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('email', {
-      header: 'Email',
+      header: t('common:form.labels.email'),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('city', {
-      header: 'Ville',
+      header: t('common:form.labels.city'),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('beneficiaryType', {
-      header: 'Type',
-      cell: (info) => beneficiaryTypeLabels[info.getValue()] || info.getValue(),
+      header: t('organizer:walkIn.beneficiaryType'),
+      cell: (info) => t(`common:beneficiaryTypes.${info.getValue()}`, info.getValue()),
     }),
     columnHelper.accessor('professionalNumber', {
-      header: "N° d'inscription",
+      header: t('organizer:participants.professionalNumberShort'),
       cell: (info) => info.getValue() || '-',
     }),
     columnHelper.display({
       id: 'actions',
-      header: 'Actions',
+      header: t('organizer:table.headers.actions'),
       cell: (info) => (
         <Button
           variant="ghost"
@@ -99,7 +91,7 @@ export function ParticipantTable({
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-neutral-500">
-        Aucun participant pré-inscrit
+        {t('organizer:participants.noParticipants')}
       </div>
     )
   }
@@ -107,7 +99,7 @@ export function ParticipantTable({
   return (
     <div className="space-y-4">
       <div className="text-sm text-neutral-600">
-        {data.length} participant{data.length > 1 ? 's' : ''}
+        {t('common:plurals.participant', { count: data.length })}
       </div>
       <div className="rounded-md border">
         <Table>

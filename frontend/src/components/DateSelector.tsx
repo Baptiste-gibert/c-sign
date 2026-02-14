@@ -1,12 +1,14 @@
 import { useFormContext, useFieldArray } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Calendar } from '@/components/ui/calendar'
 import { Badge } from '@/components/ui/badge'
 import { X } from 'lucide-react'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr, enUS } from 'date-fns/locale'
 import type { EventFormData } from '@/lib/schemas'
 
 export function DateSelector() {
+  const { t, i18n } = useTranslation('organizer')
   const { control, formState: { errors } } = useFormContext<EventFormData>()
   const { fields, append, remove } = useFieldArray({
     control,
@@ -31,6 +33,8 @@ export function DateSelector() {
   // Convert selected dates for highlighting in calendar
   const selectedDates = fields.map((field) => new Date(field.date))
 
+  const locale = i18n.language === 'en' ? enUS : fr
+
   return (
     <div className="space-y-4">
       <div className="flex justify-center">
@@ -38,7 +42,7 @@ export function DateSelector() {
           mode="single"
           selected={undefined}
           onSelect={handleDateSelect}
-          locale={fr}
+          locale={locale}
           modifiers={{
             selected: selectedDates,
           }}
@@ -50,11 +54,11 @@ export function DateSelector() {
 
       {fields.length === 0 ? (
         <p className="text-sm text-neutral-500 text-center">
-          Cliquez sur le calendrier pour selectionner des dates
+          {t('dateSelector.clickPrompt')}
         </p>
       ) : (
         <div className="space-y-2">
-          <p className="text-sm font-medium">Dates selectionnees :</p>
+          <p className="text-sm font-medium">{t('dateSelector.selectedDates')}</p>
           <div className="flex flex-wrap gap-2">
             {fields.map((field, index) => (
               <Badge
@@ -62,7 +66,7 @@ export function DateSelector() {
                 variant="secondary"
                 className="gap-1 pl-3 pr-1"
               >
-                {format(new Date(field.date), 'PPP', { locale: fr })}
+                {format(new Date(field.date), 'PPP', { locale })}
                 <button
                   type="button"
                   onClick={() => remove(index)}

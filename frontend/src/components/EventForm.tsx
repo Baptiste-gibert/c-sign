@@ -1,5 +1,6 @@
 import { useForm, FormProvider, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import { eventSchema, type EventFormData } from '@/lib/schemas'
 import { useAuth } from '@/hooks/use-auth'
 import { Input } from '@/components/ui/input'
@@ -19,16 +20,17 @@ interface EventFormProps {
   isSubmitting?: boolean
 }
 
-const EXPENSE_TYPES = [
-  { value: 'hospitality_snack', label: 'Hospitalite - Collation' },
-  { value: 'hospitality_catering', label: 'Hospitalite - Restauration' },
-  { value: 'hospitality_accommodation', label: 'Hospitalite - Hebergement' },
-  { value: 'event_registration', label: "Frais d'inscription evenement" },
-  { value: 'meeting_organization', label: 'Frais de reunion/organisation' },
-  { value: 'transport', label: 'Frais de transport' },
+const EXPENSE_TYPE_KEYS = [
+  'hospitality_snack',
+  'hospitality_catering',
+  'hospitality_accommodation',
+  'event_registration',
+  'meeting_organization',
+  'transport',
 ] as const
 
 export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
+  const { t } = useTranslation('organizer')
   const { user } = useAuth()
 
   const form = useForm<EventFormData>({
@@ -50,11 +52,11 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl space-y-6">
         {/* Title */}
         <div className="space-y-2">
-          <Label htmlFor="title">Titre de l'evenement</Label>
+          <Label htmlFor="title">{t('eventForm.title')}</Label>
           <Input
             id="title"
             {...register('title')}
-            placeholder="Reunion veterinaire..."
+            placeholder={t('eventForm.titlePlaceholder')}
           />
           {errors.title && (
             <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -63,11 +65,11 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
         {/* Location */}
         <div className="space-y-2">
-          <Label htmlFor="location">Lieu</Label>
+          <Label htmlFor="location">{t('eventForm.location')}</Label>
           <Input
             id="location"
             {...register('location')}
-            placeholder="Paris, France"
+            placeholder={t('eventForm.locationPlaceholder')}
           />
           {errors.location && (
             <p className="text-sm text-red-500">{errors.location.message}</p>
@@ -76,11 +78,11 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
         {/* Organizer Name */}
         <div className="space-y-2">
-          <Label htmlFor="organizerName">Nom de l'organisateur</Label>
+          <Label htmlFor="organizerName">{t('eventForm.organizerName')}</Label>
           <Input
             id="organizerName"
             {...register('organizerName')}
-            placeholder="Jean Dupont"
+            placeholder={t('eventForm.organizerNamePlaceholder')}
           />
           {errors.organizerName && (
             <p className="text-sm text-red-500">{errors.organizerName.message}</p>
@@ -89,12 +91,12 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
         {/* Organizer Email */}
         <div className="space-y-2">
-          <Label htmlFor="organizerEmail">Email de l'organisateur</Label>
+          <Label htmlFor="organizerEmail">{t('eventForm.organizerEmail')}</Label>
           <Input
             id="organizerEmail"
             type="email"
             {...register('organizerEmail')}
-            placeholder="jean.dupont@example.com"
+            placeholder={t('eventForm.organizerEmailPlaceholder')}
           />
           {errors.organizerEmail && (
             <p className="text-sm text-red-500">{errors.organizerEmail.message}</p>
@@ -103,7 +105,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
         {/* Expense Type */}
         <div className="space-y-2">
-          <Label htmlFor="expenseType">Type de depense</Label>
+          <Label htmlFor="expenseType">{t('eventForm.expenseType')}</Label>
           <Controller
             name="expenseType"
             control={control}
@@ -113,12 +115,12 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
                 onValueChange={field.onChange}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selectionnez un type de depense" />
+                  <SelectValue placeholder={t('eventForm.expenseTypePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {EXPENSE_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
+                  {EXPENSE_TYPE_KEYS.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {t(`expenseTypes.${key}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -132,14 +134,14 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
         {/* Date Selector */}
         <div className="space-y-2">
-          <Label>Dates de l'evenement</Label>
+          <Label>{t('eventForm.eventDates')}</Label>
           <DateSelector />
         </div>
 
         {/* Submit Button */}
         <div className="pt-4">
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? 'Creation en cours...' : "Creer l'evenement"}
+            {isSubmitting ? t('eventForm.submitting') : t('eventForm.submit')}
           </Button>
         </div>
       </form>
