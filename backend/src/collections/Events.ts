@@ -59,6 +59,14 @@ export const Events: CollectionConfig = {
                 { label: 'Rouvert', value: 'reopened' },
               ],
             },
+            {
+              name: 'theme',
+              type: 'json',
+              label: 'Theme',
+              admin: {
+                description: 'Theme configuration for public signing page',
+              },
+            },
           ],
         },
         {
