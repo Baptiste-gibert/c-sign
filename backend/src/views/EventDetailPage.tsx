@@ -41,7 +41,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 
 const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
 
@@ -472,18 +473,71 @@ export function EventDetailPage() {
                     {t('organizer:eventDetail.liveUpdates')}
                   </span>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-[10px] gap-1"
-                  onClick={() => {
-                    // Download all QR codes (same as single download for now)
-                    handleDownload()
-                  }}
-                >
-                  <Download className="w-3 h-3" />
-                  {t('organizer:eventDetail.downloadAllQr')}
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-[10px] gap-1"
+                    >
+                      <QrCode className="w-3 h-3" />
+                      {t('organizer:eventDetail.downloadAllQr')}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center justify-between">
+                        <span>{t('organizer:qrCodes.title')}</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-[10px] gap-1 print:hidden"
+                          onClick={() => window.print()}
+                        >
+                          <Printer className="w-3 h-3" />
+                          {t('organizer:qrCodes.print')}
+                        </Button>
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-6 py-2">
+                      {attendanceData?.attendanceDays.map((day) => (
+                        <div key={day.id}>
+                          <h3 className="text-sm font-semibold text-gray-800 mb-3 capitalize">
+                            {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale })}
+                          </h3>
+                          {event.qrGranularity === 'session' ? (
+                            <div className="grid grid-cols-2 gap-4">
+                              {day.sessions.map((session) => (
+                                <div key={session.id} className="flex flex-col items-center gap-2 p-3 border rounded-lg">
+                                  <QRCodeSVG
+                                    value={`${window.location.origin}/sign/${day.id}?session=${session.id}`}
+                                    size={160}
+                                    level="H"
+                                  />
+                                  <p className="text-xs font-medium text-gray-700 text-center">{session.name}</p>
+                                  <code className="text-[9px] text-gray-400 break-all text-center">
+                                    /sign/{day.id}?session={session.id}
+                                  </code>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
+                              <QRCodeSVG
+                                value={`${window.location.origin}/sign/${day.id}`}
+                                size={200}
+                                level="H"
+                              />
+                              <code className="text-[9px] text-gray-400 break-all text-center">
+                                /sign/{day.id}
+                              </code>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               <AttendanceDashboard

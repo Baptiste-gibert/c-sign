@@ -151,7 +151,8 @@
   },
   "qrCodes": {
     "title": "QR Codes pour signature",
-    "scanPrompt": "Scannez ce code pour accéder à la page de signature"
+    "scanPrompt": "Scannez ce code pour accéder à la page de signature",
+    "print": "Imprimer"
   },
   "participants": {
     "title": "Participants",
