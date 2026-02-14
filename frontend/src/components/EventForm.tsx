@@ -43,6 +43,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
       organizerName: user ? `${user.firstName} ${user.lastName}` : '',
       organizerEmail: user?.email || '',
       expenseType: undefined,
+      cnovDeclarationNumber: '',
       selectedDates: [],
     },
   })
@@ -131,6 +132,19 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
           />
           {errors.expenseType && (
             <p className="text-sm text-red-500">{errors.expenseType.message}</p>
+          )}
+        </div>
+
+        {/* CNOV Declaration Number */}
+        <div className="space-y-2">
+          <Label htmlFor="cnovDeclarationNumber">{t('eventForm.cnovDeclarationNumber')}</Label>
+          <Input
+            id="cnovDeclarationNumber"
+            {...register('cnovDeclarationNumber')}
+            placeholder={t('eventForm.cnovPlaceholder')}
+          />
+          {errors.cnovDeclarationNumber && (
+            <p className="text-sm text-red-500">{errors.cnovDeclarationNumber.message}</p>
           )}
         </div>
 

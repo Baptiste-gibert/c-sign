@@ -36,6 +36,7 @@ export function createEventSchema() {
       'meeting_organization',
       'transport',
     ], { required_error: i18n.t('organizer:validation.expenseTypeRequired') }),
+    cnovDeclarationNumber: z.string().optional(),
     selectedDates: z.array(
       z.object({ date: z.string() })
     ).min(1, i18n.t('organizer:validation.atLeastOneDateRequired')),

@@ -50,6 +50,8 @@
     "organizerEmailPlaceholder": "jean.dupont@example.com",
     "expenseType": "Type de depense",
     "expenseTypePlaceholder": "Selectionnez un type de depense",
+    "cnovDeclarationNumber": "Numero de declaration CNOV",
+    "cnovPlaceholder": "Ex: 2024-12345 (optionnel)",
     "eventDates": "Dates de l'evenement",
     "submitting": "Creation en cours...",
     "submit": "Creer l'evenement"

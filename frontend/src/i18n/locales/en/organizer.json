@@ -50,6 +50,8 @@
     "organizerEmailPlaceholder": "john.doe@example.com",
     "expenseType": "Expense type",
     "expenseTypePlaceholder": "Select an expense type",
+    "cnovDeclarationNumber": "CNOV declaration number",
+    "cnovPlaceholder": "E.g.: 2024-12345 (optional)",
     "eventDates": "Event dates",
     "submitting": "Creating...",
     "submit": "Create event"
