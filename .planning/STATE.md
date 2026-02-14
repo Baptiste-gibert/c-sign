@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 5 - Platform Polish
+**Current focus:** Phase 6 - Advanced Features
 
 ## Current Position
 
-Phase: 5 of 6 (Platform Polish)
-Plan: 3 of 3 in current phase
-Status: 05-03 complete (Phase 5 complete)
-Last activity: 2026-02-14 — Completed 05-03 (mobile responsive + bilingual verification)
+Phase: 6 of 6 (Advanced Features)
+Plan: 1 of 1 in current phase
+Status: 06-01 complete (Phase 6 complete)
+Last activity: 2026-02-14 — Completed 06-01 (event reopen + CNOV export)
 
-Progress: [▓▓▓▓▓▓▓▓▓░] 89%
+Progress: [▓▓▓▓▓▓▓▓▓▓] 94%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
+- Total plans completed: 17
 - Average duration: 6 min
-- Total execution time: 11.9 hours
+- Total execution time: 12.0 hours
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: [▓▓▓▓▓▓▓▓▓░] 89%
 | 03    | 5     | 27m    | 5m       |
 | 04    | 2     | 10h 4m | 5h 2m    |
 | 05    | 3     | 29m    | 10m      |
+| 06    | 1     | 1m     | 1m       |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (4m), 04-02 (10h), 05-01 (4m), 05-02 (9m), 05-03 (16m)
-- Trend: Phase 5 complete; responsive audit + human verification successful
+- Last 5 plans: 04-02 (10h), 05-01 (4m), 05-02 (9m), 05-03 (16m), 06-01 (1m)
+- Trend: Phase 6 complete; event reopen lifecycle and CNOV export implemented
 
 *Updated after each plan completion*
 
@@ -97,6 +98,9 @@ Recent decisions affecting current work:
 - 05-02: Multi-namespace translation usage (common/public/organizer) enables shared strings while maintaining separation of concerns
 - [Phase 05-03]: Factory pattern for Zod schemas: schemas converted to functions that evaluate i18n.t() at call time, enabling reactive validation messages
 - [Phase 05-03]: Responsive signature canvas uses h-40 sm:h-48 md:h-56 for adaptive height across devices
+- 06-01: Reopened status functionally equivalent to open for signatures (no explicit validation needed)
+- 06-01: Re-finalization detected via previousDoc.status === 'reopened' (no timestamp field needed)
+- 06-01: CNOV metadata conditionally added to XLSX only when populated (graceful omission)
 
 ### Pending Todos
 
@@ -109,6 +113,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-14T09:46:38Z
-Stopped at: Completed 05-03-PLAN.md (mobile responsive + bilingual verification)
+Last session: 2026-02-14T10:52:49Z
+Stopped at: Completed 06-01-PLAN.md (event reopen + CNOV export)
 Resume file: None
