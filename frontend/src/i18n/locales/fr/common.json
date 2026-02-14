@@ -26,7 +26,8 @@
   "status": {
     "draft": "Brouillon",
     "open": "Ouvert",
-    "finalized": "Finalisé"
+    "finalized": "Finalisé",
+    "reopened": "Rouvert"
   },
   "beneficiaryTypes": {
     "asv": "ASV",

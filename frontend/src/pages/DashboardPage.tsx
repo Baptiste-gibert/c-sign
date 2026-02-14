@@ -24,15 +24,16 @@ function FormatEventDates({ dates, language }: { dates: Array<{ id: string; date
   return <>{t('plurals.days', { count: dates.length })}</>
 }
 
-function StatusBadge({ status }: { status: 'draft' | 'open' | 'finalized' }) {
+function StatusBadge({ status }: { status: 'draft' | 'open' | 'finalized' | 'reopened' }) {
   const { t } = useTranslation('common')
   const variants = {
     draft: { variant: 'secondary' as const, label: t('status.draft') },
     open: { variant: 'default' as const, label: t('status.open') },
     finalized: { variant: 'outline' as const, label: t('status.finalized') },
+    reopened: { variant: 'default' as const, label: t('status.reopened') },
   }
 
-  const config = variants[status]
+  const config = variants[status] || variants.draft
   return <Badge variant={config.variant}>{config.label}</Badge>
 }
 

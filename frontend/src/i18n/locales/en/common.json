@@ -26,7 +26,8 @@
   "status": {
     "draft": "Draft",
     "open": "Open",
-    "finalized": "Finalized"
+    "finalized": "Finalized",
+    "reopened": "Reopened"
   },
   "beneficiaryTypes": {
     "asv": "AVN",

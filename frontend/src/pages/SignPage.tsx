@@ -137,7 +137,7 @@ export function SignPage() {
       )}
 
       {/* Event not open block */}
-      {eventStatus && eventStatus !== 'open' && (
+      {eventStatus && eventStatus !== 'open' && eventStatus !== 'reopened' && (
         <Card>
           <CardContent className="pt-6">
             <p className="text-center text-red-600 font-medium">
@@ -150,7 +150,7 @@ export function SignPage() {
       )}
 
       {/* Session selection */}
-      {eventStatus === 'open' && sessions.length > 1 && (
+      {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && (
         <div className="mb-6">
           <Card>
             <CardContent className="pt-6">
@@ -181,7 +181,7 @@ export function SignPage() {
       )}
 
       {/* Participant form */}
-      {eventStatus === 'open' && (
+      {(eventStatus === 'open' || eventStatus === 'reopened') && (
         <ParticipantForm
           onSubmit={handleSubmit}
           isPending={mutation.isPending}

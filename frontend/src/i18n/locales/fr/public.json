@@ -18,6 +18,7 @@
   "selectSession": "Sélectionnez la session",
   "eventFinalized": "Cet evenement est finalise. Les signatures ne sont plus acceptees.",
   "eventNotOpen": "Cet evenement n'est pas encore ouvert aux signatures.",
+  "eventReopened": "Cet événement a été rouvert. Vous pouvez signer.",
   "successTitle": "Merci {{name}} !",
   "successTitleDefault": "Signature enregistrée !",
   "successMessage": "Votre signature a été enregistrée avec succès."

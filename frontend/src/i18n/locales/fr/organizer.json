@@ -66,7 +66,13 @@
     "finalizeConfirm": "Finaliser cet événement ? Cette action est définitive.",
     "generating": "Génération...",
     "downloadXlsx": "Télécharger XLSX",
-    "downloadError": "Échec du téléchargement, veuillez réessayer"
+    "downloadError": "Échec du téléchargement, veuillez réessayer",
+    "reopenEvent": "Rouvrir l'événement",
+    "reopenConfirm": "Rouvrir cet événement ? Les participants pourront à nouveau signer.",
+    "eventReopened": "Événement rouvert - les participants peuvent signer",
+    "refinalizeEvent": "Finaliser à nouveau",
+    "cnov": "CNOV:",
+    "walkInSuccess": "Participant ajouté avec succès"
   },
   "qrCodes": {
     "title": "QR Codes pour signature",

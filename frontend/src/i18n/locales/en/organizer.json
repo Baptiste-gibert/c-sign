@@ -66,7 +66,13 @@
     "finalizeConfirm": "Finalize this event? This action is final.",
     "generating": "Generating...",
     "downloadXlsx": "Download XLSX",
-    "downloadError": "Download failed, please try again"
+    "downloadError": "Download failed, please try again",
+    "reopenEvent": "Reopen event",
+    "reopenConfirm": "Reopen this event? Participants will be able to sign again.",
+    "eventReopened": "Event reopened - participants can sign",
+    "refinalizeEvent": "Finalize again",
+    "cnov": "CNOV:",
+    "walkInSuccess": "Participant added successfully"
   },
   "qrCodes": {
     "title": "QR Codes for signing",
