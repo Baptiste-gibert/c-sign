@@ -96,7 +96,7 @@ export function SignPage() {
 
   if (loading) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <p className="text-center text-muted-foreground">{t('common:loading')}</p>
       </div>
     )
@@ -104,7 +104,7 @@ export function SignPage() {
 
   if (error && !day) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <Card>
           <CardContent className="pt-6">
             <p className="text-center text-red-600">{error}</p>
@@ -115,7 +115,7 @@ export function SignPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6">
+    <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Language switcher */}
       <div className="flex justify-end mb-4">
         <LanguageSwitcher />
@@ -124,7 +124,7 @@ export function SignPage() {
       {/* Event context */}
       {day && (
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">{day.event.title}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">{day.event.title}</h1>
           <p className="text-muted-foreground">
             {new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
               weekday: 'long',
@@ -160,7 +160,7 @@ export function SignPage() {
                   {sessions.map((session) => (
                     <label
                       key={session.id}
-                      className="flex items-center space-x-2 cursor-pointer"
+                      className="flex items-center space-x-2 cursor-pointer min-h-[44px]"
                     >
                       <input
                         type="radio"

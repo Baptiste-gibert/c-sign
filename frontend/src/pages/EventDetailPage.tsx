@@ -174,10 +174,10 @@ export function EventDetailPage() {
           {t('organizer:eventDetail.backToDashboard')}
         </Button>
 
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-neutral-900">{event.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-neutral-600">
+            <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">{event.title}</h1>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-neutral-600">
               <span>{event.location}</span>
               <span>•</span>
               <span>{t('organizer:eventDetail.organizer')} {event.organizerName}</span>
@@ -224,7 +224,7 @@ export function EventDetailPage() {
             </div>
           )}
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {event.status === 'draft' && (
               <Button
                 onClick={() => handleStatusChange('open')}
@@ -288,7 +288,7 @@ export function EventDetailPage() {
             <CardTitle>{t('organizer:qrCodes.title')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {event.attendanceDays.map((day: any) => (
                 <Dialog key={day.id}>
                   <DialogTrigger asChild>
@@ -357,7 +357,7 @@ export function EventDetailPage() {
 
             {showWalkInForm && (
               <form onSubmit={handleAddWalkIn} className="mt-4 space-y-3 p-4 border rounded-md bg-neutral-50">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="lastName">{t('common:form.labels.lastName')} *</Label>
                     <Input

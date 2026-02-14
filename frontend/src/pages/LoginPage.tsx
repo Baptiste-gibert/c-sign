@@ -51,7 +51,7 @@ export function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-neutral-900">c-sign</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900">c-sign</h1>
           <p className="text-neutral-600">{t('login.title')}</p>
         </div>
 

@@ -48,6 +48,7 @@ export function ParticipantTable({
     columnHelper.accessor('email', {
       header: t('common:form.labels.email'),
       cell: (info) => info.getValue(),
+      meta: { className: 'hidden md:table-cell' },
     }),
     columnHelper.accessor('city', {
       header: t('common:form.labels.city'),
@@ -60,6 +61,7 @@ export function ParticipantTable({
     columnHelper.accessor('professionalNumber', {
       header: t('organizer:participants.professionalNumberShort'),
       cell: (info) => info.getValue() || '-',
+      meta: { className: 'hidden md:table-cell' },
     }),
     columnHelper.display({
       id: 'actions',
@@ -101,13 +103,13 @@ export function ParticipantTable({
       <div className="text-sm text-neutral-600">
         {t('common:plurals.participant', { count: data.length })}
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={(header.column.columnDef.meta as any)?.className}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -123,7 +125,7 @@ export function ParticipantTable({
             {table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

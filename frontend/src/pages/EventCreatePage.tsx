@@ -30,7 +30,7 @@ export function EventCreatePage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-3xl font-bold text-neutral-900">{t('dashboard.newEvent')}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('dashboard.newEvent')}</h1>
       </div>
 
       {/* Error Message */}

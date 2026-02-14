@@ -9,7 +9,7 @@ export function SuccessPage() {
   const participantName = location.state?.participantName
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 min-h-screen flex items-center justify-center">
+    <div className="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6 min-h-screen flex items-center justify-center">
       <Card className="w-full">
         <CardContent className="pt-6">
           <div className="flex flex-col items-center text-center space-y-4">

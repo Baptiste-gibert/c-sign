@@ -53,7 +53,7 @@ export function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-neutral-900">{t('dashboard.title')}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('dashboard.title')}</h1>
         <Button onClick={() => navigate('/events/new')}>
           <Plus className="h-4 w-4 mr-2" />
           {t('dashboard.newEvent')}
@@ -72,14 +72,14 @@ export function DashboardPage() {
 
       {/* Event List Table */}
       {events && events.length > 0 && (
-        <div className="border rounded-lg">
+        <div className="border rounded-lg overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>{t('table.headers.title')}</TableHead>
-                <TableHead>{t('table.headers.location')}</TableHead>
+                <TableHead className="hidden md:table-cell">{t('table.headers.location')}</TableHead>
                 <TableHead>{t('table.headers.dates')}</TableHead>
-                <TableHead>{t('table.headers.expenseType')}</TableHead>
+                <TableHead className="hidden md:table-cell">{t('table.headers.expenseType')}</TableHead>
                 <TableHead>{t('table.headers.status')}</TableHead>
                 <TableHead className="text-right">{t('table.headers.actions')}</TableHead>
               </TableRow>
@@ -95,9 +95,9 @@ export function DashboardPage() {
                       {event.title}
                     </Link>
                   </TableCell>
-                  <TableCell>{event.location}</TableCell>
+                  <TableCell className="hidden md:table-cell">{event.location}</TableCell>
                   <TableCell><FormatEventDates dates={event.selectedDates} language={i18n.language} /></TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {t(`expenseTypes.${event.expenseType}`, event.expenseType)}
                   </TableCell>
                   <TableCell>

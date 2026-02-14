@@ -46,7 +46,7 @@ export function ParticipantSearch({
           {t('participants.searchSimvPlaceholder')}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="start">
+      <PopoverContent className="w-full max-w-[400px] p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={t('participants.searchPlaceholder')}

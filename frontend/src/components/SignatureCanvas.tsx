@@ -58,7 +58,7 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
 
   return (
     <div className="space-y-2">
-      <div className="relative w-full h-48 border border-border rounded-md overflow-hidden">
+      <div className="relative w-full h-40 sm:h-48 md:h-56 border border-border rounded-md overflow-hidden">
         {!hasDrawn && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-muted-foreground text-sm">
             {t('signHere')}
@@ -81,6 +81,7 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
           canvasRef.current?.clear()
           setHasDrawn(false)
         }}
+        className="min-h-[36px]"
       >
         {t('clear')}
       </Button>
