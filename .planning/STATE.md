@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 6 of 6 (Advanced Features)
-Plan: 1 of 1 in current phase
-Status: 06-01 complete (Phase 6 complete)
-Last activity: 2026-02-14 — Completed 06-01 (event reopen + CNOV export)
+Plan: 2 of 2 in current phase
+Status: 06-02 complete (Phase 6 complete)
+Last activity: 2026-02-14 — Completed 06-02 (frontend reopen flow + CNOV display)
 
-Progress: [▓▓▓▓▓▓▓▓▓▓] 94%
+Progress: [▓▓▓▓▓▓▓▓▓▓] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 17
+- Total plans completed: 18
 - Average duration: 6 min
-- Total execution time: 12.0 hours
+- Total execution time: 12.1 hours
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: [▓▓▓▓▓▓▓▓▓▓] 94%
 | 03    | 5     | 27m    | 5m       |
 | 04    | 2     | 10h 4m | 5h 2m    |
 | 05    | 3     | 29m    | 10m      |
-| 06    | 1     | 1m     | 1m       |
+| 06    | 2     | 4m     | 2m       |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (10h), 05-01 (4m), 05-02 (9m), 05-03 (16m), 06-01 (1m)
-- Trend: Phase 6 complete; event reopen lifecycle and CNOV export implemented
+- Last 5 plans: 05-01 (4m), 05-02 (9m), 05-03 (16m), 06-01 (1m), 06-02 (3m)
+- Trend: Phase 6 complete; event reopen lifecycle fully implemented (backend + frontend)
 
 *Updated after each plan completion*
 
@@ -101,6 +101,9 @@ Recent decisions affecting current work:
 - 06-01: Reopened status functionally equivalent to open for signatures (no explicit validation needed)
 - 06-01: Re-finalization detected via previousDoc.status === 'reopened' (no timestamp field needed)
 - 06-01: CNOV metadata conditionally added to XLSX only when populated (graceful omission)
+- 06-02: isLocked variable distinguishes truly locked (finalized only) from reopened state — enables participant management when reopened
+- 06-02: Reopened events use amber badge color to visually distinguish from finalized (blue) and open (green)
+- 06-02: Optimistic updates for walk-in participant addition provide instant visual feedback before server response
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-14T10:52:49Z
-Stopped at: Completed 06-01-PLAN.md (event reopen + CNOV export)
+Last session: 2026-02-14T10:59:01Z
+Stopped at: Completed 06-02-PLAN.md (frontend reopen flow + CNOV display)
 Resume file: None
