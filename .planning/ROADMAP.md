@@ -124,10 +124,11 @@ Plans:
   3. When event is reopened, existing signatures are preserved
   4. Organizer can add walk-in participants on-site during event
   5. Walk-in participant addition shows confirmation and updates attendance dashboard
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 06-01: TBD
+- [ ] 06-01-PLAN.md — Backend reopen status lifecycle, CNOV in XLSX export, re-finalization email handling
+- [ ] 06-02-PLAN.md — Frontend reopen UI, CNOV display, SignPage/DashboardPage updates, bilingual translations, walk-in UX
 
 ## Progress
 
@@ -141,4 +142,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
 | 5. Platform Polish | 3/3 | ✓ Complete | 2026-02-14 |
-| 6. Advanced Features | 0/TBD | Not started | - |
+| 6. Advanced Features | 0/2 | Not started | - |
