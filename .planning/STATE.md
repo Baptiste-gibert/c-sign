@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 4 - Export & Email
+**Current focus:** Phase 5 - Platform Polish
 
 ## Current Position
 
-Phase: 4 of 6 (Export & Email)
-Plan: 2 of 2 in current phase
-Status: Phase complete — 04-02 verified
-Last activity: 2026-02-14 — Completed 04-02 (Frontend download + human verification)
+Phase: 5 of 6 (Platform Polish)
+Plan: 1 of 2 in current phase
+Status: 05-01 complete
+Last activity: 2026-02-14 — Completed 05-01 (i18n infrastructure setup)
 
-Progress: [▓▓▓▓▓▓▓░░░] 70%
+Progress: [▓▓▓▓▓▓▓▓░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 8 min
+- Total plans completed: 14
+- Average duration: 7 min
 - Total execution time: 11.4 hours
 
 **By Phase:**
@@ -31,10 +31,11 @@ Progress: [▓▓▓▓▓▓▓░░░] 70%
 | 02    | 3     | 9m     | 3m       |
 | 03    | 5     | 27m    | 5m       |
 | 04    | 2     | 10h 4m | 5h 2m    |
+| 05    | 1     | 4m     | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 03-03 (3m), 03-04 (3m), 03-05 (15m), 04-01 (4m), 04-02 (10h)
-- Trend: 04-02 long duration due to human verification checkpoint with 3 bug fixes
+- Last 5 plans: 03-04 (3m), 03-05 (15m), 04-01 (4m), 04-02 (10h), 05-01 (4m)
+- Trend: Returned to fast execution after 04-02 checkpoint; 05-01 setup-only task
 
 *Updated after each plan completion*
 
@@ -87,6 +88,10 @@ Recent decisions affecting current work:
 - 04-02: Blob URL download pattern keeps user on page during XLSX download — no navigation away from event detail
 - 04-02: Payload relationship arrays not auto-populated when children created via hooks — must use direct queries with where clauses
 - 04-02: overrideAccess required for all Payload queries in server contexts — access control applies even when route validates auth
+- 05-01: French as fallback language (fallbackLng: 'fr') per project requirements — primary language for Ceva Sante Animale France
+- 05-01: Three-namespace i18n organization (common/public/organizer) for clear separation and future code-splitting potential
+- 05-01: localStorage-first language detection for persistence across sessions — better UX than navigator-only detection
+- 05-01: LanguageSwitcher shows opposite language (EN when French, FR when English) following standard bilingual website UX pattern
 
 ### Pending Todos
 
@@ -99,6 +104,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-14T08:42:59Z
-Stopped at: Completed 04-02-PLAN.md (Frontend download + human verification)
+Last session: 2026-02-14T09:13:09Z
+Stopped at: Completed 05-01-PLAN.md (i18n infrastructure setup)
 Resume file: None
