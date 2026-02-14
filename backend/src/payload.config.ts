@@ -5,6 +5,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -37,22 +38,25 @@ export default buildConfig({
         })]
       : []),
   ],
+  sharp,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL || '',
     },
   }),
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',
-    defaultFromName: 'c-sign - Ceva Sante Animale',
-    transportOptions: {
-      host: process.env.SMTP_HOST || 'localhost',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_PORT === '465',
-      auth: process.env.SMTP_USER ? {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      } : undefined,
-    },
-  })
+  ...(process.env.SMTP_HOST ? {
+    email: nodemailerAdapter({
+      defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',
+      defaultFromName: 'c-sign - Ceva Sante Animale',
+      transportOptions: {
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: process.env.SMTP_PORT === '465',
+        auth: process.env.SMTP_USER ? {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        } : undefined,
+      },
+    })
+  } : {}),
 })
