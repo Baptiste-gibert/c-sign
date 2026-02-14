@@ -123,7 +123,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
             {/* Day header — clickable for collapse */}
             <div
               className={`px-4 py-2.5 flex items-center justify-between cursor-pointer select-none ${
-                day.isToday ? 'bg-blue-100/70' : 'bg-blue-50/50'
+                day.isToday ? 'bg-blue-200/70' : 'bg-blue-100/60'
               }`}
               onClick={() => toggleCollapse(day.id)}
             >
