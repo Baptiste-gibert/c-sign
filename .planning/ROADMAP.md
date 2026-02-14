@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Event Management** - Organizer dashboard, event CRUD, participant lists
 - [x] **Phase 4: Export & Email** - XLSX generation with embedded signatures, email delivery
 - [x] **Phase 5: Platform Polish** - Bilingual UI (FR/EN), mobile-first responsive design
-- [ ] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
+- [x] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
 
 ## Phase Details
 
@@ -143,4 +143,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
 | 5. Platform Polish | 3/3 | ✓ Complete | 2026-02-14 |
-| 6. Advanced Features | 2/3 | Gap closure | 2026-02-14 |
+| 6. Advanced Features | 3/3 | ✓ Complete | 2026-02-14 |
