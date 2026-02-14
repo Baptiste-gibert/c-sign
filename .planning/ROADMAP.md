@@ -107,10 +107,12 @@ Plans:
   3. Public signing form is fully usable on smartphone screens (320px width minimum)
   4. Organizer dashboard is fully usable on tablet and desktop screens
   5. Signature canvas works reliably on iOS Safari, Android Chrome, desktop browsers
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 05-01: TBD
+- [ ] 05-01-PLAN.md — i18n infrastructure: react-i18next setup, translation JSON files (3 namespaces x 2 languages), LanguageSwitcher component
+- [ ] 05-02-PLAN.md — Replace all hardcoded French strings with t() calls across every component
+- [ ] 05-03-PLAN.md — Mobile-first responsive audit + human verification of bilingual + responsive experience
 
 ### Phase 6: Advanced Features
 **Goal**: Organizers can reopen finalized events, add CNOV numbers, and manage walk-in participants on-site.
@@ -138,5 +140,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Public Signature Flow | 4/4 | ✓ Complete | 2026-02-13 |
 | 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
-| 5. Platform Polish | 0/TBD | Not started | - |
+| 5. Platform Polish | 0/3 | Not started | - |
 | 6. Advanced Features | 0/TBD | Not started | - |
