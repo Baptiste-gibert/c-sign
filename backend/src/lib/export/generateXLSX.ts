@@ -6,11 +6,12 @@ import { optimizeSignature } from './optimizeSignature'
  * Generate XLSX attendance sheet with embedded signature images
  */
 export async function generateEventXLSX(payload: Payload, eventId: string): Promise<Buffer> {
-  // Fetch event with full depth to populate all relationships
+  // Fetch event — overrideAccess since caller already verified auth
   const event = await payload.findByID({
     collection: 'events',
     id: eventId,
     depth: 3,
+    overrideAccess: true,
   })
 
   if (!event) {
@@ -76,6 +77,7 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
       where: { attendanceDay: { equals: dayId } },
       depth: 0,
       limit: 100,
+      overrideAccess: true,
     })
 
     for (const session of sessionsResult.docs) {
@@ -87,6 +89,7 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
         where: { session: { equals: sessionId } },
         depth: 2, // Populate participant and image
         limit: 500,
+        overrideAccess: true,
       })
 
       for (const signature of signaturesResult.docs) {
