@@ -56,6 +56,7 @@ export const Events: CollectionConfig = {
                 { label: 'Brouillon', value: 'draft' },
                 { label: 'Ouvert', value: 'open' },
                 { label: 'Finalise', value: 'finalized' },
+                { label: 'Rouvert', value: 'reopened' },
               ],
             },
           ],
@@ -154,12 +155,34 @@ export const Events: CollectionConfig = {
           const oldStatus = originalDoc.status
           const newStatus = data.status
 
-          // Invalid transitions
+          // Block: open cannot go back to draft
           if (oldStatus === 'open' && newStatus === 'draft') {
             throw new Error('Un evenement ouvert ne peut pas revenir en brouillon')
           }
-          if (oldStatus === 'finalized' && (newStatus === 'draft' || newStatus === 'open')) {
-            throw new Error('Un evenement finalise ne peut pas etre modifie')
+
+          // Allow: finalized -> reopened (controlled reopen)
+          if (oldStatus === 'finalized' && newStatus === 'reopened') {
+            return data
+          }
+
+          // Block: finalized cannot go to anything except reopened
+          if (oldStatus === 'finalized') {
+            throw new Error('Un evenement finalise ne peut etre que rouvert')
+          }
+
+          // Allow: reopened -> finalized (re-finalization)
+          if (oldStatus === 'reopened' && newStatus === 'finalized') {
+            return data
+          }
+
+          // Block: reopened cannot go to draft
+          if (oldStatus === 'reopened' && newStatus === 'draft') {
+            throw new Error('Un evenement rouvert ne peut pas revenir en brouillon')
+          }
+
+          // Block: reopened cannot go to open (treat reopened as equivalent to open)
+          if (oldStatus === 'reopened' && newStatus === 'open') {
+            throw new Error('Un evenement rouvert est deja ouvert aux signatures')
           }
         }
         return data
