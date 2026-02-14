@@ -1,6 +1,40 @@
+import path from 'path'
 import type { Payload } from 'payload'
 import ExcelJS from 'exceljs'
 import { optimizeSignature } from './optimizeSignature'
+
+/**
+ * Derive the public Vercel Blob base URL from the BLOB_READ_WRITE_TOKEN.
+ * Token format: vercel_blob_rw_<storeId>_<random>
+ * Blob URL:     https://<storeId>.public.blob.vercel-storage.com
+ */
+function getBlobBaseUrl(): string | null {
+  const token = process.env.BLOB_READ_WRITE_TOKEN
+  if (!token) return null
+  const match = token.match(/^vercel_blob_rw_([a-z\d]+)_[a-z\d]+$/i)
+  if (!match) return null
+  return `https://${match[1].toLowerCase()}.public.blob.vercel-storage.com`
+}
+
+/**
+ * Resolve an image URL to a fetchable absolute URL.
+ * - Vercel Blob: construct public Blob URL from filename (bypasses deployment protection)
+ * - Absolute URL: use as-is
+ * - Relative URL: prefix with server URL
+ */
+function resolveImageUrl(imageUrl: string, filename: string, blobBaseUrl: string | null, serverUrl: string): string {
+  // If the URL is already absolute, use it directly
+  if (imageUrl.startsWith('http')) return imageUrl
+
+  // On Vercel with Blob storage, construct the public Blob URL directly
+  // This avoids self-fetching through the deployment (which hits Vercel auth protection)
+  if (blobBaseUrl) {
+    return `${blobBaseUrl}/${encodeURIComponent(filename)}`
+  }
+
+  // Fall back to self-fetch with server URL (works locally)
+  return `${serverUrl}${imageUrl}`
+}
 
 /**
  * Generate XLSX attendance sheet with embedded signature images
@@ -60,7 +94,8 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
   // Track current row number
   let currentRow = 5
 
-  // Get server URL for image fetching (relative URLs need a base)
+  // Resolve image URL strategy
+  const blobBaseUrl = getBlobBaseUrl()
   const serverUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     process.env.NEXT_PUBLIC_SERVER_URL ||
@@ -129,12 +164,11 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
         const image = signature.image
         if (image && typeof image === 'object' && image.url) {
           try {
-            // Fetch image — use absolute URL directly, or prefix with server URL
-            const imageUrl = image.url.startsWith('http') ? image.url : `${serverUrl}${image.url}`
-            const response = await fetch(imageUrl)
+            const fetchUrl = resolveImageUrl(image.url, image.filename, blobBaseUrl, serverUrl)
+            const response = await fetch(fetchUrl)
 
             if (!response.ok) {
-              console.error(`Image fetch failed for ${participant.email}: ${response.status} ${response.statusText} (URL: ${imageUrl})`)
+              console.error(`Image fetch failed for ${participant.email}: ${response.status} ${response.statusText} (URL: ${fetchUrl})`)
               continue
             }
 
