@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { DateSelector } from '@/components/DateSelector'
+import { ThemeSelector } from '@/components/ThemeSelector'
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void
@@ -44,6 +45,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
       organizerEmail: user?.email || '',
       expenseType: undefined,
       cnovDeclarationNumber: '',
+      theme: null,
       selectedDates: [],
     },
   })
@@ -146,6 +148,21 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
           {errors.cnovDeclarationNumber && (
             <p className="text-sm text-red-500">{errors.cnovDeclarationNumber.message}</p>
           )}
+        </div>
+
+        {/* Theme Selector */}
+        <div className="space-y-2">
+          <Label>{t('eventForm.theme')}</Label>
+          <Controller
+            name="theme"
+            control={control}
+            render={({ field }) => (
+              <ThemeSelector
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
         </div>
 
         {/* Date Selector */}

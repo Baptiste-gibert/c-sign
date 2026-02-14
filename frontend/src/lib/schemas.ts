@@ -37,6 +37,10 @@ export function createEventSchema() {
       'transport',
     ], { required_error: i18n.t('organizer:validation.expenseTypeRequired') }),
     cnovDeclarationNumber: z.string().optional(),
+    theme: z.object({
+      themeId: z.string().optional(),
+      customAccent: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    }).nullable().optional(),
     selectedDates: z.array(
       z.object({ date: z.string() })
     ).min(1, i18n.t('organizer:validation.atLeastOneDateRequired')),

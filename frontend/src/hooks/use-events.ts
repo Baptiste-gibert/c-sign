@@ -12,6 +12,7 @@ export interface PayloadEvent {
   attendanceDays?: Array<{ id: string; date: string }>
   participants?: Array<{ id: string; lastName: string; firstName: string }>
   cnovDeclarationNumber?: string
+  theme?: { themeId?: string; customAccent?: string } | null
   createdBy: string | { id: string }
   createdAt: string
   updatedAt: string

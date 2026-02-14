@@ -16,6 +16,8 @@ import {
 import { ParticipantSearch } from '@/components/ParticipantSearch'
 import { ParticipantTable } from '@/components/ParticipantTable'
 import { AttendanceDashboard } from '@/components/AttendanceDashboard'
+import { ThemeSelector } from '@/components/ThemeSelector'
+import { BUILT_IN_THEMES } from '@/config/themes'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -71,6 +73,8 @@ export function EventDetailPage() {
   const [statusErrorDismissed, setStatusErrorDismissed] = useState(false)
   const [editingCnov, setEditingCnov] = useState(false)
   const [cnovValue, setCnovValue] = useState('')
+  const [editingTheme, setEditingTheme] = useState(false)
+  const [themeValue, setThemeValue] = useState<{ themeId?: string; customAccent?: string } | null>(null)
 
   // Sync CNOV value when event data changes
   useEffect(() => {
@@ -80,6 +84,15 @@ export function EventDetailPage() {
       setCnovValue('')
     }
   }, [event?.cnovDeclarationNumber])
+
+  // Sync theme value when event data changes
+  useEffect(() => {
+    if (event?.theme) {
+      setThemeValue(event.theme)
+    } else {
+      setThemeValue(null)
+    }
+  }, [event?.theme])
 
   if (isLoading) {
     return (
@@ -135,6 +148,16 @@ export function EventDetailPage() {
     setEditingCnov(false)
   }
 
+  const handleSaveTheme = () => {
+    updateEvent({ theme: themeValue })
+    setEditingTheme(false)
+  }
+
+  const handleCancelTheme = () => {
+    setThemeValue(event?.theme || null)
+    setEditingTheme(false)
+  }
+
   const handleAddFromSimv = (participant: SimvParticipant) => {
     addParticipant({
       lastName: participant.lastName,
@@ -176,6 +199,14 @@ export function EventDetailPage() {
 
   const isFinalized = event.status === 'finalized'
   const isLocked = event.status === 'finalized' // Only truly locked when finalized, not when reopened
+
+  // Derive current theme label
+  let currentThemeLabel = t('organizer:eventDetail.defaultTheme')
+  if (event.theme?.themeId && BUILT_IN_THEMES[event.theme.themeId]) {
+    currentThemeLabel = BUILT_IN_THEMES[event.theme.themeId].name
+  } else if (event.theme?.customAccent) {
+    currentThemeLabel = `${t('organizer:eventDetail.customTheme')}: ${event.theme.customAccent}`
+  }
 
   // Parse status update error
   let statusErrorMessage = ''
@@ -380,6 +411,40 @@ export function EventDetailPage() {
           {downloadMutation.isError && (
             <p className="text-sm text-red-600">
               {t('organizer:eventDetail.downloadError')}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Theme selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>{t('organizer:eventDetail.themeTitle')}</span>
+            {!isLocked && !editingTheme && (
+              <Button variant="outline" size="sm" onClick={() => setEditingTheme(true)}>
+                <Pencil className="mr-1 h-3 w-3" />
+                {t('organizer:eventDetail.editTheme')}
+              </Button>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {editingTheme ? (
+            <div className="space-y-4">
+              <ThemeSelector value={themeValue} onChange={setThemeValue} />
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleSaveTheme}>
+                  {t('organizer:eventDetail.saveTheme')}
+                </Button>
+                <Button size="sm" variant="outline" onClick={handleCancelTheme}>
+                  {t('organizer:eventDetail.cancelTheme')}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-neutral-600">
+              {currentThemeLabel}
             </p>
           )}
         </CardContent>

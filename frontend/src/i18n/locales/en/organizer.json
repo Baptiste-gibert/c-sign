@@ -52,6 +52,8 @@
     "expenseTypePlaceholder": "Select an expense type",
     "cnovDeclarationNumber": "CNOV declaration number",
     "cnovPlaceholder": "E.g.: 2024-12345 (optional)",
+    "theme": "Public page theme",
+    "themePlaceholder": "Select a theme",
     "eventDates": "Event dates",
     "submitting": "Creating...",
     "submit": "Create event"
@@ -78,7 +80,13 @@
     "editCnov": "Edit",
     "saveCnov": "Save",
     "cancelCnov": "Cancel",
-    "walkInSuccess": "Participant added successfully"
+    "walkInSuccess": "Participant added successfully",
+    "themeTitle": "Public page theme",
+    "editTheme": "Edit",
+    "saveTheme": "Save",
+    "cancelTheme": "Cancel",
+    "defaultTheme": "Tech Modern (default)",
+    "customTheme": "Custom"
   },
   "qrCodes": {
     "title": "QR Codes for signing",
@@ -126,5 +134,9 @@
     "expenseTypeRequired": "Expense type is required",
     "atLeastOneDateRequired": "At least one date is required",
     "passwordRequired": "Password required"
+  },
+  "theme": {
+    "customAccent": "Custom accent color",
+    "contrastWarning": "This color may not meet accessibility contrast requirements"
   }
 }
