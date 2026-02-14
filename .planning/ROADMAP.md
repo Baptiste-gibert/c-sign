@@ -134,7 +134,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -158,7 +158,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
   5. Theme generation algorithm derives full palette from a single accent color
   6. Typography follows Inter font stack with defined scale (h1: 30px, body: 13px, label: 10px)
   7. WCAG AA contrast ratios maintained across all generated themes
-**Plans:** 0 plans
+**Plans:** 4 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Theme infrastructure: generateTheme algorithm, 4 built-in palettes, ThemeProvider context, backend theme field, Inter font
+- [ ] 07-02-PLAN.md — Public page restyling: SignPage, ParticipantForm, SignatureCanvas, SuccessPage with dark-mode design system
+- [ ] 07-03-PLAN.md — Organizer theme selector: ThemeSelector component, EventForm and EventDetailPage integration, translations
+- [ ] 07-04-PLAN.md — End-to-end human verification of complete theme system across all 4 palettes
