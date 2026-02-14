@@ -195,6 +195,8 @@
   },
   "theme": {
     "customAccent": "Couleur d'accent personnalisee",
-    "contrastWarning": "Cette couleur pourrait ne pas respecter les exigences de contraste d'accessibilite"
+    "contrastWarning": "Cette couleur pourrait ne pas respecter les exigences de contraste d'accessibilite",
+    "dark": "Sombre",
+    "light": "Clair"
   }
 }

@@ -23,6 +23,7 @@ interface Event {
   theme?: {
     themeId?: string
     customAccent?: string
+    mode?: 'dark' | 'light'
   } | null
 }
 
@@ -98,9 +99,11 @@ export function SignPage() {
       },
       {
         onSuccess: () => {
-          navigate('/success', {
-            state: { participantName: formData.firstName },
-          })
+          const params = new URLSearchParams({ participantName: formData.firstName })
+          if (day?.event.theme?.themeId) params.set('themeId', day.event.theme.themeId)
+          if (day?.event.theme?.customAccent) params.set('customAccent', day.event.theme.customAccent)
+          if (day?.event.theme?.mode) params.set('mode', day.event.theme.mode)
+          navigate(`/success?${params.toString()}`)
         },
       }
     )
@@ -145,7 +148,7 @@ export function SignPage() {
   }
 
   return (
-    <ThemeProvider themeId={day?.event.theme?.themeId} customAccent={day?.event.theme?.customAccent}>
+    <ThemeProvider themeId={day?.event.theme?.themeId} customAccent={day?.event.theme?.customAccent} mode={day?.event.theme?.mode || 'dark'}>
       <PublicPageLayout
         eventTitle={day?.event.title}
         eventDate={formattedDate}

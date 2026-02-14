@@ -1,16 +1,25 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BUILT_IN_THEMES, generateTheme, validateThemeContrast } from '@/config/themes'
+import { Moon, Sun } from 'lucide-react'
+import { BUILT_IN_THEMES, generateThemeWithMode, validateThemeContrast, type ThemeMode } from '@/config/themes'
+
+interface ThemeValue {
+  themeId?: string
+  customAccent?: string
+  mode?: ThemeMode
+}
 
 interface ThemeSelectorProps {
-  value: { themeId?: string; customAccent?: string } | null
-  onChange: (theme: { themeId?: string; customAccent?: string }) => void
+  value: ThemeValue | null
+  onChange: (theme: ThemeValue) => void
 }
 
 export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
   const { t } = useTranslation('organizer')
   const [customHex, setCustomHex] = useState(value?.customAccent || '#00d9ff')
   const [showContrastWarning, setShowContrastWarning] = useState(false)
+
+  const currentMode: ThemeMode = value?.mode || 'dark'
 
   // Sync custom hex when value changes externally
   useEffect(() => {
@@ -19,8 +28,12 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
     }
   }, [value?.customAccent])
 
+  const handleModeChange = (mode: ThemeMode) => {
+    onChange({ ...value, mode })
+  }
+
   const handleThemeClick = (themeId: string) => {
-    onChange({ themeId })
+    onChange({ themeId, mode: currentMode })
   }
 
   const handleCustomChange = (hex: string) => {
@@ -28,10 +41,10 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
 
     // Validate hex format
     if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-      onChange({ customAccent: hex })
+      onChange({ customAccent: hex, mode: currentMode })
 
       // Check contrast
-      const generatedTheme = generateTheme(hex, 'Custom', 'custom', '')
+      const generatedTheme = generateThemeWithMode(hex, 'Custom', 'custom', '', currentMode)
       const validation = validateThemeContrast(generatedTheme.vars)
       setShowContrastWarning(!validation.valid)
     }
@@ -42,16 +55,46 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
 
   // Generate preview for custom color
   const customPreview = customHex && /^#[0-9a-fA-F]{6}$/.test(customHex)
-    ? generateTheme(customHex, 'Custom', 'custom', '')
+    ? generateThemeWithMode(customHex, 'Custom', 'custom', '', currentMode)
     : null
 
   return (
     <div className="space-y-4">
+      {/* Dark/Light mode toggle */}
+      <div className="flex rounded-lg border border-neutral-200 overflow-hidden">
+        <button
+          type="button"
+          onClick={() => handleModeChange('dark')}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+            currentMode === 'dark'
+              ? 'bg-neutral-900 text-white'
+              : 'bg-white text-neutral-600 hover:bg-neutral-50'
+          }`}
+        >
+          <Moon className="w-4 h-4" />
+          {t('theme.dark')}
+        </button>
+        <button
+          type="button"
+          onClick={() => handleModeChange('light')}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+            currentMode === 'light'
+              ? 'bg-white text-neutral-900 border-l border-neutral-200 shadow-inner'
+              : 'bg-white text-neutral-600 border-l border-neutral-200 hover:bg-neutral-50'
+          }`}
+          style={currentMode === 'light' ? { boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)' } : undefined}
+        >
+          <Sun className="w-4 h-4" />
+          {t('theme.light')}
+        </button>
+      </div>
+
       {/* Built-in palette grid */}
       <div className="grid grid-cols-2 gap-3">
         {Object.values(BUILT_IN_THEMES).map((theme) => {
           const isSelected = selectedThemeId === theme.id
           const isDefault = !value && theme.id === 'tech-modern'
+          const previewTheme = generateThemeWithMode(theme.accentHex, theme.name, theme.id, theme.emoji, currentMode)
 
           return (
             <button
@@ -69,11 +112,12 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
                 boxShadow: isSelected ? `0 0 0 2px ${theme.vars['--accent']}40` : 'none',
               }}
             >
-              {/* Color swatch strip */}
-              <div
-                className="h-8 rounded-t-md"
-                style={{ backgroundColor: theme.vars['--accent'] }}
-              />
+              {/* Color swatch strip showing mode preview */}
+              <div className="h-8 flex">
+                <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--bg'] }} />
+                <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--surface'] }} />
+                <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--accent'] }} />
+              </div>
 
               {/* Theme name */}
               <div className="px-3 py-2 bg-white">

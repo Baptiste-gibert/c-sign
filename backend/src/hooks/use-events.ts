@@ -13,7 +13,7 @@ export interface PayloadEvent {
   attendanceDays?: Array<{ id: string; date: string }>
   participants?: Array<{ id: string; lastName: string; firstName: string }>
   cnovDeclarationNumber?: string
-  theme?: { themeId?: string; customAccent?: string } | null
+  theme?: { themeId?: string; customAccent?: string; mode?: 'dark' | 'light' } | null
   qrGranularity?: 'event' | 'day' | 'session'
   daySessionConfig?: Array<{ date: string; fullDay: boolean; sessions: Array<{ name: string; startTime: string; endTime: string }> }>
   signatureCount?: number

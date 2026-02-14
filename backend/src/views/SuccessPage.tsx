@@ -13,9 +13,12 @@ function SuccessContent() {
   const { t } = useTranslation('public')
   const searchParams = useSearchParams()
   const participantName = searchParams?.get('participantName') ?? null
+  const themeId = searchParams?.get('themeId') ?? undefined
+  const customAccent = searchParams?.get('customAccent') ?? undefined
+  const mode = (searchParams?.get('mode') as 'dark' | 'light') || 'dark'
 
   return (
-    <ThemeProvider>
+    <ThemeProvider themeId={themeId} customAccent={customAccent} mode={mode}>
       <PublicPageLayout>
         <div className="flex flex-col items-center text-center space-y-6 py-8 animate-success-appear">
           <div

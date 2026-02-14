@@ -58,6 +58,7 @@ export function createEventSchema() {
     theme: z.object({
       themeId: z.string().optional(),
       customAccent: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+      mode: z.enum(['dark', 'light']).optional(),
     }).nullable().optional(),
     days: z.array(attendanceDaySchema).min(1, i18n.t('organizer:validation.atLeastOneDateRequired')),
     qrGranularity: z.enum(['event', 'day', 'session']).default('day'),

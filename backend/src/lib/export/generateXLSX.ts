@@ -60,8 +60,12 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
   // Track current row number
   let currentRow = 5
 
-  // Get server URL for image fetching
-  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+  // Get server URL for image fetching (relative URLs need a base)
+  const serverUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+    'http://localhost:3000'
 
   // Iterate through attendance days
   const attendanceDays = Array.isArray(event.attendanceDays) ? event.attendanceDays : []
@@ -125,23 +129,33 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
         const image = signature.image
         if (image && typeof image === 'object' && image.url) {
           try {
-            // Fetch image
+            // Fetch image — use absolute URL directly, or prefix with server URL
             const imageUrl = image.url.startsWith('http') ? image.url : `${serverUrl}${image.url}`
             const response = await fetch(imageUrl)
 
             if (!response.ok) {
-              throw new Error(`Failed to fetch image: ${response.statusText}`)
+              console.error(`Image fetch failed for ${participant.email}: ${response.status} ${response.statusText} (URL: ${imageUrl})`)
+              continue
             }
 
             const imageBuffer = Buffer.from(await response.arrayBuffer())
 
-            // Optimize image
-            const optimizedBuffer = await optimizeSignature(imageBuffer)
+            // Try to optimize with sharp; fall back to raw PNG if sharp fails
+            let finalBuffer: Buffer
+            let extension: 'jpeg' | 'png'
+            try {
+              finalBuffer = await optimizeSignature(imageBuffer)
+              extension = 'jpeg'
+            } catch (sharpError) {
+              console.warn(`Sharp optimization failed for ${participant.email}, using raw PNG:`, sharpError)
+              finalBuffer = imageBuffer
+              extension = 'png'
+            }
 
             // Add image to workbook
             const imageId = workbook.addImage({
-              buffer: optimizedBuffer as any,
-              extension: 'jpeg',
+              buffer: finalBuffer as any,
+              extension,
             })
 
             // Place image in signature column (column index 9, 0-indexed)
@@ -152,7 +166,7 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
               editAs: 'oneCell',
             })
           } catch (error) {
-            console.error(`Failed to embed signature image for participant ${participant.email}:`, error)
+            console.error(`Failed to embed signature image for ${participant.email}:`, error)
             // Continue without image - don't fail the entire export
           }
         }

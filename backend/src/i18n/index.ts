@@ -11,6 +11,14 @@ import commonEn from './locales/en/common.json'
 import publicEn from './locales/en/public.json'
 import organizerEn from './locales/en/organizer.json'
 
+// Read cached language on client to match SSR output.
+// LanguageDetector is NOT used at init (lng is set explicitly) to prevent
+// hydration mismatches when navigator.language differs from the server default.
+const cachedLng =
+  typeof window !== 'undefined'
+    ? localStorage.getItem('i18nextLng') || 'fr'
+    : 'fr'
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -27,10 +35,11 @@ i18n
         organizer: organizerEn,
       },
     },
+    lng: cachedLng,
     fallbackLng: 'fr',
     defaultNS: 'common',
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
     },

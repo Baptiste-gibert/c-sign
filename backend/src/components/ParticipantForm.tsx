@@ -252,7 +252,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
           <Button
             type="submit"
             className={`h-10 w-full rounded-lg text-[13px] font-semibold ${isPending ? 'opacity-70 cursor-wait' : ''}`}
-            style={{ backgroundColor: 'var(--accent)', color: 'var(--bg)' }}
+            style={{ backgroundColor: 'var(--accent)', color: 'var(--accent-fg)' }}
             disabled={isPending}
           >
             {isPending ? t('public:submitting') : t('public:sign')}

@@ -4,11 +4,14 @@
 // Type Definitions
 // ============================================================================
 
+export type ThemeMode = 'dark' | 'light'
+
 export type ThemeVars = {
   '--bg': string
   '--surface': string
   '--accent': string
   '--accent-hover': string
+  '--accent-fg': string
   '--text': string
   '--text-sec': string
   '--border-c': string
@@ -23,6 +26,7 @@ export type ThemeDefinition = {
   emoji: string
   accentHex: string
   headerBg: string
+  mode: ThemeMode
   vars: ThemeVars
 }
 
@@ -136,6 +140,12 @@ export function validateThemeContrast(vars: ThemeVars): { valid: boolean; issues
     issues.push(`Text-sec/surface contrast ${textSecSurfaceRatio.toFixed(2)} < 4.5 (AA)`)
   }
 
+  // Accent-fg vs accent >= 4.5 (text on accent buttons)
+  const accentFgRatio = contrastRatio(vars['--accent-fg'], vars['--accent'])
+  if (accentFgRatio < 4.5) {
+    issues.push(`Accent-fg/accent contrast ${accentFgRatio.toFixed(2)} < 4.5 (AA)`)
+  }
+
   return { valid: issues.length === 0, issues }
 }
 
@@ -183,17 +193,22 @@ export function generateTheme(
     linear-gradient(145deg, ${bg}, ${midGradient}, ${bg})
   `.trim().replace(/\s+/g, ' ')
 
+  // Compute foreground color for text ON accent backgrounds
+  const accentFg = luminance(accent) > 0.4 ? bg : '#ffffff'
+
   return {
     id,
     name,
     emoji,
     accentHex: accent,
     headerBg,
+    mode: 'dark' as ThemeMode,
     vars: {
       '--bg': bg,
       '--surface': surface,
       '--accent': accent,
       '--accent-hover': accentHover,
+      '--accent-fg': accentFg,
       '--text': '#ffffff',
       '--text-sec': textSec,
       '--border-c': borderC,
@@ -202,6 +217,86 @@ export function generateTheme(
       '--warning': '#f59e0b',
     },
   }
+}
+
+/**
+ * Generate a light theme from a single accent hex color
+ *
+ * Light palette derivation:
+ * - --bg = near-white with hue tint
+ * - --surface = pure white
+ * - --text = near-black with hue tint
+ * - --text-sec = medium gray with hue tint
+ * - --border-c = light gray
+ * - --accent = same hex
+ */
+export function generateLightTheme(
+  accentHex: string,
+  name: string,
+  id: string,
+  emoji: string
+): ThemeDefinition {
+  const { h, s, l } = hexToHSL(accentHex)
+
+  const accent = accentHex
+  const accentHover = hslToHex(h, s, Math.min(l + 8, 80))
+  const bg = hslToHex(h, clamp(s * 0.08, 3, 12), 97)
+  const surface = '#ffffff'
+  const text = hslToHex(h, clamp(s * 0.25, 10, 30), 15)
+  const textSec = hslToHex(h, clamp(s * 0.15, 8, 25), 45)
+  const borderC = hslToHex(h, clamp(s * 0.10, 5, 20), 85)
+
+  // Compute foreground color for text ON accent backgrounds
+  const accentFg = luminance(accent) > 0.4 ? text : '#ffffff'
+
+  // Generate header gradient background (subtle light version)
+  const hComplement = (h + 30) % 360
+  const haloComplement = hslToHex(hComplement, s * 0.15, 90)
+  const midGradient = hslToHex(h, s * 0.1, 95)
+
+  const headerBg = `
+    radial-gradient(ellipse 75% 55% at 35% 45%, ${accent}12, transparent 55%),
+    radial-gradient(ellipse 55% 50% at 70% 30%, ${haloComplement}10, transparent 50%),
+    linear-gradient(145deg, ${bg}, ${midGradient}, ${bg})
+  `.trim().replace(/\s+/g, ' ')
+
+  return {
+    id,
+    name,
+    emoji,
+    accentHex: accent,
+    headerBg,
+    mode: 'light',
+    vars: {
+      '--bg': bg,
+      '--surface': surface,
+      '--accent': accent,
+      '--accent-hover': accentHover,
+      '--accent-fg': accentFg,
+      '--text': text,
+      '--text-sec': textSec,
+      '--border-c': borderC,
+      '--success': '#059669',
+      '--error': '#dc2626',
+      '--warning': '#d97706',
+    },
+  }
+}
+
+/**
+ * Generate a theme with the specified mode (dark or light)
+ */
+export function generateThemeWithMode(
+  accentHex: string,
+  name: string,
+  id: string,
+  emoji: string,
+  mode: ThemeMode = 'dark'
+): ThemeDefinition {
+  if (mode === 'light') {
+    return generateLightTheme(accentHex, name, id, emoji)
+  }
+  return generateTheme(accentHex, name, id, emoji)
 }
 
 // ============================================================================

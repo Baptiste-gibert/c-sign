@@ -72,7 +72,7 @@ export function EventDetailPage() {
   const [editingCnov, setEditingCnov] = useState(false)
   const [cnovValue, setCnovValue] = useState('')
   const [editingTheme, setEditingTheme] = useState(false)
-  const [themeValue, setThemeValue] = useState<{ themeId?: string; customAccent?: string } | null>(null)
+  const [themeValue, setThemeValue] = useState<{ themeId?: string; customAccent?: string; mode?: 'dark' | 'light' } | null>(null)
   const [editingQr, setEditingQr] = useState(false)
   const [qrMode, setQrMode] = useState<'event' | 'day' | 'session'>('day')
 
@@ -219,6 +219,9 @@ export function EventDetailPage() {
   } else if (event.theme?.customAccent) {
     currentThemeLabel = `${t('organizer:eventDetail.customTheme')}: ${event.theme.customAccent}`
     currentThemeColor = event.theme.customAccent
+  }
+  if (event.theme?.mode === 'light') {
+    currentThemeLabel += ` (${t('organizer:theme.light')})`
   }
 
   // Status error
