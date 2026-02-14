@@ -7,10 +7,11 @@ export interface PayloadEvent {
   organizerName: string
   organizerEmail: string
   expenseType: string
-  status: 'draft' | 'open' | 'finalized'
+  status: 'draft' | 'open' | 'finalized' | 'reopened'
   selectedDates: Array<{ id: string; date: string }>
   attendanceDays?: Array<{ id: string; date: string }>
   participants?: Array<{ id: string; lastName: string; firstName: string }>
+  cnovDeclarationNumber?: string
   createdBy: string | { id: string }
   createdAt: string
   updatedAt: string

@@ -41,6 +41,7 @@ const statusColors: Record<string, string> = {
   draft: 'bg-neutral-200 text-neutral-800',
   open: 'bg-green-100 text-green-800',
   finalized: 'bg-blue-100 text-blue-800',
+  reopened: 'bg-amber-100 text-amber-800',
 }
 
 const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
@@ -91,7 +92,7 @@ export function EventDetailPage() {
     )
   }
 
-  const handleStatusChange = (newStatus: 'open' | 'finalized') => {
+  const handleStatusChange = (newStatus: 'open' | 'finalized' | 'reopened') => {
     if (newStatus === 'finalized') {
       if (!window.confirm(t('organizer:eventDetail.finalizeConfirm'))) {
         return
@@ -99,6 +100,14 @@ export function EventDetailPage() {
     }
     setStatusErrorDismissed(false)
     updateEvent({ status: newStatus })
+  }
+
+  const handleReopen = () => {
+    if (!window.confirm(t('organizer:eventDetail.reopenConfirm'))) {
+      return
+    }
+    setStatusErrorDismissed(false)
+    updateEvent({ status: 'reopened' })
   }
 
   const handleDownload = () => {
@@ -145,6 +154,7 @@ export function EventDetailPage() {
   }).filter((p: Participant) => p.lastName)
 
   const isFinalized = event.status === 'finalized'
+  const isLocked = event.status === 'finalized' // Only truly locked when finalized, not when reopened
 
   // Parse status update error
   let statusErrorMessage = ''
@@ -183,6 +193,12 @@ export function EventDetailPage() {
               <span>{t('organizer:eventDetail.organizer')} {event.organizerName}</span>
               <span>•</span>
               <Badge variant="outline">{t(`organizer:expenseTypes.${event.expenseType}`, event.expenseType)}</Badge>
+              {event.cnovDeclarationNumber && (
+                <>
+                  <span>•</span>
+                  <span>{t('organizer:eventDetail.cnov')} {event.cnovDeclarationNumber}</span>
+                </>
+              )}
             </div>
             <div className="text-sm text-neutral-600">
               {event.selectedDates && event.selectedDates.length > 0 && (
@@ -252,22 +268,49 @@ export function EventDetailPage() {
             {event.status === 'finalized' && (
               <>
                 <p className="text-neutral-500">{t('organizer:eventDetail.eventFinalized')}</p>
-                <Button
-                  variant="outline"
-                  onClick={handleDownload}
-                  disabled={downloadMutation.isPending}
-                >
-                  {downloadMutation.isPending ? (
-                    <>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={handleReopen}
+                    disabled={isUpdating}
+                  >
+                    {isUpdating ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t('organizer:eventDetail.generating')}
-                    </>
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      {t('organizer:eventDetail.downloadXlsx')}
-                    </>
-                  )}
+                    ) : null}
+                    {t('organizer:eventDetail.reopenEvent')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleDownload}
+                    disabled={downloadMutation.isPending}
+                  >
+                    {downloadMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {t('organizer:eventDetail.generating')}
+                      </>
+                    ) : (
+                      <>
+                        <Download className="mr-2 h-4 w-4" />
+                        {t('organizer:eventDetail.downloadXlsx')}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {event.status === 'reopened' && (
+              <>
+                <p className="text-neutral-500">{t('organizer:eventDetail.eventReopened')}</p>
+                <Button
+                  onClick={() => handleStatusChange('finalized')}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}
+                  {t('organizer:eventDetail.refinalizeEvent')}
                 </Button>
               </>
             )}
@@ -339,7 +382,7 @@ export function EventDetailPage() {
             <Label className="mb-2 block">{t('organizer:participants.searchSimv')}</Label>
             <ParticipantSearch
               onSelect={handleAddFromSimv}
-              disabled={isFinalized}
+              disabled={isLocked}
             />
           </div>
 
@@ -348,7 +391,7 @@ export function EventDetailPage() {
             <Button
               variant="outline"
               onClick={() => setShowWalkInForm(!showWalkInForm)}
-              disabled={isFinalized}
+              disabled={isLocked}
               className="w-full"
             >
               <UserPlus className="mr-2 h-4 w-4" />
@@ -458,7 +501,7 @@ export function EventDetailPage() {
           <ParticipantTable
             data={participants}
             onRemove={handleRemoveParticipant}
-            isLoading={isFinalized}
+            isLoading={isLocked}
           />
         </CardContent>
       </Card>

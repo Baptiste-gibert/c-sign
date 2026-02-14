@@ -188,7 +188,30 @@ export function useAddWalkIn(eventId: string) {
 
       return newParticipant
     },
-    onSuccess: () => {
+    onMutate: async (newParticipant) => {
+      await queryClient.cancelQueries({ queryKey: ['events', eventId] })
+      const previousEvent = queryClient.getQueryData(['events', eventId])
+      queryClient.setQueryData(['events', eventId], (old: any) => {
+        if (!old) return old
+        return {
+          ...old,
+          participants: [
+            ...(old.participants || []),
+            {
+              id: 'temp-' + Date.now(),
+              ...newParticipant,
+            },
+          ],
+        }
+      })
+      return { previousEvent }
+    },
+    onError: (_err, _newParticipant, context) => {
+      if (context?.previousEvent) {
+        queryClient.setQueryData(['events', eventId], context.previousEvent)
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events', eventId] })
     },
   })
