@@ -39,7 +39,13 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
 
   // Add event info header rows
   worksheet.insertRow(1, [`Evenement: ${event.title}`])
-  worksheet.insertRow(2, [`Lieu: ${event.location} | Organisateur: ${event.organizerName} | Type: ${event.expenseType}`])
+
+  // Build metadata line with optional CNOV number
+  let metadataLine = `Lieu: ${event.location} | Organisateur: ${event.organizerName} | Type: ${event.expenseType}`
+  if (event.cnovDeclarationNumber) {
+    metadataLine += ` | CNOV: ${event.cnovDeclarationNumber}`
+  }
+  worksheet.insertRow(2, [metadataLine])
   worksheet.insertRow(3, []) // Empty row
 
   // Style header row (row 4)

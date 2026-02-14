@@ -12,8 +12,11 @@ export const afterFinalize: CollectionAfterChangeHook = async ({ doc, previousDo
     doc.status === 'finalized' &&
     previousDoc?.status !== 'finalized'
   ) {
+    // Detect re-finalization (reopened -> finalized)
+    const isRefinalization = previousDoc?.status === 'reopened'
+
     // Fire-and-forget to avoid blocking the HTTP response
-    generateAndEmailExport(req, doc).catch((error) => {
+    generateAndEmailExport(req, doc, isRefinalization).catch((error) => {
       console.error(`Failed to generate/email export for event ${doc.id}:`, error)
     })
   }
@@ -24,8 +27,8 @@ export const afterFinalize: CollectionAfterChangeHook = async ({ doc, previousDo
 /**
  * Generate XLSX and send email with attachment
  */
-async function generateAndEmailExport(req: any, doc: any): Promise<void> {
-  console.log(`Generating export for event ${doc.id} (${doc.title})`)
+async function generateAndEmailExport(req: any, doc: any, isRefinalization: boolean): Promise<void> {
+  console.log(`${isRefinalization ? 'Re-finalizing' : 'Finalizing'} event ${doc.id} (${doc.title})`)
 
   // Generate XLSX
   const xlsxBuffer = await generateEventXLSX(req.payload, doc.id)
@@ -50,10 +53,13 @@ async function generateAndEmailExport(req: any, doc: any): Promise<void> {
     expenseType: doc.expenseType,
   })
 
+  // Build subject with optional prefix for re-finalization
+  const subjectPrefix = isRefinalization ? '[Mise a jour] ' : ''
+
   // Send email
   await req.payload.sendEmail({
     to: recipients.join(', '),
-    subject: `Feuille de presence - ${doc.title}`,
+    subject: `${subjectPrefix}Feuille de presence - ${doc.title}`,
     html,
     attachments: [
       {
