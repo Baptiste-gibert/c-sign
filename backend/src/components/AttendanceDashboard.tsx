@@ -123,7 +123,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
             {/* Day header — clickable for collapse */}
             <div
               className={`px-4 py-2.5 flex items-center justify-between cursor-pointer select-none ${
-                day.isToday ? 'bg-blue-50/60' : 'bg-gray-50'
+                day.isToday ? 'bg-blue-100/70' : 'bg-blue-50/50'
               }`}
               onClick={() => toggleCollapse(day.id)}
             >
@@ -204,7 +204,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
 
             {/* Sessions — conditionally rendered */}
             {!isCollapsed && (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-300">
                 {day.sessions.map((session) => {
                   const pct = session.totalExpected > 0
                     ? Math.round((session.signedCount / session.totalExpected) * 100)
