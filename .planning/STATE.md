@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 6 of 6 (Advanced Features)
-Plan: 2 of 2 in current phase
-Status: 06-02 complete (Phase 6 complete)
-Last activity: 2026-02-14 — Completed 06-02 (frontend reopen flow + CNOV display)
+Plan: 3 of 3 in current phase
+Status: 06-03 complete (Phase 6 complete)
+Last activity: 2026-02-14 — Completed 06-03 (CNOV frontend input)
 
 Progress: [▓▓▓▓▓▓▓▓▓▓] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 18
+- Total plans completed: 19
 - Average duration: 6 min
 - Total execution time: 12.1 hours
 
@@ -32,11 +32,11 @@ Progress: [▓▓▓▓▓▓▓▓▓▓] 100%
 | 03    | 5     | 27m    | 5m       |
 | 04    | 2     | 10h 4m | 5h 2m    |
 | 05    | 3     | 29m    | 10m      |
-| 06    | 2     | 4m     | 2m       |
+| 06    | 3     | 6m     | 2m       |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (4m), 05-02 (9m), 05-03 (16m), 06-01 (1m), 06-02 (3m)
-- Trend: Phase 6 complete; event reopen lifecycle fully implemented (backend + frontend)
+- Last 5 plans: 05-02 (9m), 05-03 (16m), 06-01 (1m), 06-02 (3m), 06-03 (2m)
+- Trend: Phase 6 complete; CNOV frontend input closes UAT gap
 
 *Updated after each plan completion*
 
@@ -104,6 +104,9 @@ Recent decisions affecting current work:
 - 06-02: isLocked variable distinguishes truly locked (finalized only) from reopened state — enables participant management when reopened
 - 06-02: Reopened events use amber badge color to visually distinguish from finalized (blue) and open (green)
 - 06-02: Optimistic updates for walk-in participant addition provide instant visual feedback before server response
+- 06-03: CNOV field is optional string in createEventSchema — no validation rules needed
+- 06-03: CNOV inline edit uses state sync via useEffect — ensures UI reflects server state after updates
+- 06-03: CNOV edit controls hidden when isLocked — maintains finalized event immutability for non-reopened events
 
 ### Pending Todos
 
@@ -116,6 +119,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-14T10:59:01Z
-Stopped at: Completed 06-02-PLAN.md (frontend reopen flow + CNOV display)
+Last session: 2026-02-14T11:33:32Z
+Stopped at: Completed 06-03-PLAN.md (CNOV frontend input)
 Resume file: None
