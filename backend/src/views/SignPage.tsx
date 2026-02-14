@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from '@/lib/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { fetchAttendanceDay, fetchSessionsByDay } from '@/lib/api'
@@ -34,6 +35,8 @@ interface AttendanceDay {
 export function SignPage() {
   const { t, i18n } = useTranslation(['public', 'common'])
   const { dayId } = useParams<{ dayId: string }>()
+  const searchParams = useSearchParams()
+  const sessionFromUrl = searchParams?.get('session') ?? null
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -61,8 +64,10 @@ export function SignPage() {
         setEventStatus(dayData.event?.status || null)
         setSessions(sessionsData.docs || [])
 
-        // Auto-select if only one session
-        if (sessionsData.docs?.length === 1) {
+        // Auto-select session from URL param, or if only one session
+        if (sessionFromUrl && sessionsData.docs?.some((s: Session) => String(s.id) === sessionFromUrl)) {
+          setSelectedSessionId(sessionFromUrl)
+        } else if (sessionsData.docs?.length === 1) {
           setSelectedSessionId(String(sessionsData.docs[0].id))
         }
 
@@ -160,7 +165,7 @@ export function SignPage() {
         )}
 
         {/* Session selection */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && (
+        {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && !sessionFromUrl && (
           <div className="mb-6">
             <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
               <CardContent className="pt-6">

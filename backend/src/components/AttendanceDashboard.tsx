@@ -166,39 +166,41 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                   {daySigned}/{dayTotal}
                 </span>
 
-                {/* QR button — stopPropagation to avoid collapse toggle */}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <QrCode className="h-3.5 w-3.5 text-gray-500" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>
-                        QR Code - {format(new Date(day.date), 'd MMMM yyyy', { locale })}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col items-center gap-4 py-4">
-                      <QRCodeSVG
-                        value={`${window.location.origin}/sign/${day.id}`}
-                        size={256}
-                        level="H"
-                      />
-                      <p className="text-sm text-neutral-600 text-center">
-                        {t('organizer:qrCodes.scanPrompt')}
-                      </p>
-                      <code className="text-xs bg-neutral-100 px-2 py-1 rounded">
-                        {window.location.origin}/sign/{day.id}
-                      </code>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                {/* QR button per day (only when granularity is not 'session') */}
+                {qrGranularity !== 'session' && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <QrCode className="h-3.5 w-3.5 text-gray-500" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          QR Code - {format(new Date(day.date), 'd MMMM yyyy', { locale })}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="flex flex-col items-center gap-4 py-4">
+                        <QRCodeSVG
+                          value={`${window.location.origin}/sign/${day.id}`}
+                          size={256}
+                          level="H"
+                        />
+                        <p className="text-sm text-neutral-600 text-center">
+                          {t('organizer:qrCodes.scanPrompt')}
+                        </p>
+                        <code className="text-xs bg-neutral-100 px-2 py-1 rounded">
+                          {window.location.origin}/sign/{day.id}
+                        </code>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </div>
 
@@ -225,9 +227,46 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                         <span className="text-[11px] font-semibold text-gray-700">
                           {session.name}
                         </span>
-                        <span className="text-[10px] text-gray-400 tabular-nums">
-                          {session.signedCount}/{session.totalExpected}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-400 tabular-nums">
+                            {session.signedCount}/{session.totalExpected}
+                          </span>
+
+                          {/* QR button per session (only when granularity is 'session') */}
+                          {qrGranularity === 'session' && (
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-5 w-5 p-0"
+                                >
+                                  <QrCode className="h-3 w-3 text-gray-500" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>
+                                    QR Code - {session.name} ({format(new Date(day.date), 'd MMM', { locale })})
+                                  </DialogTitle>
+                                </DialogHeader>
+                                <div className="flex flex-col items-center gap-4 py-4">
+                                  <QRCodeSVG
+                                    value={`${window.location.origin}/sign/${day.id}?session=${session.id}`}
+                                    size={256}
+                                    level="H"
+                                  />
+                                  <p className="text-sm text-neutral-600 text-center">
+                                    {t('organizer:qrCodes.scanPrompt')}
+                                  </p>
+                                  <code className="text-xs bg-neutral-100 px-2 py-1 rounded break-all text-center">
+                                    {window.location.origin}/sign/{day.id}?session={session.id}
+                                  </code>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                        </div>
                       </div>
 
                       {/* Mini progress bar */}
