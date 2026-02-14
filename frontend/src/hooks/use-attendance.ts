@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { apiFetch } from '@/lib/api-fetch'
 
 interface AttendanceDay {
   id: string
@@ -51,10 +52,7 @@ export function useAttendanceDashboard(eventId: string) {
     queryKey: ['attendance', eventId],
     queryFn: async () => {
       // Step a: Get event with attendanceDays IDs and participants IDs
-      const eventRes = await fetch(`/api/events/${eventId}?depth=0`, {
-        credentials: 'include',
-      })
-      if (!eventRes.ok) throw new Error('Failed to fetch event')
+      const eventRes = await apiFetch(`/api/events/${eventId}?depth=0`)
       const event = await eventRes.json()
 
       const attendanceDayIds = event.attendanceDays || []
@@ -64,19 +62,9 @@ export function useAttendanceDashboard(eventId: string) {
       const attendanceDaysData = await Promise.all(
         attendanceDayIds.map(async (dayId: string) => {
           const [dayRes, sessionsRes] = await Promise.all([
-            fetch(`/api/attendance-days/${dayId}?depth=0`, {
-              credentials: 'include',
-            }),
-            fetch(
-              `/api/sessions?where[attendanceDay][equals]=${dayId}&depth=0`,
-              {
-                credentials: 'include',
-              }
-            ),
+            apiFetch(`/api/attendance-days/${dayId}?depth=0`),
+            apiFetch(`/api/sessions?where[attendanceDay][equals]=${dayId}&depth=0`),
           ])
-
-          if (!dayRes.ok) throw new Error('Failed to fetch attendance day')
-          if (!sessionsRes.ok) throw new Error('Failed to fetch sessions')
 
           const day: AttendanceDay = await dayRes.json()
           const sessionsData: PayloadSessionsResponse = await sessionsRes.json()
@@ -93,14 +81,9 @@ export function useAttendanceDashboard(eventId: string) {
         attendanceDaysData.map(async ({ day, sessions }) => {
           const sessionsWithSignatures: SessionWithSignatures[] = await Promise.all(
             sessions.map(async (session) => {
-              const signaturesRes = await fetch(
+              const signaturesRes = await apiFetch(
                 `/api/signatures?where[session][equals]=${session.id}&depth=1`,
-                {
-                  credentials: 'include',
-                }
               )
-
-              if (!signaturesRes.ok) throw new Error('Failed to fetch signatures')
 
               const signaturesData: PayloadSignaturesResponse =
                 await signaturesRes.json()

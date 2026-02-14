@@ -1,16 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
+import { apiFetch } from '@/lib/api-fetch'
 
 export function useDownloadExport() {
   return useMutation({
     mutationFn: async (eventId: string) => {
-      const res = await fetch(`/api/events/${eventId}/export`, {
-        credentials: 'include', // CRITICAL: send HTTP-only cookies for auth
-      })
-
-      if (!res.ok) {
-        const error = await res.json()
-        throw new Error(error.message || 'Failed to download export')
-      }
+      const res = await apiFetch(`/api/events/${eventId}/export`)
 
       // Extract filename from Content-Disposition header
       const contentDisposition = res.headers.get('Content-Disposition')

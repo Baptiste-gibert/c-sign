@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query'
+import { ApiError } from '@/lib/api-fetch'
 import { SignPage } from '@/pages/SignPage'
 import { SuccessPage } from '@/pages/SuccessPage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -9,7 +10,16 @@ import { EventDetailPage } from '@/pages/EventDetailPage'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { OrganizerLayout } from '@/components/OrganizerLayout'
 
-const queryClient = new QueryClient()
+function handleAuthError(error: unknown) {
+  if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+    queryClient.setQueryData(['auth', 'me'], null)
+  }
+}
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: handleAuthError }),
+  mutationCache: new MutationCache({ onError: handleAuthError }),
+})
 
 function HomePage() {
   return (

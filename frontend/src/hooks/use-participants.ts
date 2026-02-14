@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { apiFetch } from '@/lib/api-fetch'
 
 export interface SimvParticipant {
   id: string
@@ -32,10 +33,7 @@ export function useSimvSearch(query: string) {
   return useQuery<SimvParticipant[]>({
     queryKey: ['simv', 'search', query],
     queryFn: async () => {
-      const res = await fetch(`/api/simv/search?q=${encodeURIComponent(query)}`, {
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('Failed to search SIMV registry')
+      const res = await apiFetch(`/api/simv/search?q=${encodeURIComponent(query)}`)
       const data: SimvSearchResponse = await res.json()
       return data.results
     },
@@ -57,24 +55,16 @@ export function useAddParticipant(eventId: string) {
       beneficiaryType: string
     }) => {
       // Step 1: Create participant in Payload
-      const createRes = await fetch('/api/participants', {
+      const createRes = await apiFetch('/api/participants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(participantData),
       })
-      if (!createRes.ok) {
-        const error = await createRes.json()
-        throw new Error(error.message || 'Failed to create participant')
-      }
       const participantResult: PayloadParticipantResponse = await createRes.json()
       const newParticipant = participantResult.doc
 
       // Step 2: Get current event to read existing participants
-      const eventRes = await fetch(`/api/events/${eventId}?depth=0`, {
-        credentials: 'include',
-      })
-      if (!eventRes.ok) throw new Error('Failed to fetch event')
+      const eventRes = await apiFetch(`/api/events/${eventId}?depth=0`)
       const event = await eventRes.json()
 
       // Step 3: Add new participant to participants array
@@ -82,16 +72,11 @@ export function useAddParticipant(eventId: string) {
       const updatedParticipants = [...currentParticipants, newParticipant.id]
 
       // Step 4: Update event with merged participants array
-      const updateRes = await fetch(`/api/events/${eventId}`, {
+      await apiFetch(`/api/events/${eventId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ participants: updatedParticipants }),
       })
-      if (!updateRes.ok) {
-        const error = await updateRes.json()
-        throw new Error(error.message || 'Failed to update event')
-      }
 
       return newParticipant
     },
@@ -107,10 +92,7 @@ export function useRemoveParticipant(eventId: string) {
   return useMutation({
     mutationFn: async (participantId: string) => {
       // Step 1: Get current event to read existing participants
-      const eventRes = await fetch(`/api/events/${eventId}?depth=0`, {
-        credentials: 'include',
-      })
-      if (!eventRes.ok) throw new Error('Failed to fetch event')
+      const eventRes = await apiFetch(`/api/events/${eventId}?depth=0`)
       const event = await eventRes.json()
 
       // Step 2: Filter out the participant ID
@@ -120,16 +102,11 @@ export function useRemoveParticipant(eventId: string) {
       )
 
       // Step 3: Update event with remaining participants
-      const updateRes = await fetch(`/api/events/${eventId}`, {
+      await apiFetch(`/api/events/${eventId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ participants: updatedParticipants }),
       })
-      if (!updateRes.ok) {
-        const error = await updateRes.json()
-        throw new Error(error.message || 'Failed to update event')
-      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events', eventId] })
@@ -150,24 +127,16 @@ export function useAddWalkIn(eventId: string) {
       beneficiaryType: string
     }) => {
       // Step 1: Create participant
-      const createRes = await fetch('/api/participants', {
+      const createRes = await apiFetch('/api/participants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(participantData),
       })
-      if (!createRes.ok) {
-        const error = await createRes.json()
-        throw new Error(error.message || 'Failed to create walk-in participant')
-      }
       const participantResult: PayloadParticipantResponse = await createRes.json()
       const newParticipant = participantResult.doc
 
       // Step 2: Get current event
-      const eventRes = await fetch(`/api/events/${eventId}?depth=0`, {
-        credentials: 'include',
-      })
-      if (!eventRes.ok) throw new Error('Failed to fetch event')
+      const eventRes = await apiFetch(`/api/events/${eventId}?depth=0`)
       const event = await eventRes.json()
 
       // Step 3: Add to participants array
@@ -175,16 +144,11 @@ export function useAddWalkIn(eventId: string) {
       const updatedParticipants = [...currentParticipants, newParticipant.id]
 
       // Step 4: Update event
-      const updateRes = await fetch(`/api/events/${eventId}`, {
+      await apiFetch(`/api/events/${eventId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ participants: updatedParticipants }),
       })
-      if (!updateRes.ok) {
-        const error = await updateRes.json()
-        throw new Error(error.message || 'Failed to update event')
-      }
 
       return newParticipant
     },
