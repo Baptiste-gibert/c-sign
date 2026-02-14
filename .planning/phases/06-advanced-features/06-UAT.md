@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 06-advanced-features
 source: 06-01-SUMMARY.md, 06-02-SUMMARY.md
 started: 2026-02-14T11:10:00Z
@@ -66,7 +66,16 @@ skipped: 1
   reason: "User reported: on the frontend for organiser i can't create an event with CNOV number"
   severity: major
   test: 5
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "Backend has cnovDeclarationNumber field on Events collection but frontend EventForm.tsx has no input for it, createEventSchema in schemas.ts doesn't include it, and EventDetailPage has no edit capability for CNOV"
+  artifacts:
+    - path: "frontend/src/components/EventForm.tsx"
+      issue: "Missing CNOV input field"
+    - path: "frontend/src/lib/schemas.ts"
+      issue: "createEventSchema missing cnovDeclarationNumber"
+    - path: "frontend/src/pages/EventDetailPage.tsx"
+      issue: "No edit UI for CNOV after creation"
+  missing:
+    - "Add optional cnovDeclarationNumber text input to EventForm.tsx"
+    - "Add cnovDeclarationNumber to createEventSchema as optional string"
+    - "Add CNOV edit capability on EventDetailPage (or include in event form)"
   debug_session: ""
