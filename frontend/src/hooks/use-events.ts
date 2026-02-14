@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { apiFetch } from '@/lib/api-fetch'
 
 export interface PayloadEvent {
   id: string
@@ -13,6 +14,10 @@ export interface PayloadEvent {
   participants?: Array<{ id: string; lastName: string; firstName: string }>
   cnovDeclarationNumber?: string
   theme?: { themeId?: string; customAccent?: string } | null
+  qrGranularity?: 'event' | 'day' | 'session'
+  daySessionConfig?: Array<{ date: string; fullDay: boolean; sessions: Array<{ name: string; startTime: string; endTime: string }> }>
+  signatureCount?: number
+  participantCount?: number
   createdBy: string | { id: string }
   createdAt: string
   updatedAt: string
@@ -39,10 +44,7 @@ export function useEvents() {
   return useQuery<PayloadEvent[]>({
     queryKey: ['events'],
     queryFn: async () => {
-      const res = await fetch('/api/events?sort=-createdAt&depth=0', {
-        credentials: 'include', // CRITICAL: send HTTP-only cookies
-      })
-      if (!res.ok) throw new Error('Failed to fetch events')
+      const res = await apiFetch('/api/events?sort=-createdAt&depth=0')
       const data: PayloadEventsResponse = await res.json()
       return data.docs
     },
@@ -54,10 +56,7 @@ export function useEvent(id: string) {
   return useQuery<PayloadEvent>({
     queryKey: ['events', id],
     queryFn: async () => {
-      const res = await fetch(`/api/events/${id}?depth=1`, {
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('Failed to fetch event')
+      const res = await apiFetch(`/api/events/${id}?depth=1`)
       const data = await res.json()
       return data
     },
@@ -71,16 +70,11 @@ export function useCreateEvent(options?: { onSuccess?: (event: PayloadEvent) => 
 
   return useMutation({
     mutationFn: async (eventData: any) => {
-      const res = await fetch('/api/events', {
+      const res = await apiFetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // CRITICAL: send HTTP-only cookies
         body: JSON.stringify(eventData),
       })
-      if (!res.ok) {
-        const error = await res.json()
-        throw new Error(error.message || 'Failed to create event')
-      }
       const data: PayloadEventResponse = await res.json()
       return data.doc
     },
@@ -96,16 +90,11 @@ export function useUpdateEvent(id: string) {
 
   return useMutation({
     mutationFn: async (eventData: any) => {
-      const res = await fetch(`/api/events/${id}`, {
+      const res = await apiFetch(`/api/events/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(eventData),
       })
-      if (!res.ok) {
-        const error = await res.json()
-        throw new Error(error.message || 'Failed to update event')
-      }
       const data: PayloadEventResponse = await res.json()
       return data.doc
     },

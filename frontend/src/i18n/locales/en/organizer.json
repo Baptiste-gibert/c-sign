@@ -17,9 +17,19 @@
   },
   "dashboard": {
     "title": "My events",
+    "subtitle": "{{total}} events · {{active}} active",
+    "search": "Search events...",
     "newEvent": "New event",
     "noEvents": "No events",
-    "createFirst": "Create your first event"
+    "createFirst": "Create your first event",
+    "viewEvent": "View",
+    "filter": {
+      "all": "All",
+      "draft": "Drafts",
+      "open": "Open",
+      "finalized": "Finalized",
+      "reopened": "Reopened"
+    }
   },
   "table": {
     "headers": {
@@ -27,6 +37,7 @@
       "location": "Location",
       "dates": "Dates",
       "expenseType": "Expense type",
+      "signatures": "Signatures",
       "status": "Status",
       "actions": "Actions"
     }
@@ -58,6 +69,32 @@
     "submitting": "Creating...",
     "submit": "Create event"
   },
+  "eventCreate": {
+    "createError": "Error creating event. Please try again.",
+    "pageTitle": "New event",
+    "pageSubtitle": "Configure the details of your event",
+    "informations": "Information",
+    "organizer": "Organizer",
+    "prefilled": "Pre-filled",
+    "daysSessions": "Days & Sessions",
+    "daysSessionsDesc": "Add the event dates and configure sessions for each day",
+    "addDay": "Add a day",
+    "noDays": "No days added",
+    "noDaysHint": "Add at least one date for your event",
+    "fullDay": "Full day",
+    "sessionName": "Session name",
+    "addSession": "Add a session",
+    "qrGranularity": "QR code granularity",
+    "qrGranularityDesc": "Choose the level of detail for signature QR codes",
+    "qrEvent": "Event",
+    "qrEventDesc": "A single QR for the entire event",
+    "qrDay": "Per day",
+    "qrDayDesc": "One QR per day",
+    "qrSession": "Per session",
+    "qrSessionDesc": "One QR per session",
+    "themeDesc": "Customize the appearance of the public signing page",
+    "customColor": "Custom color"
+  },
   "eventDetail": {
     "backToDashboard": "Back to dashboard",
     "eventNotFound": "Event not found",
@@ -86,7 +123,31 @@
     "saveTheme": "Save",
     "cancelTheme": "Cancel",
     "defaultTheme": "Tech Modern (default)",
-    "customTheme": "Custom"
+    "customTheme": "Custom",
+    "liveUpdates": "Live attendance",
+    "downloadAllQr": "Download all QR codes",
+    "participantsSigned": "participants signed",
+    "signaturesCollected": "signatures collected",
+    "pending": "Pending",
+    "confirmAction": "Are you sure?",
+    "confirmYes": "Yes,",
+    "today": "TODAY",
+    "complete": "Complete",
+    "presence": "Attendance",
+    "xlsxDesc": "Contains embedded signature images. Available even before finalization.",
+    "qrGranularityTitle": "QR code granularity",
+    "statusDraft": "This event is a draft. Open it to enable attendance signing.",
+    "statusOpen": "Event open — participants can sign via QR codes.",
+    "statusReopened": "Event reopened — participants can sign again.",
+    "statusFinalized": "Event finalized — signing closed. XLSX report is available.",
+    "actionOpen": "Open event",
+    "actionFinalize": "Finalize",
+    "actionReopen": "Reopen",
+    "tabAttendance": "Attendance & QR",
+    "tabParticipants": "Participants",
+    "tabSettings": "Settings",
+    "fullDay": "Full day",
+    "sessions": "sessions"
   },
   "qrCodes": {
     "title": "QR Codes for signing",
@@ -122,9 +183,6 @@
   "dateSelector": {
     "clickPrompt": "Click on the calendar to select dates",
     "selectedDates": "Selected dates:"
-  },
-  "eventCreate": {
-    "createError": "Error creating event. Please try again."
   },
   "validation": {
     "titleRequired": "Title is required",

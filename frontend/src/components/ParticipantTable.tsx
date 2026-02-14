@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -20,10 +21,29 @@ import {
 } from '@/components/ui/table'
 import type { Participant } from '@/hooks/use-participants'
 
+interface SessionWithSignatures {
+  id: string
+  name: string
+  signatures: Array<{ id: string; participant: { id: string }; createdAt: string }>
+  signedCount: number
+  totalExpected: number
+}
+
+interface AttendanceDayData {
+  id: string
+  date: string
+  sessions: SessionWithSignatures[]
+}
+
+interface AttendanceData {
+  attendanceDays: AttendanceDayData[]
+}
+
 interface ParticipantTableProps {
   data: Participant[]
   onRemove: (id: string) => void
   isLoading?: boolean
+  attendanceData?: AttendanceData
 }
 
 const columnHelper = createColumnHelper<Participant>()
@@ -32,9 +52,27 @@ export function ParticipantTable({
   data,
   onRemove,
   isLoading = false,
+  attendanceData,
 }: ParticipantTableProps) {
   const { t } = useTranslation(['organizer', 'common'])
   const [sorting, setSorting] = useState<SortingState>([])
+
+  // Compute total sessions and per-participant session counts
+  const totalSessions = attendanceData
+    ? attendanceData.attendanceDays.reduce((a, d) => a + d.sessions.length, 0)
+    : 0
+
+  const participantSessionCounts = new Map<string, number>()
+  if (attendanceData) {
+    for (const day of attendanceData.attendanceDays) {
+      for (const session of day.sessions) {
+        for (const sig of session.signatures) {
+          const pid = sig.participant.id
+          participantSessionCounts.set(pid, (participantSessionCounts.get(pid) || 0) + 1)
+        }
+      }
+    }
+  }
 
   const columns = [
     columnHelper.accessor('lastName', {
@@ -63,6 +101,45 @@ export function ParticipantTable({
       cell: (info) => info.getValue() || '-',
       meta: { className: 'hidden md:table-cell' },
     }),
+    ...(attendanceData && totalSessions > 0
+      ? [
+          columnHelper.display({
+            id: 'presence',
+            header: t('organizer:eventDetail.presence'),
+            cell: (info) => {
+              const sessionsSigned = participantSessionCounts.get(info.row.original.id) || 0
+              const pPct = totalSessions > 0 ? Math.round((sessionsSigned / totalSessions) * 100) : 0
+              const allDone = sessionsSigned === totalSessions && totalSessions > 0
+
+              return (
+                <div className="flex items-center gap-1.5">
+                  <div className="w-10 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${pPct}%`,
+                        background: allDone ? '#22c55e' : sessionsSigned > 0 ? '#3b82f6' : 'transparent',
+                      }}
+                    />
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className={`text-[8px] font-semibold px-1 ${
+                      allDone
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : sessionsSigned > 0
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'bg-gray-100 text-gray-400'
+                    }`}
+                  >
+                    {sessionsSigned}/{totalSessions}
+                  </Badge>
+                </div>
+              )
+            },
+          }),
+        ]
+      : []),
     columnHelper.display({
       id: 'actions',
       header: t('organizer:table.headers.actions'),

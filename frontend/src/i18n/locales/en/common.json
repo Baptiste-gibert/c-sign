@@ -46,6 +46,7 @@
     "beneficiaryTypeRequired": "Beneficiary type is required",
     "beneficiaryTypeOtherRequired": "Please specify the beneficiary type"
   },
+  "optional": "Optional",
   "plurals": {
     "participant_one": "{{count}} participant",
     "participant_other": "{{count}} participants",

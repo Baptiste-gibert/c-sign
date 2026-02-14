@@ -17,9 +17,19 @@
   },
   "dashboard": {
     "title": "Mes evenements",
+    "subtitle": "{{total}} evenements · {{active}} actifs",
+    "search": "Rechercher un evenement...",
     "newEvent": "Nouvel evenement",
     "noEvents": "Aucun evenement",
-    "createFirst": "Creez votre premier evenement"
+    "createFirst": "Creez votre premier evenement",
+    "viewEvent": "Voir",
+    "filter": {
+      "all": "Tous",
+      "draft": "Brouillons",
+      "open": "Ouverts",
+      "finalized": "Finalises",
+      "reopened": "Reouverts"
+    }
   },
   "table": {
     "headers": {
@@ -27,6 +37,7 @@
       "location": "Lieu",
       "dates": "Dates",
       "expenseType": "Type de depense",
+      "signatures": "Signatures",
       "status": "Statut",
       "actions": "Actions"
     }
@@ -58,6 +69,32 @@
     "submitting": "Creation en cours...",
     "submit": "Creer l'evenement"
   },
+  "eventCreate": {
+    "createError": "Erreur lors de la creation de l'evenement. Veuillez reessayer.",
+    "pageTitle": "Nouvel evenement",
+    "pageSubtitle": "Configurez les details de votre evenement",
+    "informations": "Informations",
+    "organizer": "Organisateur",
+    "prefilled": "Pre-rempli",
+    "daysSessions": "Journees & Sessions",
+    "daysSessionsDesc": "Ajoutez les dates de l'evenement et configurez les sessions pour chaque journee",
+    "addDay": "Ajouter une journee",
+    "noDays": "Aucune journee ajoutee",
+    "noDaysHint": "Ajoutez au moins une date pour votre evenement",
+    "fullDay": "Journee entiere",
+    "sessionName": "Nom de la session",
+    "addSession": "Ajouter une session",
+    "qrGranularity": "Granularite des QR codes",
+    "qrGranularityDesc": "Choisissez le niveau de detail pour les QR codes de signature",
+    "qrEvent": "Evenement",
+    "qrEventDesc": "Un seul QR pour tout l'evenement",
+    "qrDay": "Par journee",
+    "qrDayDesc": "Un QR par journee",
+    "qrSession": "Par session",
+    "qrSessionDesc": "Un QR par session",
+    "themeDesc": "Personnalisez l'apparence de la page de signature publique",
+    "customColor": "Couleur personnalisee"
+  },
   "eventDetail": {
     "backToDashboard": "Retour au tableau de bord",
     "eventNotFound": "Événement introuvable",
@@ -86,7 +123,31 @@
     "saveTheme": "Enregistrer",
     "cancelTheme": "Annuler",
     "defaultTheme": "Tech Modern (par defaut)",
-    "customTheme": "Personnalise"
+    "customTheme": "Personnalise",
+    "liveUpdates": "Presences en direct",
+    "downloadAllQr": "Telecharger tous les QR",
+    "participantsSigned": "participants ont signe",
+    "signaturesCollected": "emargements collectes",
+    "pending": "En attente",
+    "confirmAction": "Etes-vous sur ?",
+    "confirmYes": "Oui,",
+    "today": "AUJOURD'HUI",
+    "complete": "Complet",
+    "presence": "Presence",
+    "xlsxDesc": "Contient les signatures embarquees en images. Disponible meme avant la finalisation.",
+    "qrGranularityTitle": "Granularite des QR codes",
+    "statusDraft": "Cet evenement est en brouillon. Ouvrez-le pour activer l'emargement.",
+    "statusOpen": "Evenement ouvert — les participants peuvent emarger via les QR codes.",
+    "statusReopened": "Evenement rouvert — les participants peuvent a nouveau emarger.",
+    "statusFinalized": "Evenement finalise — emargement ferme. Le rapport XLSX est disponible.",
+    "actionOpen": "Ouvrir l'evenement",
+    "actionFinalize": "Finaliser",
+    "actionReopen": "Rouvrir",
+    "tabAttendance": "Presences & QR",
+    "tabParticipants": "Participants",
+    "tabSettings": "Parametres",
+    "fullDay": "Journee entiere",
+    "sessions": "sessions"
   },
   "qrCodes": {
     "title": "QR Codes pour signature",
@@ -122,9 +183,6 @@
   "dateSelector": {
     "clickPrompt": "Cliquez sur le calendrier pour selectionner des dates",
     "selectedDates": "Dates selectionnees :"
-  },
-  "eventCreate": {
-    "createError": "Erreur lors de la creation de l'evenement. Veuillez reessayer."
   },
   "validation": {
     "titleRequired": "Le titre est requis",
