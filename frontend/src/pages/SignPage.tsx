@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { fetchAttendanceDay, fetchSessionsByDay } from '@/lib/api'
 import { useSignatureSubmission } from '@/hooks/use-signature-submission'
 import { ParticipantForm } from '@/components/ParticipantForm'
@@ -24,6 +25,7 @@ interface AttendanceDay {
 }
 
 export function SignPage() {
+  const { t, i18n } = useTranslation(['public', 'common'])
   const { dayId } = useParams<{ dayId: string }>()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
@@ -58,10 +60,10 @@ export function SignPage() {
         }
 
         if (!sessionsData.docs || sessionsData.docs.length === 0) {
-          setError('Aucune session configurée pour cette journée')
+          setError(t('public:noSessionConfigured'))
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur de chargement')
+        setError(err instanceof Error ? err.message : t('common:errors.error'))
       } finally {
         setLoading(false)
       }
@@ -72,7 +74,7 @@ export function SignPage() {
 
   const handleSubmit = async (formData: ParticipantFormData, signatureBlob: Blob) => {
     if (!selectedSessionId) {
-      setError('Veuillez sélectionner une session')
+      setError(t('public:selectSessionRequired'))
       return
     }
 
@@ -95,7 +97,7 @@ export function SignPage() {
   if (loading) {
     return (
       <div className="max-w-lg mx-auto px-4 py-6">
-        <p className="text-center text-muted-foreground">Chargement...</p>
+        <p className="text-center text-muted-foreground">{t('common:loading')}</p>
       </div>
     )
   }
@@ -124,7 +126,7 @@ export function SignPage() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold">{day.event.title}</h1>
           <p className="text-muted-foreground">
-            {new Date(day.date).toLocaleDateString('fr-FR', {
+            {new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
@@ -140,8 +142,8 @@ export function SignPage() {
           <CardContent className="pt-6">
             <p className="text-center text-red-600 font-medium">
               {eventStatus === 'finalized'
-                ? 'Cet evenement est finalise. Les signatures ne sont plus acceptees.'
-                : 'Cet evenement n\'est pas encore ouvert aux signatures.'}
+                ? t('public:eventFinalized')
+                : t('public:eventNotOpen')}
             </p>
           </CardContent>
         </Card>
@@ -153,7 +155,7 @@ export function SignPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <Label>Sélectionnez la session *</Label>
+                <Label>{t('public:selectSession')} *</Label>
                 <div className="space-y-2">
                   {sessions.map((session) => (
                     <label

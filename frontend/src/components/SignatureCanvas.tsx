@@ -1,5 +1,6 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, useState } from 'react'
 import SignatureCanvasLib from 'react-signature-canvas'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 
 export interface SignatureCanvasHandle {
@@ -9,6 +10,7 @@ export interface SignatureCanvasHandle {
 }
 
 export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
+  const { t } = useTranslation('public')
   const canvasRef = useRef<SignatureCanvasLib>(null)
   const [hasDrawn, setHasDrawn] = useState(false)
 
@@ -59,7 +61,7 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
       <div className="relative w-full h-48 border border-border rounded-md overflow-hidden">
         {!hasDrawn && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-muted-foreground text-sm">
-            Signez ici
+            {t('signHere')}
           </div>
         )}
         <SignatureCanvasLib
@@ -80,7 +82,7 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
           setHasDrawn(false)
         }}
       >
-        Effacer
+        {t('clear')}
       </Button>
     </div>
   )

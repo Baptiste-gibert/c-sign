@@ -1,29 +1,30 @@
 import { z } from 'zod'
+import i18n from '@/i18n'
 
 export const participantSchema = z.object({
-  lastName: z.string().min(1, 'Le nom est requis'),
-  firstName: z.string().min(1, 'Le prénom est requis'),
-  email: z.string().email('Email invalide'),
-  city: z.string().min(1, 'La ville est requise'),
+  lastName: z.string().min(1, () => i18n.t('common:validation.lastNameRequired')),
+  firstName: z.string().min(1, () => i18n.t('common:validation.firstNameRequired')),
+  email: z.string().email(() => i18n.t('common:validation.emailInvalid')),
+  city: z.string().min(1, () => i18n.t('common:validation.cityRequired')),
   professionalNumber: z.string().optional(),
   beneficiaryType: z.enum(
     ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'],
-    { required_error: 'Le type de bénéficiaire est requis' }
+    { required_error: () => i18n.t('common:validation.beneficiaryTypeRequired') }
   ),
   beneficiaryTypeOther: z.string().optional(),
   consentRightToImage: z.boolean().default(false),
 }).refine(
   (data) => data.beneficiaryType !== 'autre' || (data.beneficiaryTypeOther && data.beneficiaryTypeOther.length > 0),
-  { message: 'Veuillez préciser le type de bénéficiaire', path: ['beneficiaryTypeOther'] }
+  { message: () => i18n.t('common:validation.beneficiaryTypeOtherRequired'), path: ['beneficiaryTypeOther'] }
 )
 
 export type ParticipantFormData = z.infer<typeof participantSchema>
 
 export const eventSchema = z.object({
-  title: z.string().min(1, "Le titre est requis").max(200, "Le titre est trop long"),
-  location: z.string().min(1, "Le lieu est requis"),
-  organizerName: z.string().min(1, "Le nom de l'organisateur est requis"),
-  organizerEmail: z.string().email("Email invalide"),
+  title: z.string().min(1, () => i18n.t('organizer:validation.titleRequired')).max(200, () => i18n.t('organizer:validation.titleTooLong')),
+  location: z.string().min(1, () => i18n.t('organizer:validation.locationRequired')),
+  organizerName: z.string().min(1, () => i18n.t('organizer:validation.organizerNameRequired')),
+  organizerEmail: z.string().email(() => i18n.t('common:validation.emailInvalid')),
   expenseType: z.enum([
     'hospitality_snack',
     'hospitality_catering',
@@ -31,10 +32,10 @@ export const eventSchema = z.object({
     'event_registration',
     'meeting_organization',
     'transport',
-  ], { required_error: "Le type de depense est requis" }),
+  ], { required_error: () => i18n.t('organizer:validation.expenseTypeRequired') }),
   selectedDates: z.array(
     z.object({ date: z.string() })
-  ).min(1, "Au moins une date est requise"),
+  ).min(1, () => i18n.t('organizer:validation.atLeastOneDateRequired')),
 })
 
 export type EventFormData = z.infer<typeof eventSchema>

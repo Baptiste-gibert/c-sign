@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { participantSchema, type ParticipantFormData } from '@/lib/schemas'
 import { SignatureCanvas, type SignatureCanvasHandle } from '@/components/SignatureCanvas'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ interface ParticipantFormProps {
 }
 
 export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormProps) {
+  const { t } = useTranslation(['public', 'common'])
   const signatureRef = useRef<SignatureCanvasHandle>(null)
   const [signatureError, setSignatureError] = useState<string | null>(null)
 
@@ -44,14 +46,14 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
   const handleFormSubmit = async (data: ParticipantFormData) => {
     // Check signature canvas is not empty
     if (!signatureRef.current || signatureRef.current.isEmpty()) {
-      setSignatureError('La signature est requise')
+      setSignatureError(t('public:signatureRequired'))
       return
     }
 
     // Get signature blob
     const blob = await signatureRef.current.getBlob()
     if (!blob) {
-      setSignatureError('Erreur lors de la capture de la signature')
+      setSignatureError(t('public:signatureCaptureError'))
       return
     }
 
@@ -62,13 +64,13 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Feuille de présence</CardTitle>
+        <CardTitle>{t('public:attendanceSheet')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Nom */}
           <div className="space-y-1">
-            <Label htmlFor="lastName">Nom *</Label>
+            <Label htmlFor="lastName">{t('common:form.labels.lastName')} *</Label>
             <Input
               id="lastName"
               {...register('lastName')}
@@ -81,7 +83,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Prénom */}
           <div className="space-y-1">
-            <Label htmlFor="firstName">Prénom *</Label>
+            <Label htmlFor="firstName">{t('common:form.labels.firstName')} *</Label>
             <Input
               id="firstName"
               {...register('firstName')}
@@ -94,7 +96,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Email */}
           <div className="space-y-1">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{t('common:form.labels.email')} *</Label>
             <Input
               id="email"
               type="email"
@@ -110,7 +112,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Ville */}
           <div className="space-y-1">
-            <Label htmlFor="city">Ville *</Label>
+            <Label htmlFor="city">{t('common:form.labels.city')} *</Label>
             <Input
               id="city"
               {...register('city')}
@@ -123,14 +125,14 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Numéro d'inscription professionnelle */}
           <div className="space-y-1">
-            <Label htmlFor="professionalNumber">Numéro d&apos;inscription professionnelle</Label>
+            <Label htmlFor="professionalNumber">{t('public:professionalNumber')}</Label>
             <Input
               id="professionalNumber"
               {...register('professionalNumber')}
               className="min-h-[44px]"
             />
             <p className="text-sm text-muted-foreground">
-              Si applicable (vétérinaires, pharmaciens)
+              {t('public:professionalNumberHelp')}
             </p>
             {errors.professionalNumber && (
               <p className="text-sm text-red-600">{errors.professionalNumber.message}</p>
@@ -139,21 +141,21 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Type de bénéficiaire */}
           <div className="space-y-1">
-            <Label htmlFor="beneficiaryType">Type de bénéficiaire *</Label>
+            <Label htmlFor="beneficiaryType">{t('public:beneficiaryType')} *</Label>
             <Select
               onValueChange={(value) => setValue('beneficiaryType', value as ParticipantFormData['beneficiaryType'])}
             >
               <SelectTrigger className="min-h-[44px]">
-                <SelectValue placeholder="Sélectionner..." />
+                <SelectValue placeholder={t('public:selectPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="asv">ASV</SelectItem>
-                <SelectItem value="autre">Autre</SelectItem>
-                <SelectItem value="eleveur">Éleveur</SelectItem>
-                <SelectItem value="etudiant">Étudiant</SelectItem>
-                <SelectItem value="pharmacien">Pharmacien</SelectItem>
-                <SelectItem value="technicien">Technicien</SelectItem>
-                <SelectItem value="veterinaire">Vétérinaire</SelectItem>
+                <SelectItem value="asv">{t('common:beneficiaryTypes.asv')}</SelectItem>
+                <SelectItem value="autre">{t('common:beneficiaryTypes.autre')}</SelectItem>
+                <SelectItem value="eleveur">{t('common:beneficiaryTypes.eleveur')}</SelectItem>
+                <SelectItem value="etudiant">{t('common:beneficiaryTypes.etudiant')}</SelectItem>
+                <SelectItem value="pharmacien">{t('common:beneficiaryTypes.pharmacien')}</SelectItem>
+                <SelectItem value="technicien">{t('common:beneficiaryTypes.technicien')}</SelectItem>
+                <SelectItem value="veterinaire">{t('common:beneficiaryTypes.veterinaire')}</SelectItem>
               </SelectContent>
             </Select>
             {errors.beneficiaryType && (
@@ -164,7 +166,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
           {/* Préciser le type (conditional) */}
           {beneficiaryType === 'autre' && (
             <div className="space-y-1">
-              <Label htmlFor="beneficiaryTypeOther">Préciser le type *</Label>
+              <Label htmlFor="beneficiaryTypeOther">{t('public:specifyType')} *</Label>
               <Input
                 id="beneficiaryTypeOther"
                 {...register('beneficiaryTypeOther')}
@@ -178,7 +180,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
 
           {/* Signature */}
           <div className="space-y-1">
-            <Label>Signature *</Label>
+            <Label>{t('public:signature')} *</Label>
             <SignatureCanvas ref={signatureRef} />
             {signatureError && (
               <p className="text-sm text-red-600">{signatureError}</p>
@@ -192,7 +194,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
               onCheckedChange={(checked) => setValue('consentRightToImage', checked === true)}
             />
             <Label htmlFor="consentRightToImage" className="leading-tight cursor-pointer">
-              J&apos;autorise l&apos;utilisation de photos prises lors de l&apos;événement
+              {t('public:consentRightToImage')}
             </Label>
           </div>
           {errors.consentRightToImage && (
@@ -212,7 +214,7 @@ export function ParticipantForm({ onSubmit, isPending, error }: ParticipantFormP
             className="w-full min-h-[44px]"
             disabled={isPending}
           >
-            {isPending ? 'Envoi en cours...' : 'Signer'}
+            {isPending ? t('public:submitting') : t('public:sign')}
           </Button>
         </form>
       </CardContent>

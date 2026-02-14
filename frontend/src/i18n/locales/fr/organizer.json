@@ -112,7 +112,7 @@
     "locationRequired": "Le lieu est requis",
     "organizerNameRequired": "Le nom de l'organisateur est requis",
     "expenseTypeRequired": "Le type de depense est requis",
-    "atLeastOneDate": "Au moins une date est requise",
+    "atLeastOneDateRequired": "Au moins une date est requise",
     "passwordRequired": "Mot de passe requis"
   }
 }

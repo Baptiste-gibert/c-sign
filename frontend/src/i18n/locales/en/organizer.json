@@ -112,7 +112,7 @@
     "locationRequired": "Location is required",
     "organizerNameRequired": "Organizer name is required",
     "expenseTypeRequired": "Expense type is required",
-    "atLeastOneDate": "At least one date is required",
+    "atLeastOneDateRequired": "At least one date is required",
     "passwordRequired": "Password required"
   }
 }
