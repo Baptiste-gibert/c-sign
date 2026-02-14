@@ -10,31 +10,31 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 4 of 6 (Export & Email)
-Plan: 1 of 2 in current phase
-Status: In progress — 04-01 complete
-Last activity: 2026-02-13 — Completed 04-01 (XLSX export + email delivery)
+Plan: 2 of 2 in current phase
+Status: Phase complete — 04-02 verified
+Last activity: 2026-02-14 — Completed 04-02 (Frontend download + human verification)
 
-Progress: [▓▓▓▓▓▓░░░░] 60%
+Progress: [▓▓▓▓▓▓▓░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 4 min
-- Total execution time: 1.2 hours
+- Total plans completed: 13
+- Average duration: 8 min
+- Total execution time: 11.4 hours
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01    | 3     | 23m   | 8m       |
-| 02    | 3     | 9m    | 3m       |
-| 03    | 5     | 27m   | 5m       |
-| 04    | 1     | 4m    | 4m       |
+| Phase | Plans | Total  | Avg/Plan |
+|-------|-------|--------|----------|
+| 01    | 3     | 23m    | 8m       |
+| 02    | 3     | 9m     | 3m       |
+| 03    | 5     | 27m    | 5m       |
+| 04    | 2     | 10h 4m | 5h 2m    |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (2m), 03-03 (3m), 03-04 (3m), 03-05 (15m), 04-01 (4m)
-- Trend: 04-01 quick XLSX export setup, no blockers
+- Last 5 plans: 03-03 (3m), 03-04 (3m), 03-05 (15m), 04-01 (4m), 04-02 (10h)
+- Trend: 04-02 long duration due to human verification checkpoint with 3 bug fixes
 
 *Updated after each plan completion*
 
@@ -84,6 +84,9 @@ Recent decisions affecting current work:
 - 04-01: Missing/corrupted signature images gracefully skipped without failing entire export — wrapped in try/catch with logging
 - 04-01: SMTP auth is conditional in Payload config — undefined when SMTP_USER not set, allows dev without SMTP credentials
 - 04-01: 8MB file size warning for XLSX exports — logs warning but doesn't block export
+- 04-02: Blob URL download pattern keeps user on page during XLSX download — no navigation away from event detail
+- 04-02: Payload relationship arrays not auto-populated when children created via hooks — must use direct queries with where clauses
+- 04-02: overrideAccess required for all Payload queries in server contexts — access control applies even when route validates auth
 
 ### Pending Todos
 
@@ -96,6 +99,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-13T22:45:30Z
-Stopped at: Completed 04-01-PLAN.md (XLSX export + email delivery)
+Last session: 2026-02-14T08:42:59Z
+Stopped at: Completed 04-02-PLAN.md (Frontend download + human verification)
 Resume file: None
