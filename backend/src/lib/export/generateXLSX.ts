@@ -75,15 +75,19 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
         continue
       }
 
-      const signatures = Array.isArray(session.signatures) ? session.signatures : []
+      // Query signatures directly — session.signatures relationship is not
+      // auto-populated when signatures are created, so we must query by session ID
+      const sessionId = typeof session === 'object' ? session.id : session
+      const signaturesResult = await payload.find({
+        collection: 'signatures',
+        where: { session: { equals: sessionId } },
+        depth: 2, // Populate participant and image
+        limit: 500,
+      })
 
-      for (const signature of signatures) {
-        if (typeof signature === 'string' || !signature.participant) {
-          continue
-        }
-
+      for (const signature of signaturesResult.docs) {
         const participant = signature.participant
-        if (typeof participant === 'string') {
+        if (!participant || typeof participant === 'string') {
           continue
         }
 
