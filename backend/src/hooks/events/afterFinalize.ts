@@ -43,7 +43,7 @@ async function generateAndEmailExport(req: any, doc: any, isRefinalization: bool
   const filename = `feuille-presence-${titleSlug}-${dateStr}.xlsx`
 
   // Build recipients
-  const recipients = ['transparence@ceva.com', doc.organizerEmail]
+  const recipients = ['gibert.b@gmail.com', doc.organizerEmail]
 
   // Build email HTML
   const html = buildFinalizeEmailTemplate({
