@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Event Management** - Organizer dashboard, event CRUD, participant lists
 - [x] **Phase 4: Export & Email** - XLSX generation with embedded signatures, email delivery
 - [x] **Phase 5: Platform Polish** - Bilingual UI (FR/EN), mobile-first responsive design
-- [x] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
+- [ ] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
 
 ## Phase Details
 
@@ -124,11 +124,12 @@ Plans:
   3. When event is reopened, existing signatures are preserved
   4. Organizer can add walk-in participants on-site during event
   5. Walk-in participant addition shows confirmation and updates attendance dashboard
-**Plans:** 2 plans
+**Plans:** 3 plans
 
 Plans:
 - [ ] 06-01-PLAN.md — Backend reopen status lifecycle, CNOV in XLSX export, re-finalization email handling
 - [ ] 06-02-PLAN.md — Frontend reopen UI, CNOV display, SignPage/DashboardPage updates, bilingual translations, walk-in UX
+- [ ] 06-03-PLAN.md — [GAP CLOSURE] Add CNOV input to event creation form + inline CNOV edit on event detail page
 
 ## Progress
 
@@ -142,4 +143,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Event Management | 5/5 | ✓ Complete | 2026-02-13 |
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
 | 5. Platform Polish | 3/3 | ✓ Complete | 2026-02-14 |
-| 6. Advanced Features | 2/2 | ✓ Complete | 2026-02-14 |
+| 6. Advanced Features | 2/3 | Gap closure | 2026-02-14 |
