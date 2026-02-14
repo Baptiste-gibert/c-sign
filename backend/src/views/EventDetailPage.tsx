@@ -41,7 +41,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
 const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
@@ -442,14 +442,26 @@ export function EventDetailPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="attendance">
-        <TabsList>
-          <TabsTrigger value="attendance" className="text-xs">
+        <TabsList className="w-full h-auto p-0 bg-white border border-gray-200 rounded-xl grid grid-cols-3 gap-0">
+          <TabsTrigger
+            value="attendance"
+            className="flex items-center justify-center gap-2 rounded-none rounded-l-xl px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+          >
+            <ClipboardList className="w-4 h-4" />
             {t('organizer:eventDetail.tabAttendance')}
           </TabsTrigger>
-          <TabsTrigger value="participants" className="text-xs">
+          <TabsTrigger
+            value="participants"
+            className="flex items-center justify-center gap-2 rounded-none px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+          >
+            <Users className="w-4 h-4" />
             {t('organizer:eventDetail.tabParticipants')} ({participants.length})
           </TabsTrigger>
-          <TabsTrigger value="settings" className="text-xs">
+          <TabsTrigger
+            value="settings"
+            className="flex items-center justify-center gap-2 rounded-none rounded-r-xl px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+          >
+            <Settings className="w-4 h-4" />
             {t('organizer:eventDetail.tabSettings')}
           </TabsTrigger>
         </TabsList>
