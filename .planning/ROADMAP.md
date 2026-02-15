@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Platform Polish** - Bilingual UI (FR/EN), mobile-first responsive design
 - [x] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
 - [ ] **Phase 7: UI Design & Style Guide Application** - Dark-mode themed, per-event color customization (96% complete)
-- [ ] **Phase 8: Security & Access** - Auth hardening, signing tokens, input sanitization, rate limiting, CSRF
+- [x] **Phase 8: Security & Access** - Auth hardening, signing tokens, input sanitization, rate limiting, CSRF
 
 ## Phase Details
 
@@ -146,6 +146,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Export & Email | 2/2 | ✓ Complete | 2026-02-14 |
 | 5. Platform Polish | 3/3 | ✓ Complete | 2026-02-14 |
 | 6. Advanced Features | 3/3 | ✓ Complete | 2026-02-14 |
+| 7. UI Design & Style Guide | 3/3 | ✓ Complete | 2026-02-14 |
+| 8. Security & Access | 7/7 | ✓ Complete | 2026-02-15 |
 
 ### Phase 7: UI Design & Style Guide Application
 
