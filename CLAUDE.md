@@ -24,16 +24,17 @@ c-sign/
 │   │   ├── contexts/       # React contexts (theme)
 │   │   └── i18n/           # Traductions FR/EN
 │   └── payload.config.ts
-├── docker-compose.yml      # PostgreSQL + container de dev
+├── docker-compose.yml      # PostgreSQL + dev + Playwright MCP
 ├── Dockerfile.dev          # Image de dev (Node 22)
+├── .mcp.json               # MCP server config (Playwright)
+├── qa-reports/             # QA screenshots & reports (gitignored runs/)
 └── .devcontainer/          # Config VS Code
 ```
 
 **Services :**
 - `app` — container de dev unique (Next.js unifie)
-- `postgres` — PostgreSQL 16 (seul service externe)
-
-Pas de Redis, pas de containers separes. Le dev se fait entierement dans le container `app`.
+- `postgres` — PostgreSQL 16
+- `playwright` — Playwright MCP server (headless Chromium, port 8931)
 
 ## Commandes
 
@@ -49,6 +50,9 @@ Injectees via docker-compose.yml dans le container :
 - `PAYLOAD_SECRET=poc-super-secret-change-me-in-prod`
 - `NODE_ENV=development`
 
+Playwright MCP (configurable) :
+- `PLAYWRIGHT_BASE_URL` — URL cible (defaut: `http://app:3000`, ou URL Vercel pour QA prod)
+
 Pour Vercel (auto-injectees) :
 - `POSTGRES_URL` — Neon PostgreSQL (fallback si DATABASE_URI absent)
 - `BLOB_READ_WRITE_TOKEN` — Vercel Blob Storage pour les medias
@@ -60,6 +64,7 @@ Pour Vercel (auto-injectees) :
 |------|-----------------------------|
 | 3000 | Next.js (Payload + Frontend)|
 | 5432 | PostgreSQL                  |
+| 8931 | Playwright MCP (SSE)        |
 
 ## Outils globaux
 

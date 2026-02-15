@@ -4,10 +4,11 @@
   "service": "app",
   "workspaceFolder": "/workspace",
 
-  "forwardPorts": [3000, 5432],
+  "forwardPorts": [3000, 5432, 8931],
   "portsAttributes": {
     "3000": { "label": "Next.js (Payload + Frontend)", "onAutoForward": "openBrowser" },
-    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" }
+    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
+    "8931": { "label": "Playwright MCP", "onAutoForward": "silent" }
   },
 
   "customizations": {

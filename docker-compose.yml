@@ -34,6 +34,31 @@ services:
       NODE_ENV: development
     command: sleep infinity
 
+  playwright:
+    image: mcr.microsoft.com/playwright/mcp:latest
+    entrypoint: ["node", "cli.js"]
+    command:
+      - "--headless"
+      - "--browser"
+      - "chromium"
+      - "--no-sandbox"
+      - "--port"
+      - "8931"
+      - "--host"
+      - "0.0.0.0"
+      - "--allowed-hosts"
+      - "*"
+      - "--output-dir"
+      - "/qa-reports"
+    ports:
+      - "8931:8931"
+    volumes:
+      - ./qa-reports:/qa-reports
+    init: true
+    restart: unless-stopped
+    environment:
+      PLAYWRIGHT_BASE_URL: ${PLAYWRIGHT_BASE_URL:-http://app:3000}
+
 volumes:
   pg_data:
   node_modules_backend:

@@ -4,3 +4,6 @@ dist/
 .env.local
 *.log
 media/
+
+# QA reports (screenshots, run artifacts)
+qa-reports/runs/
