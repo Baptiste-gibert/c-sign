@@ -1,19 +1,19 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import path from 'path'
+import { buildConfig } from 'payload'
 import sharp from 'sharp'
+import { fileURLToPath } from 'url'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Events } from './collections/Events'
 import { AttendanceDays } from './collections/AttendanceDays'
-import { Sessions } from './collections/Sessions'
+import { Events } from './collections/Events'
+import { Media } from './collections/Media'
 import { Participants } from './collections/Participants'
+import { Sessions } from './collections/Sessions'
 import { Signatures } from './collections/Signatures'
+import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -71,3 +71,4 @@ export default buildConfig({
       }
     : {}),
 })
+// test comment

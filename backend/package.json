@@ -15,7 +15,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "type-check": "tsc --noEmit",
     "quality": "npm run type-check && npm run lint && npm run format:check",
-    "depcheck": "depcheck"
+    "depcheck": "depcheck",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^5.0.1",
@@ -78,6 +79,15 @@
     "tsx": "^4.21.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.55.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css}": [
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": ">=22.0.0"
