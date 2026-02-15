@@ -124,6 +124,7 @@ Recent decisions affecting current work:
 - 08-02: Magic byte validation using file-type package prevents MIME type spoofing
 - 08-02: Sharp re-encoding to PNG with compressionLevel 9 destroys polyglot payloads
 - 08-02: Removed webp from allowed MIME types - PNG/JPEG only per security requirements
+- [Phase 08]: Double-submit CSRF cookie pattern used instead of @edge-csrf/nextjs library (deprecated package)
 
 ### Roadmap Evolution
 
