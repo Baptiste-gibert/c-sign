@@ -18,6 +18,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Export & Email** - XLSX generation with embedded signatures, email delivery
 - [x] **Phase 5: Platform Polish** - Bilingual UI (FR/EN), mobile-first responsive design
 - [x] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
+- [ ] **Phase 7: UI Design & Style Guide Application** - Dark-mode themed, per-event color customization (96% complete)
+- [ ] **Phase 8: Security & Access** - Auth hardening, signing tokens, input sanitization, rate limiting, CSRF
 
 ## Phase Details
 
@@ -134,7 +136,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -165,3 +167,31 @@ Plans:
 - [ ] 07-02-PLAN.md — Public page restyling: SignPage, ParticipantForm, SignatureCanvas, SuccessPage with dark-mode design system
 - [ ] 07-03-PLAN.md — Organizer theme selector: ThemeSelector component, EventForm and EventDetailPage integration, translations
 - [ ] 07-04-PLAN.md — End-to-end human verification of complete theme system across all 4 palettes
+
+### Phase 8: Security & Access
+
+**Goal:** Application is hardened for public deployment with defense-in-depth security: auth lockout, unguessable signing URLs, input sanitization, device-based rate limiting, CSRF protection, and production-safe configuration.
+**Depends on:** Phase 7
+**Plans:** 6 plans
+
+**Success Criteria** (what must be TRUE):
+  1. Organizer sessions expire after 24 hours with strict cookie security
+  2. Accounts lock after 5 failed login attempts (admin-only unlock)
+  3. Passwords require 8+ chars, mixed case, at least one number
+  4. Organizers cannot access Payload admin panel (admin-only)
+  5. Public signing URLs use unguessable tokens (not sequential IDs)
+  6. Organizer can regenerate signing token to invalidate compromised links
+  7. Participant text inputs are sanitized server-side (HTML/script tags stripped)
+  8. Image uploads validated by magic bytes, re-encoded through Sharp
+  9. CSRF tokens protect all state-changing API requests
+  10. Security headers (CSP, HSTS, X-Frame-Options) on all responses
+  11. Device fingerprint-based rate limiting detects abuse
+  12. Dynamic CAPTCHA triggers only on suspicious submission volume
+
+Plans:
+- [ ] 08-01-PLAN.md — Auth hardening: session expiry, lockout, password policy, admin-only panel, production config
+- [ ] 08-02-PLAN.md — Input sanitization and upload safety: HTML stripping, magic byte validation, Sharp re-encoding
+- [ ] 08-03-PLAN.md — Security middleware: HTTP headers (CSP, HSTS), CSRF protection, API fetch updates
+- [ ] 08-04-PLAN.md — Signing tokens backend: nanoid generation, Events signingToken field, QR code update
+- [ ] 08-05-PLAN.md — Signing tokens frontend: URL migration to /sign/[token], organizer UI updates, regeneration
+- [ ] 08-06-PLAN.md — Rate limiting and CAPTCHA: device fingerprinting, Turnstile integration, abuse detection
