@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!result.allowed) {
       return NextResponse.json(
         { error: 'Trop de soumissions. Veuillez réessayer plus tard.' },
-        { status: 429 }
+        { status: 429 },
       )
     }
 
@@ -26,9 +26,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result)
   } catch (error) {
     console.error('Rate check error:', error)
-    return NextResponse.json(
-      { error: 'Erreur lors de la vérification' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur lors de la vérification' }, { status: 500 })
   }
 }

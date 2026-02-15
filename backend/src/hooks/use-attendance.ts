@@ -73,7 +73,7 @@ export function useAttendanceDashboard(eventId: string) {
             day,
             sessions: sessionsData.docs,
           }
-        })
+        }),
       )
 
       // Step c: For each day's sessions, fetch signatures in parallel
@@ -85,8 +85,7 @@ export function useAttendanceDashboard(eventId: string) {
                 `/api/signatures?where[session][equals]=${session.id}&depth=1`,
               )
 
-              const signaturesData: PayloadSignaturesResponse =
-                await signaturesRes.json()
+              const signaturesData: PayloadSignaturesResponse = await signaturesRes.json()
 
               const signatures: Signature[] = signaturesData.docs.map((sig) => ({
                 id: sig.id,
@@ -105,7 +104,7 @@ export function useAttendanceDashboard(eventId: string) {
                 signedCount: signatures.length,
                 totalExpected,
               }
-            })
+            }),
           )
 
           return {
@@ -113,7 +112,7 @@ export function useAttendanceDashboard(eventId: string) {
             date: day.date,
             sessions: sessionsWithSignatures,
           }
-        })
+        }),
       )
 
       return {

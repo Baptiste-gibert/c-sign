@@ -37,7 +37,7 @@ export const validatePassword: CollectionBeforeChangeHook<User> = async ({ data,
     const result = passwordSchema.safeParse(userData.password)
 
     if (!result.success) {
-      const errors = result.error.errors.map(err => err.message).join(', ')
+      const errors = result.error.errors.map((err) => err.message).join(', ')
       throw new Error(errors)
     }
   }

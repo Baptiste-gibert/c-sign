@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Moon, Sun } from 'lucide-react'
-import { BUILT_IN_THEMES, generateThemeWithMode, validateThemeContrast, type ThemeMode } from '@/config/themes'
+import {
+  BUILT_IN_THEMES,
+  generateThemeWithMode,
+  validateThemeContrast,
+  type ThemeMode,
+} from '@/config/themes'
 
 interface ThemeValue {
   themeId?: string
@@ -51,40 +56,43 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
   }
 
   // Determine if a built-in theme is selected
-  const selectedThemeId = value?.customAccent ? null : (value?.themeId || null)
+  const selectedThemeId = value?.customAccent ? null : value?.themeId || null
 
   // Generate preview for custom color
-  const customPreview = customHex && /^#[0-9a-fA-F]{6}$/.test(customHex)
-    ? generateThemeWithMode(customHex, 'Custom', 'custom', '', currentMode)
-    : null
+  const customPreview =
+    customHex && /^#[0-9a-fA-F]{6}$/.test(customHex)
+      ? generateThemeWithMode(customHex, 'Custom', 'custom', '', currentMode)
+      : null
 
   return (
     <div className="space-y-4">
       {/* Dark/Light mode toggle */}
-      <div className="flex rounded-lg border border-neutral-200 overflow-hidden">
+      <div className="flex overflow-hidden rounded-lg border border-neutral-200">
         <button
           type="button"
           onClick={() => handleModeChange('dark')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
             currentMode === 'dark'
               ? 'bg-neutral-900 text-white'
               : 'bg-white text-neutral-600 hover:bg-neutral-50'
           }`}
         >
-          <Moon className="w-4 h-4" />
+          <Moon className="h-4 w-4" />
           {t('theme.dark')}
         </button>
         <button
           type="button"
           onClick={() => handleModeChange('light')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
             currentMode === 'light'
-              ? 'bg-white text-neutral-900 border-l border-neutral-200 shadow-inner'
-              : 'bg-white text-neutral-600 border-l border-neutral-200 hover:bg-neutral-50'
+              ? 'border-l border-neutral-200 bg-white text-neutral-900 shadow-inner'
+              : 'border-l border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50'
           }`}
-          style={currentMode === 'light' ? { boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)' } : undefined}
+          style={
+            currentMode === 'light' ? { boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)' } : undefined
+          }
         >
-          <Sun className="w-4 h-4" />
+          <Sun className="h-4 w-4" />
           {t('theme.light')}
         </button>
       </div>
@@ -94,37 +102,44 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
         {Object.values(BUILT_IN_THEMES).map((theme) => {
           const isSelected = selectedThemeId === theme.id
           const isDefault = !value && theme.id === 'tech-modern'
-          const previewTheme = generateThemeWithMode(theme.accentHex, theme.name, theme.id, theme.emoji, currentMode)
+          const previewTheme = generateThemeWithMode(
+            theme.accentHex,
+            theme.name,
+            theme.id,
+            theme.emoji,
+            currentMode,
+          )
 
           return (
             <button
               key={theme.id}
               type="button"
               onClick={() => handleThemeClick(theme.id)}
-              className={`
-                relative overflow-hidden rounded-md border-2 transition-all
-                ${isSelected ? 'ring-2 scale-105' : 'border-transparent'}
-                ${isDefault ? 'opacity-80' : ''}
-                hover:scale-105
-              `}
+              className={`relative overflow-hidden rounded-md border-2 transition-all ${isSelected ? 'scale-105 ring-2' : 'border-transparent'} ${isDefault ? 'opacity-80' : ''} hover:scale-105`}
               style={{
                 borderColor: isSelected ? theme.vars['--accent'] : 'transparent',
                 boxShadow: isSelected ? `0 0 0 2px ${theme.vars['--accent']}40` : 'none',
               }}
             >
               {/* Color swatch strip showing mode preview */}
-              <div className="h-8 flex">
+              <div className="flex h-8">
                 <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--bg'] }} />
-                <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--surface'] }} />
-                <div className="flex-1" style={{ backgroundColor: previewTheme.vars['--accent'] }} />
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: previewTheme.vars['--surface'] }}
+                />
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: previewTheme.vars['--accent'] }}
+                />
               </div>
 
               {/* Theme name */}
-              <div className="px-3 py-2 bg-white">
+              <div className="bg-white px-3 py-2">
                 <p className="text-sm font-medium text-neutral-900">
                   {theme.name}
                   {isDefault && !value && (
-                    <span className="text-xs text-neutral-500 ml-1">
+                    <span className="ml-1 text-xs text-neutral-500">
                       ({t('eventDetail.defaultTheme').split(' ')[0]})
                     </span>
                   )}
@@ -136,10 +151,8 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
       </div>
 
       {/* Custom color section */}
-      <div className="space-y-2 pt-2 border-t border-neutral-200">
-        <label className="text-sm font-medium text-neutral-700">
-          {t('theme.customAccent')}
-        </label>
+      <div className="space-y-2 border-t border-neutral-200 pt-2">
+        <label className="text-sm font-medium text-neutral-700">{t('theme.customAccent')}</label>
 
         <div className="flex items-center gap-3">
           {/* Native color picker */}
@@ -147,7 +160,7 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
             type="color"
             value={customHex}
             onChange={(e) => handleCustomChange(e.target.value)}
-            className="w-10 h-10 rounded border border-neutral-300 cursor-pointer"
+            className="h-10 w-10 cursor-pointer rounded border border-neutral-300"
           />
 
           {/* Hex input */}
@@ -157,14 +170,12 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
             onChange={(e) => handleCustomChange(e.target.value)}
             placeholder="#00d9ff"
             maxLength={7}
-            className="w-32 px-3 py-2 border border-neutral-300 rounded text-sm font-mono"
+            className="w-32 rounded border border-neutral-300 px-3 py-2 font-mono text-sm"
           />
 
           {/* Active indicator */}
           {value?.customAccent && (
-            <span className="text-xs text-neutral-600">
-              {t('eventDetail.customTheme')}
-            </span>
+            <span className="text-xs text-neutral-600">{t('eventDetail.customTheme')}</span>
           )}
         </div>
 
@@ -177,12 +188,18 @@ export function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
 
         {/* Custom color preview */}
         {customPreview && value?.customAccent && (
-          <div className="mt-3 rounded overflow-hidden border border-neutral-200">
-            <div className="h-6 flex">
+          <div className="mt-3 overflow-hidden rounded border border-neutral-200">
+            <div className="flex h-6">
               <div className="flex-1" style={{ backgroundColor: customPreview.vars['--bg'] }} />
-              <div className="flex-1" style={{ backgroundColor: customPreview.vars['--surface'] }} />
+              <div
+                className="flex-1"
+                style={{ backgroundColor: customPreview.vars['--surface'] }}
+              />
               <div className="flex-1" style={{ backgroundColor: customPreview.vars['--accent'] }} />
-              <div className="flex-1" style={{ backgroundColor: customPreview.vars['--text-sec'] }} />
+              <div
+                className="flex-1"
+                style={{ backgroundColor: customPreview.vars['--text-sec'] }}
+              />
             </div>
           </div>
         )}

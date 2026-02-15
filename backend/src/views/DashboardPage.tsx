@@ -20,7 +20,13 @@ import { Plus, Loader2, Search } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
 
-function FormatEventDates({ dates, language }: { dates: Array<{ id: string; date: string }>; language: string }) {
+function FormatEventDates({
+  dates,
+  language,
+}: {
+  dates: Array<{ id: string; date: string }>
+  language: string
+}) {
   const { t } = useTranslation('common')
   if (dates.length === 0) return <>-</>
   if (dates.length === 1) {
@@ -40,7 +46,7 @@ export function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex min-h-[400px] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-neutral-400" />
       </div>
     )
@@ -71,30 +77,30 @@ export function DashboardPage() {
       {/* Header: title + counter + button */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('dashboard.title')}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">
+            {t('dashboard.title')}
+          </h1>
           {total > 0 && (
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="mt-0.5 text-xs text-gray-400">
               {t('dashboard.subtitle', { total, active })}
             </p>
           )}
         </div>
         <Button
           size="sm"
-          className="h-8 gap-1.5 text-xs bg-gray-900 text-white hover:bg-gray-800"
+          className="h-8 gap-1.5 bg-gray-900 text-xs text-white hover:bg-gray-800"
           onClick={() => navigate('/events/new')}
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="h-3.5 w-3.5" />
           {t('dashboard.newEvent')}
         </Button>
       </div>
 
       {/* Empty State */}
       {events && events.length === 0 && (
-        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <p className="text-neutral-600 text-lg">{t('dashboard.noEvents')}</p>
-          <Button onClick={() => navigate('/events/new')}>
-            {t('dashboard.createFirst')}
-          </Button>
+        <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
+          <p className="text-lg text-neutral-600">{t('dashboard.noEvents')}</p>
+          <Button onClick={() => navigate('/events/new')}>{t('dashboard.createFirst')}</Button>
         </div>
       )}
 
@@ -103,11 +109,11 @@ export function DashboardPage() {
         <>
           <div className="flex items-center gap-3">
             {/* Search */}
-            <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <div className="relative max-w-xs flex-1">
+              <Search className="absolute top-1/2 left-2.5 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
               <Input
                 placeholder={t('dashboard.search')}
-                className="h-8 text-xs pl-8 bg-white border-gray-200"
+                className="h-8 border-gray-200 bg-white pl-8 text-xs"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -119,7 +125,7 @@ export function DashboardPage() {
                   key={f.key}
                   variant={filter === f.key ? 'default' : 'ghost'}
                   size="sm"
-                  className={`h-7 text-[10px] px-2.5 ${
+                  className={`h-7 px-2.5 text-[10px] ${
                     filter === f.key ? 'bg-gray-900 text-white hover:bg-gray-800' : 'text-gray-500'
                   }`}
                   onClick={() => setFilter(f.key)}
@@ -131,18 +137,32 @@ export function DashboardPage() {
           </div>
 
           {/* Card-wrapped table */}
-          <Card className="border border-gray-200 bg-white overflow-hidden p-0">
+          <Card className="overflow-hidden border border-gray-200 bg-white p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="border-b border-gray-100 bg-gray-50/60 hover:bg-gray-50/60">
-                    <TableHead className="text-xs font-medium text-gray-500">{t('table.headers.title')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500 hidden md:table-cell">{t('table.headers.location')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500">{t('table.headers.dates')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500 hidden md:table-cell">{t('table.headers.expenseType')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500">{t('table.headers.signatures')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500">{t('table.headers.status')}</TableHead>
-                    <TableHead className="text-xs font-medium text-gray-500 text-right">{t('table.headers.actions')}</TableHead>
+                    <TableHead className="text-xs font-medium text-gray-500">
+                      {t('table.headers.title')}
+                    </TableHead>
+                    <TableHead className="hidden text-xs font-medium text-gray-500 md:table-cell">
+                      {t('table.headers.location')}
+                    </TableHead>
+                    <TableHead className="text-xs font-medium text-gray-500">
+                      {t('table.headers.dates')}
+                    </TableHead>
+                    <TableHead className="hidden text-xs font-medium text-gray-500 md:table-cell">
+                      {t('table.headers.expenseType')}
+                    </TableHead>
+                    <TableHead className="text-xs font-medium text-gray-500">
+                      {t('table.headers.signatures')}
+                    </TableHead>
+                    <TableHead className="text-xs font-medium text-gray-500">
+                      {t('table.headers.status')}
+                    </TableHead>
+                    <TableHead className="text-right text-xs font-medium text-gray-500">
+                      {t('table.headers.actions')}
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -150,28 +170,33 @@ export function DashboardPage() {
                     const st = statusConfig[event.status] ?? statusConfig.draft
                     const participantTotal = event.participantCount ?? 0
                     const signatureDone = event.signatureCount ?? 0
-                    const pct = participantTotal > 0 ? Math.round((signatureDone / participantTotal) * 100) : 0
+                    const pct =
+                      participantTotal > 0
+                        ? Math.round((signatureDone / participantTotal) * 100)
+                        : 0
 
                     return (
                       <TableRow
                         key={event.id}
-                        className="border-b border-gray-50 hover:bg-gray-50/50 cursor-pointer transition-colors"
+                        className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-gray-50/50"
                         onClick={() => navigate(`/events/${event.id}`)}
                       >
                         <TableCell className="px-4 py-3">
                           <span className="font-medium text-gray-900">{event.title}</span>
                         </TableCell>
-                        <TableCell className="px-4 py-3 hidden md:table-cell">{event.location}</TableCell>
+                        <TableCell className="hidden px-4 py-3 md:table-cell">
+                          {event.location}
+                        </TableCell>
                         <TableCell className="px-4 py-3">
                           <FormatEventDates dates={event.selectedDates} language={i18n.language} />
                         </TableCell>
-                        <TableCell className="px-4 py-3 hidden md:table-cell">
+                        <TableCell className="hidden px-4 py-3 md:table-cell">
                           {t(`expenseTypes.${event.expenseType}`, event.expenseType)}
                         </TableCell>
                         {/* Signatures column with progress bar */}
                         <TableCell className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-16 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div className="h-1.5 w-16 overflow-hidden rounded-full bg-gray-100">
                               <div
                                 className="h-full rounded-full transition-all duration-300"
                                 style={{
@@ -189,11 +214,11 @@ export function DashboardPage() {
                         <TableCell className="px-4 py-3">
                           <Badge
                             variant="secondary"
-                            className="text-[10px] font-medium gap-1.5 px-2 py-0.5"
+                            className="gap-1.5 px-2 py-0.5 text-[10px] font-medium"
                             style={{ background: st.bg, color: st.text }}
                           >
                             <span
-                              className="inline-block w-1.5 h-1.5 rounded-full"
+                              className="inline-block h-1.5 w-1.5 rounded-full"
                               style={{ background: st.dot }}
                             />
                             {tCommon(`status.${event.status}`)}
@@ -207,7 +232,9 @@ export function DashboardPage() {
                             asChild
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Link href={`/events/${event.id}`}>{t('dashboard.viewEvent')} &rarr;</Link>
+                            <Link href={`/events/${event.id}`}>
+                              {t('dashboard.viewEvent')} &rarr;
+                            </Link>
                           </Button>
                         </TableCell>
                       </TableRow>

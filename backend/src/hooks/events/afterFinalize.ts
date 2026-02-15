@@ -5,13 +5,14 @@ import { buildFinalizeEmailTemplate } from '@/lib/email/templates'
 /**
  * Hook that triggers XLSX export and email delivery when event is finalized
  */
-export const afterFinalize: CollectionAfterChangeHook = async ({ doc, previousDoc, req, operation }) => {
+export const afterFinalize: CollectionAfterChangeHook = async ({
+  doc,
+  previousDoc,
+  req,
+  operation,
+}) => {
   // Only trigger on update when status changes to finalized
-  if (
-    operation === 'update' &&
-    doc.status === 'finalized' &&
-    previousDoc?.status !== 'finalized'
-  ) {
+  if (operation === 'update' && doc.status === 'finalized' && previousDoc?.status !== 'finalized') {
     // Detect re-finalization (reopened -> finalized)
     const isRefinalization = previousDoc?.status === 'reopened'
 
@@ -27,7 +28,11 @@ export const afterFinalize: CollectionAfterChangeHook = async ({ doc, previousDo
 /**
  * Generate XLSX and send email with attachment
  */
-async function generateAndEmailExport(req: any, doc: any, isRefinalization: boolean): Promise<void> {
+async function generateAndEmailExport(
+  req: any,
+  doc: any,
+  isRefinalization: boolean,
+): Promise<void> {
   console.log(`${isRefinalization ? 'Re-finalizing' : 'Finalizing'} event ${doc.id} (${doc.title})`)
 
   // Generate XLSX
@@ -38,7 +43,10 @@ async function generateAndEmailExport(req: any, doc: any, isRefinalization: bool
   console.log(`Generated XLSX: ${fileSizeMB} MB`)
 
   // Build filename (sanitize title)
-  const titleSlug = doc.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  const titleSlug = doc.title
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
   const dateStr = new Date().toISOString().split('T')[0]
   const filename = `feuille-presence-${titleSlug}-${dateStr}.xlsx`
 

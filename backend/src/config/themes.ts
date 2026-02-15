@@ -42,16 +42,25 @@ export function hexToHSL(hex: string): { h: number; s: number; l: number } {
   let g = parseInt(hex.slice(3, 5), 16) / 255
   let b = parseInt(hex.slice(5, 7), 16) / 255
 
-  const max = Math.max(r, g, b), min = Math.min(r, g, b)
-  let h = 0, s = 0, l = (max + min) / 2
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b)
+  let h = 0,
+    s = 0,
+    l = (max + min) / 2
 
   if (max !== min) {
     const d = max - min
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-      case g: h = ((b - r) / d + 2) / 6; break
-      case b: h = ((r - g) / d + 4) / 6; break
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+        break
+      case g:
+        h = ((b - r) / d + 2) / 6
+        break
+      case b:
+        h = ((r - g) / d + 4) / 6
+        break
     }
   }
 
@@ -68,7 +77,9 @@ export function hslToHex(h: number, s: number, l: number): string {
   const f = (n: number) => {
     const k = (n + h / 30) % 12
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
-    return Math.round(255 * color).toString(16).padStart(2, '0')
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, '0')
   }
   return `#${f(0)}${f(8)}${f(4)}`
 }
@@ -170,7 +181,7 @@ export function generateTheme(
   accentHex: string,
   name: string,
   id: string,
-  emoji: string
+  emoji: string,
 ): ThemeDefinition {
   const { h, s, l } = hexToHSL(accentHex)
 
@@ -178,8 +189,8 @@ export function generateTheme(
   const accent = accentHex
   const accentHover = hslToHex(h, s, Math.max(l - 8, 20))
   const bg = hslToHex(h, clamp(s * 0.35, 20, 45), 6)
-  const surface = hslToHex(h, clamp(s * 0.40, 20, 50), 14)
-  const textSec = hslToHex(h, clamp(s * 0.50, 25, 60), 80)
+  const surface = hslToHex(h, clamp(s * 0.4, 20, 50), 14)
+  const textSec = hslToHex(h, clamp(s * 0.5, 25, 60), 80)
   const borderC = hslToHex(h, clamp(s * 0.35, 15, 40), 24)
 
   // Generate header gradient background
@@ -191,7 +202,9 @@ export function generateTheme(
     radial-gradient(ellipse 75% 55% at 35% 45%, ${accent}20, transparent 55%),
     radial-gradient(ellipse 55% 50% at 70% 30%, ${haloComplement}18, transparent 50%),
     linear-gradient(145deg, ${bg}, ${midGradient}, ${bg})
-  `.trim().replace(/\s+/g, ' ')
+  `
+    .trim()
+    .replace(/\s+/g, ' ')
 
   // Compute foreground color for text ON accent backgrounds
   const accentFg = luminance(accent) > 0.4 ? bg : '#ffffff'
@@ -234,7 +247,7 @@ export function generateLightTheme(
   accentHex: string,
   name: string,
   id: string,
-  emoji: string
+  emoji: string,
 ): ThemeDefinition {
   const { h, s, l } = hexToHSL(accentHex)
 
@@ -244,7 +257,7 @@ export function generateLightTheme(
   const surface = '#ffffff'
   const text = hslToHex(h, clamp(s * 0.25, 10, 30), 15)
   const textSec = hslToHex(h, clamp(s * 0.15, 8, 25), 45)
-  const borderC = hslToHex(h, clamp(s * 0.10, 5, 20), 85)
+  const borderC = hslToHex(h, clamp(s * 0.1, 5, 20), 85)
 
   // Compute foreground color for text ON accent backgrounds
   const accentFg = luminance(accent) > 0.4 ? text : '#ffffff'
@@ -258,7 +271,9 @@ export function generateLightTheme(
     radial-gradient(ellipse 75% 55% at 35% 45%, ${accent}12, transparent 55%),
     radial-gradient(ellipse 55% 50% at 70% 30%, ${haloComplement}10, transparent 50%),
     linear-gradient(145deg, ${bg}, ${midGradient}, ${bg})
-  `.trim().replace(/\s+/g, ' ')
+  `
+    .trim()
+    .replace(/\s+/g, ' ')
 
   return {
     id,
@@ -291,7 +306,7 @@ export function generateThemeWithMode(
   name: string,
   id: string,
   emoji: string,
-  mode: ThemeMode = 'dark'
+  mode: ThemeMode = 'dark',
 ): ThemeDefinition {
   if (mode === 'light') {
     return generateLightTheme(accentHex, name, id, emoji)

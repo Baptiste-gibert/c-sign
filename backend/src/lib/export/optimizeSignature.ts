@@ -20,7 +20,7 @@ export async function optimizeSignature(inputBuffer: Buffer): Promise<Buffer> {
     return optimized
   } catch (error) {
     throw new Error(
-      `Failed to optimize signature image: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Failed to optimize signature image: ${error instanceof Error ? error.message : 'Unknown error'}`,
     )
   }
 }

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   if (!eventId && !dayId) {
     return NextResponse.json(
       { error: 'eventId or dayId query parameter is required' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
@@ -35,16 +35,16 @@ export async function GET(req: NextRequest) {
       })
 
       if (!event) {
-        return NextResponse.json(
-          { error: 'Event not found' },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: 'Event not found' }, { status: 404 })
       }
 
       if (!event.signingToken) {
         return NextResponse.json(
-          { error: 'Event has no signing token. This event was created before token system was implemented.' },
-          { status: 400 }
+          {
+            error:
+              'Event has no signing token. This event was created before token system was implemented.',
+          },
+          { status: 400 },
         )
       }
 
@@ -61,10 +61,7 @@ export async function GET(req: NextRequest) {
     }
   } catch (error) {
     console.error('QR code URL generation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate signing URL' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to generate signing URL' }, { status: 500 })
   }
 
   // Generate QR code as data URL (base64 PNG)
@@ -87,9 +84,6 @@ export async function GET(req: NextRequest) {
     })
   } catch (error) {
     console.error('QR code generation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate QR code' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to generate QR code' }, { status: 500 })
   }
 }

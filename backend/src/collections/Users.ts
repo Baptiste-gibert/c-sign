@@ -16,7 +16,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['email', 'firstName', 'lastName', 'role']
+    defaultColumns: ['email', 'firstName', 'lastName', 'role'],
   },
   hooks: {
     beforeChange: [validatePassword],
@@ -28,7 +28,7 @@ export const Users: CollectionConfig = {
     delete: isAdmin,
     admin: ({ req: { user } }) => {
       return user?.role === 'admin'
-    }
+    },
   },
   fields: [
     {
@@ -39,25 +39,25 @@ export const Users: CollectionConfig = {
       options: [
         {
           label: 'Admin',
-          value: 'admin'
+          value: 'admin',
         },
         {
           label: 'Organisateur',
-          value: 'organizer'
-        }
-      ]
+          value: 'organizer',
+        },
+      ],
     },
     {
       name: 'firstName',
       type: 'text',
       required: true,
-      label: 'Prenom'
+      label: 'Prenom',
     },
     {
       name: 'lastName',
       type: 'text',
       required: true,
-      label: 'Nom'
-    }
-  ]
+      label: 'Nom',
+    },
+  ],
 }

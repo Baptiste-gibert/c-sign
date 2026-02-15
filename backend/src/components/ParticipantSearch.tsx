@@ -11,21 +11,14 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 interface ParticipantSearchProps {
   onSelect: (participant: SimvParticipant) => void
   disabled?: boolean
 }
 
-export function ParticipantSearch({
-  onSelect,
-  disabled = false,
-}: ParticipantSearchProps) {
+export function ParticipantSearch({ onSelect, disabled = false }: ParticipantSearchProps) {
   const { t } = useTranslation('organizer')
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -70,7 +63,8 @@ export function ParticipantSearch({
                       {participant.lastName} {participant.firstName}
                     </div>
                     <div className="text-sm text-neutral-500">
-                      {participant.professionalNumber || t('participants.noNumber')} • {participant.city}
+                      {participant.professionalNumber || t('participants.noNumber')} •{' '}
+                      {participant.city}
                     </div>
                   </CommandItem>
                 ))}

@@ -12,10 +12,7 @@ import { generateSigningToken } from '@/lib/security/tokens'
  *
  * Requires authentication (the user must be an organizer who owns the event).
  */
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
   try {
@@ -29,10 +26,7 @@ export async function POST(
     })
 
     if (!event) {
-      return NextResponse.json(
-        { error: 'Event not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 })
     }
 
     // Generate a new signing token
@@ -54,9 +48,6 @@ export async function POST(
     })
   } catch (error) {
     console.error('Token regeneration error:', error)
-    return NextResponse.json(
-      { error: 'Failed to regenerate signing token' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to regenerate signing token' }, { status: 500 })
   }
 }

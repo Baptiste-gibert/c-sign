@@ -59,11 +59,14 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle>((_, ref) => {
   return (
     <div className="space-y-2">
       <div
-        className="relative w-full h-40 sm:h-48 md:h-56 rounded-md overflow-hidden"
+        className="relative h-40 w-full overflow-hidden rounded-md sm:h-48 md:h-56"
         style={{ border: '2px solid var(--accent)' }}
       >
         {!hasDrawn && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-[13px]" style={{ color: 'var(--text-sec)', opacity: 0.5 }}>
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center text-[13px]"
+            style={{ color: 'var(--text-sec)', opacity: 0.5 }}
+          >
             {t('signHere')}
           </div>
         )}

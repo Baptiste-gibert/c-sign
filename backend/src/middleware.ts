@@ -43,10 +43,7 @@ export function middleware(request: NextRequest) {
       const headerToken = request.headers.get('x-csrf-token')
 
       if (!cookieToken || !headerToken || cookieToken !== headerToken) {
-        return NextResponse.json(
-          { error: 'Invalid CSRF token' },
-          { status: 403 }
-        )
+        return NextResponse.json({ error: 'Invalid CSRF token' }, { status: 403 })
       }
     }
   }
@@ -62,7 +59,7 @@ export function middleware(request: NextRequest) {
     "img-src 'self' data: blob: *.public.blob.vercel-storage.com",
     "font-src 'self' data:",
     "connect-src 'self' https://challenges.cloudflare.com",
-    "frame-src https://challenges.cloudflare.com",
+    'frame-src https://challenges.cloudflare.com',
     "frame-ancestors 'none'",
   ]
   headers.set('Content-Security-Policy', cspDirectives.join('; '))

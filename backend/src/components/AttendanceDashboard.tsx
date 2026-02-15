@@ -24,7 +24,12 @@ interface AttendanceDashboardProps {
   signingToken?: string
 }
 
-export function AttendanceDashboard({ eventId, participants, qrGranularity, signingToken }: AttendanceDashboardProps) {
+export function AttendanceDashboard({
+  eventId,
+  participants,
+  qrGranularity,
+  signingToken,
+}: AttendanceDashboardProps) {
   const { t, i18n } = useTranslation(['organizer', 'common'])
   const { data, isLoading, isError, error } = useAttendanceDashboard(eventId)
   const locale = i18n.language === 'en' ? enUS : fr
@@ -91,17 +96,16 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
 
   if (isError) {
     return (
-      <div className="text-red-600 py-4">
-        {t('common:errors.error')}: {error instanceof Error ? error.message : t('common:errors.unknownError')}
+      <div className="py-4 text-red-600">
+        {t('common:errors.error')}:{' '}
+        {error instanceof Error ? error.message : t('common:errors.unknownError')}
       </div>
     )
   }
 
   if (!data || data.attendanceDays.length === 0) {
     return (
-      <div className="text-center py-8 text-neutral-500">
-        {t('organizer:attendance.noDays')}
-      </div>
+      <div className="py-8 text-center text-neutral-500">{t('organizer:attendance.noDays')}</div>
     )
   }
 
@@ -117,52 +121,55 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
         return (
           <Card
             key={day.id}
-            className={`py-0 overflow-hidden ${
+            className={`overflow-hidden py-0 ${
               day.isToday ? 'border-blue-200 ring-1 ring-blue-100' : ''
             }`}
           >
             {/* Day header — clickable for collapse */}
             <div
-              className={`px-4 py-2.5 flex items-center justify-between cursor-pointer select-none ${
+              className={`flex cursor-pointer items-center justify-between px-4 py-2.5 select-none ${
                 day.isToday ? 'bg-blue-200/70' : 'bg-blue-100/60'
               }`}
               onClick={() => toggleCollapse(day.id)}
             >
-              <div className="flex items-center gap-2 min-w-0">
+              <div className="flex min-w-0 items-center gap-2">
                 <ChevronDown
-                  className={`w-3 h-3 text-gray-400 transition-transform duration-200 shrink-0 ${
+                  className={`h-3 w-3 shrink-0 text-gray-400 transition-transform duration-200 ${
                     isCollapsed ? '-rotate-90' : 'rotate-0'
                   }`}
                 />
-                <Calendar className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                <span className="text-xs font-semibold text-gray-800 capitalize truncate">
+                <Calendar className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+                <span className="truncate text-xs font-semibold text-gray-800 capitalize">
                   {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale })}
                 </span>
 
                 {day.isToday && (
-                  <Badge className="text-[8px] font-bold px-1.5 py-0 bg-blue-600 text-white">
+                  <Badge className="bg-blue-600 px-1.5 py-0 text-[8px] font-bold text-white">
                     {t('organizer:eventDetail.today')}
                   </Badge>
                 )}
 
                 {isFullDay ? (
-                  <Badge variant="secondary" className="text-[9px] bg-gray-200/60 text-gray-500">
+                  <Badge variant="secondary" className="bg-gray-200/60 text-[9px] text-gray-500">
                     {t('organizer:eventDetail.fullDay')}
                   </Badge>
                 ) : (
-                  <Badge variant="secondary" className="text-[9px] bg-gray-200/60 text-gray-500">
+                  <Badge variant="secondary" className="bg-gray-200/60 text-[9px] text-gray-500">
                     {day.sessions.length} {t('organizer:eventDetail.sessions')}
                   </Badge>
                 )}
 
                 {isDone && (
-                  <Badge variant="secondary" className="text-[8px] bg-emerald-100 text-emerald-700 font-semibold">
+                  <Badge
+                    variant="secondary"
+                    className="bg-emerald-100 text-[8px] font-semibold text-emerald-700"
+                  >
                     ✓ {t('organizer:eventDetail.complete')}
                   </Badge>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex shrink-0 items-center gap-2">
                 <span className="text-[10px] text-gray-500 tabular-nums">
                   {daySigned}/{dayTotal}
                 </span>
@@ -192,10 +199,10 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                           size={256}
                           level="H"
                         />
-                        <p className="text-sm text-neutral-600 text-center">
+                        <p className="text-center text-sm text-neutral-600">
                           {t('organizer:qrCodes.scanPrompt')}
                         </p>
-                        <code className="text-xs bg-neutral-100 px-2 py-1 rounded">
+                        <code className="rounded bg-neutral-100 px-2 py-1 text-xs">
                           {window.location.origin}/sign/{signingToken}?day={day.id}
                         </code>
                       </div>
@@ -209,20 +216,17 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
             {!isCollapsed && (
               <div className="divide-y divide-gray-300">
                 {day.sessions.map((session) => {
-                  const pct = session.totalExpected > 0
-                    ? Math.round((session.signedCount / session.totalExpected) * 100)
-                    : 0
+                  const pct =
+                    session.totalExpected > 0
+                      ? Math.round((session.signedCount / session.totalExpected) * 100)
+                      : 0
 
                   // Determine missing participants
-                  const signedSet = new Set(
-                    session.signatures.map((s) => s.participant.id)
-                  )
-                  const missingParticipants = participants.filter(
-                    (p) => !signedSet.has(p.id)
-                  )
+                  const signedSet = new Set(session.signatures.map((s) => s.participant.id))
+                  const missingParticipants = participants.filter((p) => !signedSet.has(p.id))
 
                   return (
-                    <div key={session.id} className="px-4 py-3 space-y-2">
+                    <div key={session.id} className="space-y-2 px-4 py-3">
                       {/* Session header */}
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-semibold text-gray-700">
@@ -237,18 +241,15 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                           {qrGranularity === 'session' && (
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-5 w-5 p-0"
-                                >
+                                <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
                                   <QrCode className="h-3 w-3 text-gray-500" />
                                 </Button>
                               </DialogTrigger>
                               <DialogContent>
                                 <DialogHeader>
                                   <DialogTitle>
-                                    QR Code - {session.name} ({format(new Date(day.date), 'd MMM', { locale })})
+                                    QR Code - {session.name} (
+                                    {format(new Date(day.date), 'd MMM', { locale })})
                                   </DialogTitle>
                                 </DialogHeader>
                                 <div className="flex flex-col items-center gap-4 py-4">
@@ -257,11 +258,12 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                                     size={256}
                                     level="H"
                                   />
-                                  <p className="text-sm text-neutral-600 text-center">
+                                  <p className="text-center text-sm text-neutral-600">
                                     {t('organizer:qrCodes.scanPrompt')}
                                   </p>
-                                  <code className="text-xs bg-neutral-100 px-2 py-1 rounded break-all text-center">
-                                    {window.location.origin}/sign/{signingToken}?day={day.id}&session={session.id}
+                                  <code className="rounded bg-neutral-100 px-2 py-1 text-center text-xs break-all">
+                                    {window.location.origin}/sign/{signingToken}?day={day.id}
+                                    &session={session.id}
                                   </code>
                                 </div>
                               </DialogContent>
@@ -271,7 +273,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                       </div>
 
                       {/* Mini progress bar */}
-                      <div className="w-full h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{
@@ -287,7 +289,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                         {session.signatures.map((sig) => (
                           <div key={sig.id} className="flex items-center justify-between py-0.5">
                             <div className="flex items-center gap-2">
-                              <Check className="w-3.5 h-3.5 text-emerald-500" />
+                              <Check className="h-3.5 w-3.5 text-emerald-500" />
                               <span className="text-[11px] font-medium text-gray-700">
                                 {sig.participant.lastName.toUpperCase()} {sig.participant.firstName}
                               </span>
@@ -302,7 +304,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
                         {missingParticipants.map((p) => (
                           <div key={p.id} className="flex items-center justify-between py-0.5">
                             <div className="flex items-center gap-2">
-                              <Circle className="w-3.5 h-3.5 text-gray-300" />
+                              <Circle className="h-3.5 w-3.5 text-gray-300" />
                               <span className="text-[11px] text-gray-400">
                                 {p.lastName.toUpperCase()} {p.firstName}
                               </span>
@@ -315,7 +317,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity, sign
 
                         {/* No participants at all */}
                         {session.signatures.length === 0 && missingParticipants.length === 0 && (
-                          <div className="text-[11px] text-gray-400 py-1">
+                          <div className="py-1 text-[11px] text-gray-400">
                             {t('organizer:attendance.noSignatures')}
                           </div>
                         )}

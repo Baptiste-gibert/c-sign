@@ -19,9 +19,9 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="bg-white border-b border-neutral-200">
-        <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2 max-w-7xl mx-auto">
+    <div className="flex min-h-screen flex-col">
+      <header className="border-b border-neutral-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-4 sm:gap-8">
             <Link href="/dashboard" className="text-xl font-bold text-neutral-900">
               c-sign
@@ -29,13 +29,13 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
             <nav className="flex items-center gap-3 sm:gap-6">
               <Link
                 href="/dashboard"
-                className="text-xs sm:text-sm font-medium text-neutral-700 hover:text-neutral-900"
+                className="text-xs font-medium text-neutral-700 hover:text-neutral-900 sm:text-sm"
               >
                 {t('navigation.events')}
               </Link>
               <Link
                 href="/events/new"
-                className="text-xs sm:text-sm font-medium text-neutral-700 hover:text-neutral-900"
+                className="text-xs font-medium text-neutral-700 hover:text-neutral-900 sm:text-sm"
               >
                 {t('navigation.newEvent')}
               </Link>
@@ -43,7 +43,7 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             {user && (
-              <span className="text-xs sm:text-sm text-neutral-700">
+              <span className="text-xs text-neutral-700 sm:text-sm">
                 {user.firstName} {user.lastName}
               </span>
             )}
@@ -55,7 +55,7 @@ export function OrganizerLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main className="flex-1 bg-neutral-50 p-3 sm:p-6">
-        <div className="max-w-7xl mx-auto w-full">{children}</div>
+        <div className="mx-auto w-full max-w-7xl">{children}</div>
       </main>
     </div>
   )

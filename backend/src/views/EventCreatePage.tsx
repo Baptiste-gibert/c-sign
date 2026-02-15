@@ -19,12 +19,12 @@ export function EventCreatePage() {
   }
 
   return (
-    <div className="max-w-[640px] mx-auto space-y-4 py-6">
+    <div className="mx-auto max-w-[640px] space-y-4 py-6">
       {/* Header */}
       <div className="space-y-1">
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-0.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="flex items-center gap-0.5 text-xs text-gray-400 transition-colors hover:text-gray-600"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           {t('eventDetail.backToDashboard')}
@@ -35,23 +35,16 @@ export function EventCreatePage() {
 
       {/* Error Message */}
       {createEvent.isError && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
-          <p className="text-sm text-red-800">
-            {t('eventCreate.createError')}
-          </p>
+        <div className="rounded-md border border-red-200 bg-red-50 p-4">
+          <p className="text-sm text-red-800">{t('eventCreate.createError')}</p>
           {createEvent.error && (
-            <p className="text-sm text-red-600 mt-1">
-              {createEvent.error.message}
-            </p>
+            <p className="mt-1 text-sm text-red-600">{createEvent.error.message}</p>
           )}
         </div>
       )}
 
       {/* Event Form */}
-      <EventForm
-        onSubmit={handleSubmit}
-        isSubmitting={createEvent.isPending}
-      />
+      <EventForm onSubmit={handleSubmit} isSubmitting={createEvent.isPending} />
     </div>
   )
 }

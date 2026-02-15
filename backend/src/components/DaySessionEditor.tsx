@@ -59,10 +59,7 @@ export function DaySessionEditor({
     if (!dateInput) return
     // Prevent duplicate dates
     if (days.some((d) => d.date === dateInput)) return
-    onDaysChange([
-      ...days,
-      { date: dateInput, fullDay: true, sessions: [makeDefaultSession()] },
-    ])
+    onDaysChange([...days, { date: dateInput, fullDay: true, sessions: [makeDefaultSession()] }])
     setDateInput('')
   }
 
@@ -92,17 +89,24 @@ export function DaySessionEditor({
         return {
           ...d,
           fullDay: true,
-          sessions: [{ id: d.sessions[0]?.id || generateId(), name: d.sessions[0]?.name || 'Session principale', startTime: '09:00', endTime: '17:00' }],
+          sessions: [
+            {
+              id: d.sessions[0]?.id || generateId(),
+              name: d.sessions[0]?.name || 'Session principale',
+              startTime: '09:00',
+              endTime: '17:00',
+            },
+          ],
         }
-      })
+      }),
     )
   }
 
   const addSession = (date: string) => {
     onDaysChange(
       days.map((d) =>
-        d.date === date ? { ...d, sessions: [...d.sessions, makeDefaultSession()] } : d
-      )
+        d.date === date ? { ...d, sessions: [...d.sessions, makeDefaultSession()] } : d,
+      ),
     )
   }
 
@@ -112,7 +116,7 @@ export function DaySessionEditor({
         if (d.date !== date) return d
         if (d.sessions.length <= 1) return d
         return { ...d, sessions: d.sessions.filter((s) => s.id !== sessionId) }
-      })
+      }),
     )
   }
 
@@ -121,8 +125,8 @@ export function DaySessionEditor({
       days.map((d) =>
         d.date === date
           ? { ...d, sessions: d.sessions.map((s) => (s.id === sessionId ? { ...s, name } : s)) }
-          : d
-      )
+          : d,
+      ),
     )
   }
 
@@ -130,19 +134,17 @@ export function DaySessionEditor({
     date: string,
     sessionId: string,
     field: 'startTime' | 'endTime',
-    value: string
+    value: string,
   ) => {
     onDaysChange(
       days.map((d) =>
         d.date === date
           ? {
               ...d,
-              sessions: d.sessions.map((s) =>
-                s.id === sessionId ? { ...s, [field]: value } : s
-              ),
+              sessions: d.sessions.map((s) => (s.id === sessionId ? { ...s, [field]: value } : s)),
             }
-          : d
-      )
+          : d,
+      ),
     )
   }
 
@@ -163,8 +165,8 @@ export function DaySessionEditor({
                 }
               }),
             }
-          : d
-      )
+          : d,
+      ),
     )
   }
 
@@ -182,7 +184,11 @@ export function DaySessionEditor({
   const qrCount =
     qrGranularity === 'event' ? 1 : qrGranularity === 'day' ? days.length : totalSessions
 
-  const qrOptions: Array<{ value: 'event' | 'day' | 'session'; labelKey: string; descKey: string }> = [
+  const qrOptions: Array<{
+    value: 'event' | 'day' | 'session'
+    labelKey: string
+    descKey: string
+  }> = [
     { value: 'event', labelKey: 'eventCreate.qrEvent', descKey: 'eventCreate.qrEventDesc' },
     { value: 'day', labelKey: 'eventCreate.qrDay', descKey: 'eventCreate.qrDayDesc' },
     { value: 'session', labelKey: 'eventCreate.qrSession', descKey: 'eventCreate.qrSessionDesc' },
@@ -196,7 +202,7 @@ export function DaySessionEditor({
           type="date"
           value={dateInput}
           onChange={(e) => setDateInput(e.target.value)}
-          className="h-8 text-xs flex-1"
+          className="h-8 flex-1 text-xs"
         />
         <Button
           type="button"
@@ -206,35 +212,35 @@ export function DaySessionEditor({
           onClick={addDay}
           disabled={!dateInput}
         >
-          <Plus className="h-3 w-3 mr-1" />
+          <Plus className="mr-1 h-3 w-3" />
           {t('eventCreate.addDay')}
         </Button>
       </div>
 
       {/* Empty state */}
       {sortedDays.length === 0 && (
-        <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+        <div className="rounded-lg border-2 border-dashed border-gray-200 p-6 text-center">
           <p className="text-sm text-gray-500">{t('eventCreate.noDays')}</p>
-          <p className="text-xs text-gray-400 mt-1">{t('eventCreate.noDaysHint')}</p>
+          <p className="mt-1 text-xs text-gray-400">{t('eventCreate.noDaysHint')}</p>
         </div>
       )}
 
       {/* Day cards */}
       {sortedDays.map((day) => (
         <Card key={day.date} className="py-3">
-          <CardContent className="px-4 space-y-3">
+          <CardContent className="space-y-3 px-4">
             {/* Day header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-900 capitalize">
                   {formatDate(day.date)}
                 </span>
-                <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                <Badge variant="secondary" className="px-1.5 py-0 text-[10px]">
                   {day.sessions.length} session{day.sessions.length > 1 ? 's' : ''}
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer">
+                <label className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-500">
                   <input
                     type="checkbox"
                     checked={day.fullDay}
@@ -246,7 +252,7 @@ export function DaySessionEditor({
                 <button
                   type="button"
                   onClick={() => removeDay(day.date)}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                  className="p-1 text-gray-400 transition-colors hover:text-red-500"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -256,16 +262,13 @@ export function DaySessionEditor({
             {/* Sessions */}
             <div className="space-y-2">
               {day.sessions.map((session) => (
-                <div
-                  key={session.id}
-                  className="flex items-center gap-2 bg-gray-50 rounded-md p-2"
-                >
+                <div key={session.id} className="flex items-center gap-2 rounded-md bg-gray-50 p-2">
                   {/* Session name */}
                   <Input
                     value={session.name}
                     onChange={(e) => updateSessionName(day.date, session.id, e.target.value)}
                     placeholder={t('eventCreate.sessionName')}
-                    className="h-7 text-xs flex-1 min-w-0"
+                    className="h-7 min-w-0 flex-1 text-xs"
                     disabled={day.fullDay}
                   />
                   {/* Time inputs */}
@@ -275,7 +278,7 @@ export function DaySessionEditor({
                     onChange={(e) =>
                       updateSessionTime(day.date, session.id, 'startTime', e.target.value)
                     }
-                    className="h-7 text-xs w-24"
+                    className="h-7 w-24 text-xs"
                   />
                   <span className="text-xs text-gray-400">-</span>
                   <Input
@@ -284,7 +287,7 @@ export function DaySessionEditor({
                     onChange={(e) =>
                       updateSessionTime(day.date, session.id, 'endTime', e.target.value)
                     }
-                    className="h-7 text-xs w-24"
+                    className="h-7 w-24 text-xs"
                   />
                   {/* Preset buttons */}
                   {!day.fullDay && (
@@ -294,7 +297,7 @@ export function DaySessionEditor({
                           key={preset.label}
                           type="button"
                           onClick={() => applyPreset(day.date, session.id, preset)}
-                          className="p-1 text-sm hover:bg-gray-200 rounded transition-colors"
+                          className="rounded p-1 text-sm transition-colors hover:bg-gray-200"
                           title={preset.label}
                         >
                           {preset.icon}
@@ -307,7 +310,7 @@ export function DaySessionEditor({
                     <button
                       type="button"
                       onClick={() => removeSession(day.date, session.id)}
-                      className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                      className="p-1 text-gray-400 transition-colors hover:text-red-500"
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>
@@ -321,9 +324,9 @@ export function DaySessionEditor({
               <button
                 type="button"
                 onClick={() => addSession(day.date)}
-                className="w-full border-2 border-dashed border-gray-200 rounded-md p-2 text-xs text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-colors"
+                className="w-full rounded-md border-2 border-dashed border-gray-200 p-2 text-xs text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-600"
               >
-                <Plus className="h-3 w-3 inline mr-1" />
+                <Plus className="mr-1 inline h-3 w-3" />
                 {t('eventCreate.addSession')}
               </button>
             )}
@@ -353,8 +356,8 @@ export function DaySessionEditor({
                   }`}
                 >
                   <p className="text-xs font-medium text-gray-900">{t(opt.labelKey)}</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">{t(opt.descKey)}</p>
-                  <p className="text-lg font-bold text-gray-900 mt-1">{count} QR</p>
+                  <p className="mt-0.5 text-[10px] text-gray-500">{t(opt.descKey)}</p>
+                  <p className="mt-1 text-lg font-bold text-gray-900">{count} QR</p>
                 </button>
               )
             })}
@@ -364,13 +367,14 @@ export function DaySessionEditor({
 
       {/* Summary banner */}
       {days.length > 0 && (
-        <div className="bg-gray-50 rounded-lg px-4 py-2.5 flex items-center justify-between text-xs text-gray-600">
+        <div className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2.5 text-xs text-gray-600">
           <span>
             {tc('plurals.days', { count: days.length })} &middot; {totalSessions} session
             {totalSessions > 1 ? 's' : ''}
           </span>
           <span>
-            QR: {qrCount} ({t(`eventCreate.qr${qrGranularity.charAt(0).toUpperCase() + qrGranularity.slice(1)}`)})
+            QR: {qrCount} (
+            {t(`eventCreate.qr${qrGranularity.charAt(0).toUpperCase() + qrGranularity.slice(1)}`)})
           </span>
         </div>
       )}

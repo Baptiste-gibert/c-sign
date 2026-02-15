@@ -51,19 +51,17 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900">c-sign</h1>
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold text-neutral-900 sm:text-4xl">c-sign</h1>
           <p className="text-neutral-600">{t('login.title')}</p>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle>{t('login.connection')}</CardTitle>
-            <CardDescription>
-              {t('login.description')}
-            </CardDescription>
+            <CardDescription>{t('login.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -76,9 +74,7 @@ export function LoginPage() {
                   {...register('email')}
                   disabled={isLoggingIn}
                 />
-                {errors.email && (
-                  <p className="text-sm text-red-600">{errors.email.message}</p>
-                )}
+                {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
               </div>
 
               <div className="space-y-2">
@@ -96,16 +92,10 @@ export function LoginPage() {
               </div>
 
               {loginError && (
-                <p className="text-sm text-red-600">
-                  {t('login.invalidCredentials')}
-                </p>
+                <p className="text-sm text-red-600">{t('login.invalidCredentials')}</p>
               )}
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoggingIn}
-              >
+              <Button type="submit" className="w-full" disabled={isLoggingIn}>
                 {isLoggingIn ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

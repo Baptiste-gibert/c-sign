@@ -56,7 +56,13 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
     },
   })
 
-  const { handleSubmit, register, control, setValue, formState: { errors } } = form
+  const {
+    handleSubmit,
+    register,
+    control,
+    setValue,
+    formState: { errors },
+  } = form
 
   // Sync local days state with form
   const handleDaysChange = (newDays: AttendanceDay[]) => {
@@ -95,7 +101,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
           <div className="grid grid-cols-2 gap-3">
             {/* Title */}
             <div className="space-y-1">
-              <Label htmlFor="title" className="text-[10px] text-gray-500 font-medium">
+              <Label htmlFor="title" className="text-[10px] font-medium text-gray-500">
                 {t('eventForm.title')} *
               </Label>
               <Input
@@ -104,14 +110,12 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
                 placeholder={t('eventForm.titlePlaceholder')}
                 className="h-8 text-xs"
               />
-              {errors.title && (
-                <p className="text-[10px] text-red-500">{errors.title.message}</p>
-              )}
+              {errors.title && <p className="text-[10px] text-red-500">{errors.title.message}</p>}
             </div>
 
             {/* Location */}
             <div className="space-y-1">
-              <Label htmlFor="location" className="text-[10px] text-gray-500 font-medium">
+              <Label htmlFor="location" className="text-[10px] font-medium text-gray-500">
                 {t('eventForm.location')} *
               </Label>
               <Input
@@ -127,7 +131,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
             {/* Expense Type */}
             <div className="space-y-1">
-              <Label htmlFor="expenseType" className="text-[10px] text-gray-500 font-medium">
+              <Label htmlFor="expenseType" className="text-[10px] font-medium text-gray-500">
                 {t('eventForm.expenseType')} *
               </Label>
               <Controller
@@ -135,7 +139,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full h-8 text-xs">
+                    <SelectTrigger className="h-8 w-full text-xs">
                       <SelectValue placeholder={t('eventForm.expenseTypePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -155,7 +159,10 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
 
             {/* CNOV Declaration Number */}
             <div className="space-y-1">
-              <Label htmlFor="cnovDeclarationNumber" className="text-[10px] text-gray-500 font-medium">
+              <Label
+                htmlFor="cnovDeclarationNumber"
+                className="text-[10px] font-medium text-gray-500"
+              >
                 {t('eventForm.cnovDeclarationNumber')}
               </Label>
               <Input
@@ -177,18 +184,18 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
         >
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="organizerName" className="text-[10px] text-gray-500 font-medium">
+              <Label htmlFor="organizerName" className="text-[10px] font-medium text-gray-500">
                 {t('eventForm.organizerName')}
               </Label>
               <Input
                 id="organizerName"
                 {...register('organizerName')}
                 readOnly
-                className="h-8 text-xs bg-white text-gray-500"
+                className="h-8 bg-white text-xs text-gray-500"
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="organizerEmail" className="text-[10px] text-gray-500 font-medium">
+              <Label htmlFor="organizerEmail" className="text-[10px] font-medium text-gray-500">
                 {t('eventForm.organizerEmail')}
               </Label>
               <Input
@@ -196,7 +203,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
                 type="email"
                 {...register('organizerEmail')}
                 readOnly
-                className="h-8 text-xs bg-white text-gray-500"
+                className="h-8 bg-white text-xs text-gray-500"
               />
             </div>
           </div>
@@ -215,7 +222,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
             onQrGranularityChange={handleQrChange}
           />
           {errors.days && (
-            <p className="text-[10px] text-red-500 mt-1">
+            <p className="mt-1 text-[10px] text-red-500">
               {typeof errors.days.message === 'string'
                 ? errors.days.message
                 : t('validation.atLeastOneDateRequired')}
@@ -234,10 +241,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
             name="theme"
             control={control}
             render={({ field }) => (
-              <ThemeSelector
-                value={field.value ?? null}
-                onChange={field.onChange}
-              />
+              <ThemeSelector value={field.value ?? null} onChange={field.onChange} />
             )}
           />
         </SectionStep>
@@ -246,7 +250,7 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-9 text-xs font-semibold bg-gray-900 text-white hover:bg-gray-800"
+          className="h-9 w-full bg-gray-900 text-xs font-semibold text-white hover:bg-gray-800"
         >
           {isSubmitting ? t('eventForm.submitting') : t('eventForm.submit')}
         </Button>

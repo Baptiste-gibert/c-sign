@@ -15,10 +15,7 @@ function getBlobBaseUrl(): string | null {
   return `https://${match[1].toLowerCase()}.public.blob.vercel-storage.com`
 }
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const payload = await getPayload({ config })
   const { user } = await payload.auth({ headers: req.headers })
@@ -77,7 +74,14 @@ export async function GET(
         const image = sig.image
         const entry: any = {
           participantEmail: typeof participant === 'object' ? participant.email : participant,
-          imageField: image === null ? 'null' : typeof image === 'string' ? `id:${image}` : typeof image === 'number' ? `id:${image}` : 'object',
+          imageField:
+            image === null
+              ? 'null'
+              : typeof image === 'string'
+                ? `id:${image}`
+                : typeof image === 'number'
+                  ? `id:${image}`
+                  : 'object',
         }
 
         if (image && typeof image === 'object') {

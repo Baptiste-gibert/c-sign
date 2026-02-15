@@ -14,10 +14,7 @@ import organizerEn from './locales/en/organizer.json'
 // Read cached language on client to match SSR output.
 // LanguageDetector is NOT used at init (lng is set explicitly) to prevent
 // hydration mismatches when navigator.language differs from the server default.
-const cachedLng =
-  typeof window !== 'undefined'
-    ? localStorage.getItem('i18nextLng') || 'fr'
-    : 'fr'
+const cachedLng = typeof window !== 'undefined' ? localStorage.getItem('i18nextLng') || 'fr' : 'fr'
 
 i18n
   .use(LanguageDetector)

@@ -97,9 +97,7 @@ export function useRemoveParticipant(eventId: string) {
 
       // Step 2: Filter out the participant ID
       const currentParticipants = event.participants || []
-      const updatedParticipants = currentParticipants.filter(
-        (id: string) => id !== participantId
-      )
+      const updatedParticipants = currentParticipants.filter((id: string) => id !== participantId)
 
       // Step 3: Update event with remaining participants
       await apiFetch(`/api/events/${eventId}`, {

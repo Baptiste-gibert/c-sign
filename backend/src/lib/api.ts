@@ -38,7 +38,10 @@ export async function fetchSessionsByDay(dayId: string) {
   return res.json()
 }
 
-export async function createParticipant(data: Record<string, unknown>, securityHeaders?: SecurityHeaders) {
+export async function createParticipant(
+  data: Record<string, unknown>,
+  securityHeaders?: SecurityHeaders,
+) {
   const csrfToken = getCsrfToken()
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (csrfToken) headers['X-CSRF-Token'] = csrfToken
@@ -75,12 +78,15 @@ export async function uploadSignatureImage(blob: Blob, securityHeaders?: Securit
   return res.json()
 }
 
-export async function createSignature(data: {
-  participant: number | string
-  session: number | string
-  image: number | string
-  rightToImage: boolean
-}, securityHeaders?: SecurityHeaders) {
+export async function createSignature(
+  data: {
+    participant: number | string
+    session: number | string
+    image: number | string
+    rightToImage: boolean
+  },
+  securityHeaders?: SecurityHeaders,
+) {
   const csrfToken = getCsrfToken()
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (csrfToken) headers['X-CSRF-Token'] = csrfToken

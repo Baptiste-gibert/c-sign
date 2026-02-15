@@ -20,7 +20,7 @@ const store = new Map<string, RateLimitEntry>()
 export function checkRateLimit(
   fingerprint: string,
   maxRequests: number = 10,
-  windowMs: number = 60000
+  windowMs: number = 60000,
 ): RateLimitResult {
   const now = Date.now()
   const entry = store.get(fingerprint)

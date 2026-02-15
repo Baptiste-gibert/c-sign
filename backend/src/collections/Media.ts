@@ -32,9 +32,7 @@ const validateAndSanitizeUpload: CollectionBeforeChangeHook = async ({ data, req
   try {
     // Re-encode through Sharp to strip metadata and destroy polyglot payloads
     // Convert to PNG for consistent security processing
-    const reEncoded = await sharp(buffer)
-      .png({ compressionLevel: 9 })
-      .toBuffer()
+    const reEncoded = await sharp(buffer).png({ compressionLevel: 9 }).toBuffer()
 
     // Replace original file data with sanitized version
     req.file.data = reEncoded
@@ -54,15 +52,15 @@ export const Media: CollectionConfig = {
         name: 'thumbnail',
         width: 200,
         height: 100,
-        fit: 'contain'
-      }
-    ]
+        fit: 'contain',
+      },
+    ],
   },
   access: {
     create: () => true, // Public: signature images uploaded by anonymous users
     read: () => true, // Public: images may need to be served
     update: ({ req: { user } }) => user?.role === 'admin',
-    delete: ({ req: { user } }) => user?.role === 'admin'
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   hooks: {
     beforeChange: [validateAndSanitizeUpload],
@@ -71,7 +69,7 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      label: 'Texte alternatif'
-    }
-  ]
+      label: 'Texte alternatif',
+    },
+  ],
 }

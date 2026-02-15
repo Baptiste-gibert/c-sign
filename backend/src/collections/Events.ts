@@ -69,7 +69,8 @@ export const Events: CollectionConfig = {
               label: 'Jeton de signature',
               admin: {
                 readOnly: true,
-                description: 'Jeton de signature unique pour les URLs publiques (genere automatiquement)',
+                description:
+                  'Jeton de signature unique pour les URLs publiques (genere automatiquement)',
               },
             },
             {
@@ -105,7 +106,7 @@ export const Events: CollectionConfig = {
                 { label: 'Hospitalite - Collation', value: 'hospitality_snack' },
                 { label: 'Hospitalite - Restauration', value: 'hospitality_catering' },
                 { label: 'Hospitalite - Hebergement', value: 'hospitality_accommodation' },
-                { label: 'Frais d\'inscription evenement', value: 'event_registration' },
+                { label: "Frais d'inscription evenement", value: 'event_registration' },
                 { label: 'Frais de reunion/organisation', value: 'meeting_organization' },
                 { label: 'Frais de transport', value: 'transport' },
               ],
@@ -125,7 +126,8 @@ export const Events: CollectionConfig = {
               type: 'json',
               label: 'Configuration des sessions par jour',
               admin: {
-                description: 'Configuration detaillee des sessions pour chaque journee (genere par le formulaire)',
+                description:
+                  'Configuration detaillee des sessions pour chaque journee (genere par le formulaire)',
               },
             },
             {
@@ -198,7 +200,12 @@ export const Events: CollectionConfig = {
       // Validate status transitions
       async ({ data, req, operation, originalDoc }) => {
         // Only validate transitions on update when status is changing
-        if (operation === 'update' && data.status && originalDoc?.status && data.status !== originalDoc.status) {
+        if (
+          operation === 'update' &&
+          data.status &&
+          originalDoc?.status &&
+          data.status !== originalDoc.status
+        ) {
           const oldStatus = originalDoc.status
           const newStatus = data.status
 

@@ -21,8 +21,8 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     importMap: {
-      baseDir: path.resolve(dirname)
-    }
+      baseDir: path.resolve(dirname),
+    },
   },
   collections: [Users, Events, AttendanceDays, Sessions, Participants, Signatures, Media],
   editor: lexicalEditor(),
@@ -31,36 +31,43 @@ export default buildConfig({
   },
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts')
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
-      ? [vercelBlobStorage({
-          collections: { media: true },
-          token: process.env.BLOB_READ_WRITE_TOKEN,
-        })]
+      ? [
+          vercelBlobStorage({
+            collections: { media: true },
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+          }),
+        ]
       : []),
   ],
   sharp,
   db: postgresAdapter({
     push: true,
     pool: {
-      connectionString: process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL || '',
+      connectionString:
+        process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL || '',
     },
   }),
-  ...(process.env.SMTP_HOST ? {
-    email: nodemailerAdapter({
-      defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',
-      defaultFromName: 'c-sign - Ceva Sante Animale',
-      transportOptions: {
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: process.env.SMTP_PORT === '465',
-        auth: process.env.SMTP_USER ? {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        } : undefined,
-      },
-    })
-  } : {}),
+  ...(process.env.SMTP_HOST
+    ? {
+        email: nodemailerAdapter({
+          defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'noreply@ceva.com',
+          defaultFromName: 'c-sign - Ceva Sante Animale',
+          transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: parseInt(process.env.SMTP_PORT || '587'),
+            secure: process.env.SMTP_PORT === '465',
+            auth: process.env.SMTP_USER
+              ? {
+                  user: process.env.SMTP_USER,
+                  pass: process.env.SMTP_PASS,
+                }
+              : undefined,
+          },
+        }),
+      }
+    : {}),
 })

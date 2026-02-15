@@ -108,23 +108,28 @@ export function ParticipantTable({
             header: t('organizer:eventDetail.presence'),
             cell: (info) => {
               const sessionsSigned = participantSessionCounts.get(info.row.original.id) || 0
-              const pPct = totalSessions > 0 ? Math.round((sessionsSigned / totalSessions) * 100) : 0
+              const pPct =
+                totalSessions > 0 ? Math.round((sessionsSigned / totalSessions) * 100) : 0
               const allDone = sessionsSigned === totalSessions && totalSessions > 0
 
               return (
                 <div className="flex items-center gap-1.5">
-                  <div className="w-10 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                  <div className="h-1.5 w-10 overflow-hidden rounded-full bg-gray-100">
                     <div
                       className="h-full rounded-full"
                       style={{
                         width: `${pPct}%`,
-                        background: allDone ? '#22c55e' : sessionsSigned > 0 ? '#3b82f6' : 'transparent',
+                        background: allDone
+                          ? '#22c55e'
+                          : sessionsSigned > 0
+                            ? '#3b82f6'
+                            : 'transparent',
                       }}
                     />
                   </div>
                   <Badge
                     variant="secondary"
-                    className={`text-[8px] font-semibold px-1 ${
+                    className={`px-1 text-[8px] font-semibold ${
                       allDone
                         ? 'bg-emerald-100 text-emerald-700'
                         : sessionsSigned > 0
@@ -169,7 +174,7 @@ export function ParticipantTable({
 
   if (data.length === 0) {
     return (
-      <div className="text-center py-8 text-neutral-500">
+      <div className="py-8 text-center text-neutral-500">
         {t('organizer:participants.noParticipants')}
       </div>
     )
@@ -180,19 +185,19 @@ export function ParticipantTable({
       <div className="text-sm text-neutral-600">
         {t('common:plurals.participant', { count: data.length })}
       </div>
-      <div className="rounded-md border overflow-x-auto">
+      <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className={(header.column.columnDef.meta as any)?.className}>
+                  <TableHead
+                    key={header.id}
+                    className={(header.column.columnDef.meta as any)?.className}
+                  >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -202,7 +207,10 @@ export function ParticipantTable({
             {table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
+                  <TableCell
+                    key={cell.id}
+                    className={(cell.column.columnDef.meta as any)?.className}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

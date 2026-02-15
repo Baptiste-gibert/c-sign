@@ -118,7 +118,10 @@ export function SignPage() {
         setSessions(sessionsData.docs || [])
 
         // Auto-select session from URL param, or if only one session
-        if (sessionFromUrl && sessionsData.docs?.some((s: Session) => String(s.id) === sessionFromUrl)) {
+        if (
+          sessionFromUrl &&
+          sessionsData.docs?.some((s: Session) => String(s.id) === sessionFromUrl)
+        ) {
           setSelectedSessionId(sessionFromUrl)
         } else if (sessionsData.docs?.length === 1) {
           setSelectedSessionId(String(sessionsData.docs[0].id))
@@ -218,7 +221,7 @@ export function SignPage() {
           if (event?.theme?.mode) params.set('mode', event.theme.mode)
           navigate(`/success?${params.toString()}`)
         },
-      }
+      },
     )
   }
 
@@ -262,7 +265,11 @@ export function SignPage() {
   }
 
   return (
-    <ThemeProvider themeId={event?.theme?.themeId} customAccent={event?.theme?.customAccent} mode={event?.theme?.mode || 'dark'}>
+    <ThemeProvider
+      themeId={event?.theme?.themeId}
+      customAccent={event?.theme?.customAccent}
+      mode={event?.theme?.mode || 'dark'}
+    >
       <PublicPageLayout
         eventTitle={event?.title}
         eventDate={formattedDate}
@@ -282,80 +289,90 @@ export function SignPage() {
         )}
 
         {/* Day selection (when event has multiple days and no day selected) */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && !selectedDayId && event && event.attendanceDays && event.attendanceDays.length > 1 && (
-          <div className="mb-6">
-            <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
-                    {t('public:selectDay')} *
-                  </Label>
+        {(eventStatus === 'open' || eventStatus === 'reopened') &&
+          !selectedDayId &&
+          event &&
+          event.attendanceDays &&
+          event.attendanceDays.length > 1 && (
+            <div className="mb-6">
+              <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+                <CardContent className="pt-6">
                   <div className="space-y-2">
-                    {event.attendanceDays.map((day) => {
-                      const dayDate = new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                      return (
+                    <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
+                      {t('public:selectDay')} *
+                    </Label>
+                    <div className="space-y-2">
+                      {event.attendanceDays.map((day) => {
+                        const dayDate = new Date(day.date).toLocaleDateString(
+                          i18n.language === 'en' ? 'en-US' : 'fr-FR',
+                          {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          },
+                        )
+                        return (
+                          <label
+                            key={day.id}
+                            className="flex min-h-[44px] cursor-pointer items-center space-x-2 text-[13px]"
+                            style={{ color: 'var(--text)' }}
+                          >
+                            <input
+                              type="radio"
+                              name="day"
+                              value={day.id}
+                              checked={selectedDayId === String(day.id)}
+                              onChange={(e) => setSelectedDayId(e.target.value)}
+                              className="min-h-[20px] min-w-[20px]"
+                            />
+                            <span>{dayDate}</span>
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+        {/* Session selection (when day is selected and event is open) */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') &&
+          selectedDayId &&
+          sessions.length > 1 &&
+          !sessionFromUrl && (
+            <div className="mb-6">
+              <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+                <CardContent className="pt-6">
+                  <div className="space-y-2">
+                    <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
+                      {t('public:selectSession')} *
+                    </Label>
+                    <div className="space-y-2">
+                      {sessions.map((session) => (
                         <label
-                          key={day.id}
-                          className="flex items-center space-x-2 cursor-pointer min-h-[44px] text-[13px]"
+                          key={session.id}
+                          className="flex min-h-[44px] cursor-pointer items-center space-x-2 text-[13px]"
                           style={{ color: 'var(--text)' }}
                         >
                           <input
                             type="radio"
-                            name="day"
-                            value={day.id}
-                            checked={selectedDayId === String(day.id)}
-                            onChange={(e) => setSelectedDayId(e.target.value)}
-                            className="min-w-[20px] min-h-[20px]"
+                            name="session"
+                            value={session.id}
+                            checked={selectedSessionId === String(session.id)}
+                            onChange={(e) => setSelectedSessionId(e.target.value)}
+                            className="min-h-[20px] min-w-[20px]"
                           />
-                          <span>{dayDate}</span>
+                          <span>{session.name}</span>
                         </label>
-                      )
-                    })}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Session selection (when day is selected and event is open) */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && sessions.length > 1 && !sessionFromUrl && (
-          <div className="mb-6">
-            <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
-                    {t('public:selectSession')} *
-                  </Label>
-                  <div className="space-y-2">
-                    {sessions.map((session) => (
-                      <label
-                        key={session.id}
-                        className="flex items-center space-x-2 cursor-pointer min-h-[44px] text-[13px]"
-                        style={{ color: 'var(--text)' }}
-                      >
-                        <input
-                          type="radio"
-                          name="session"
-                          value={session.id}
-                          checked={selectedSessionId === String(session.id)}
-                          onChange={(e) => setSelectedSessionId(e.target.value)}
-                          className="min-w-[20px] min-h-[20px]"
-                        />
-                        <span>{session.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
         {/* Rate limit error */}
         {rateLimitError && (
@@ -373,7 +390,7 @@ export function SignPage() {
           <div className="mb-6">
             <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
               <CardContent className="pt-6">
-                <p className="text-center mb-4" style={{ color: 'var(--text)' }}>
+                <p className="mb-4 text-center" style={{ color: 'var(--text)' }}>
                   {t('public:captchaRequired', 'Veuillez compléter la vérification ci-dessous')}
                 </p>
                 <div className="flex justify-center">
@@ -390,13 +407,15 @@ export function SignPage() {
         )}
 
         {/* Participant form (when event is open and day/session selected) */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && !showCaptcha && (
-          <ParticipantForm
-            onSubmit={handleSubmit}
-            isPending={mutation.isPending}
-            error={mutation.error}
-          />
-        )}
+        {(eventStatus === 'open' || eventStatus === 'reopened') &&
+          selectedDayId &&
+          !showCaptcha && (
+            <ParticipantForm
+              onSubmit={handleSubmit}
+              isPending={mutation.isPending}
+              error={mutation.error}
+            />
+          )}
       </PublicPageLayout>
     </ThemeProvider>
   )

@@ -7,10 +7,7 @@ import { generateEventXLSX } from '@/lib/export/generateXLSX'
  * Manual XLSX download endpoint for finalized events
  * Requires authentication and finalized event status
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Await params (Next.js 15 requirement)
     const { id } = await params
@@ -22,13 +19,10 @@ export async function GET(
     const { user } = await payload.auth({ headers: req.headers })
 
     if (!user) {
-      return new Response(
-        JSON.stringify({ error: 'Authentication required' }),
-        {
-          status: 401,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ error: 'Authentication required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
 
     // Fetch event with user context for access control
@@ -39,31 +33,28 @@ export async function GET(
     })
 
     if (!event) {
-      return new Response(
-        JSON.stringify({ error: 'Event not found' }),
-        {
-          status: 404,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ error: 'Event not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
 
     // Verify event is finalized
     if (event.status !== 'finalized') {
-      return new Response(
-        JSON.stringify({ error: 'Event must be finalized before export' }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ error: 'Event must be finalized before export' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
 
     // Generate XLSX
     const xlsxBuffer = await generateEventXLSX(payload, id)
 
     // Build filename
-    const titleSlug = event.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    const titleSlug = event.title
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
     const dateStr = new Date().toISOString().split('T')[0]
     const filename = `feuille-presence-${titleSlug}-${dateStr}.xlsx`
 
@@ -86,7 +77,7 @@ export async function GET(
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
-      }
+      },
     )
   }
 }

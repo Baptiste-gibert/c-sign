@@ -1,10 +1,6 @@
 import type { CollectionAfterChangeHook } from 'payload'
 
-export const afterEventChange: CollectionAfterChangeHook = async ({
-  doc,
-  req,
-  operation,
-}) => {
+export const afterEventChange: CollectionAfterChangeHook = async ({ doc, req, operation }) => {
   // Prevent infinite loop
   if (req.context.preventLoop) {
     return doc
@@ -31,7 +27,7 @@ export const afterEventChange: CollectionAfterChangeHook = async ({
       // Normalize to ISO date string
       const dateObj = new Date(day.date)
       return dateObj.toISOString().split('T')[0]
-    })
+    }),
   )
 
   // Track all attendance day IDs (existing + new)

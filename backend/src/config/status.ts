@@ -1,9 +1,6 @@
 export type EventStatus = 'draft' | 'open' | 'finalized' | 'reopened'
 
-export const statusConfig: Record<
-  EventStatus,
-  { bg: string; text: string; dot: string }
-> = {
+export const statusConfig: Record<EventStatus, { bg: string; text: string; dot: string }> = {
   draft: {
     bg: '#f3f4f6',
     text: '#6b7280',

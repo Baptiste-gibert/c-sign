@@ -93,7 +93,10 @@ export const Signatures: CollectionConfig = {
           if (session?.attendanceDay) {
             const day = await req.payload.findByID({
               collection: 'attendance-days',
-              id: typeof session.attendanceDay === 'object' ? session.attendanceDay.id : session.attendanceDay,
+              id:
+                typeof session.attendanceDay === 'object'
+                  ? session.attendanceDay.id
+                  : session.attendanceDay,
               depth: 0,
               req,
             })
@@ -108,7 +111,7 @@ export const Signatures: CollectionConfig = {
                 throw new Error('Cet evenement est finalise, les signatures ne sont plus acceptees')
               }
               if (event?.status === 'draft') {
-                throw new Error('Cet evenement n\'est pas encore ouvert aux signatures')
+                throw new Error("Cet evenement n'est pas encore ouvert aux signatures")
               }
             }
           }
@@ -129,9 +132,7 @@ export const Signatures: CollectionConfig = {
           })
 
           if (existing.docs.length > 0) {
-            throw new Error(
-              'Un participant ne peut signer qu\'une seule fois par session'
-            )
+            throw new Error("Un participant ne peut signer qu'une seule fois par session")
           }
         }
 

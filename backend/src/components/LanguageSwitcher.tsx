@@ -19,7 +19,7 @@ export function LanguageSwitcher() {
       onClick={toggleLanguage}
       aria-label={`Switch to ${displayLang}`}
     >
-      <Languages className="h-4 w-4 mr-2" />
+      <Languages className="mr-2 h-4 w-4" />
       {displayLang}
     </Button>
   )

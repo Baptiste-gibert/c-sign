@@ -11,19 +11,27 @@ interface StatusActionButtonProps {
 
 function getNextStatus(status: EventStatus): EventStatus {
   switch (status) {
-    case 'draft': return 'open'
-    case 'open': return 'finalized'
-    case 'reopened': return 'finalized'
-    case 'finalized': return 'reopened'
+    case 'draft':
+      return 'open'
+    case 'open':
+      return 'finalized'
+    case 'reopened':
+      return 'finalized'
+    case 'finalized':
+      return 'reopened'
   }
 }
 
 function getActionKey(status: EventStatus): string {
   switch (status) {
-    case 'draft': return 'eventDetail.actionOpen'
-    case 'open': return 'eventDetail.actionFinalize'
-    case 'reopened': return 'eventDetail.actionFinalize'
-    case 'finalized': return 'eventDetail.actionReopen'
+    case 'draft':
+      return 'eventDetail.actionOpen'
+    case 'open':
+      return 'eventDetail.actionFinalize'
+    case 'reopened':
+      return 'eventDetail.actionFinalize'
+    case 'finalized':
+      return 'eventDetail.actionReopen'
   }
 }
 
@@ -39,7 +47,7 @@ export function StatusActionButton({ status, onAction, isPending }: StatusAction
     return (
       <Button
         size="sm"
-        className={`h-7 text-[11px] font-semibold px-3 ${ctx.buttonClass}`}
+        className={`h-7 px-3 text-[11px] font-semibold ${ctx.buttonClass}`}
         onClick={() => setConfirming(true)}
         disabled={isPending}
       >
@@ -50,12 +58,12 @@ export function StatusActionButton({ status, onAction, isPending }: StatusAction
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[10px] text-amber-700 font-medium">
+      <span className="text-[10px] font-medium text-amber-700">
         {t('eventDetail.confirmAction')}
       </span>
       <Button
         size="sm"
-        className="h-7 text-[11px] font-semibold px-3 bg-red-600 hover:bg-red-700 text-white"
+        className="h-7 bg-red-600 px-3 text-[11px] font-semibold text-white hover:bg-red-700"
         disabled={isPending}
         onClick={() => {
           onAction(nextStatus)
@@ -67,7 +75,7 @@ export function StatusActionButton({ status, onAction, isPending }: StatusAction
       <Button
         variant="ghost"
         size="sm"
-        className="h-7 text-[11px] text-gray-500 px-2"
+        className="h-7 px-2 text-[11px] text-gray-500"
         onClick={() => setConfirming(false)}
       >
         {t('common:actions.cancel')}

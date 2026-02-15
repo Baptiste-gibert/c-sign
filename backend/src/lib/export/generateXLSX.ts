@@ -22,7 +22,12 @@ function getBlobBaseUrl(): string | null {
  * - Absolute URL: use as-is
  * - Relative URL: prefix with server URL
  */
-function resolveImageUrl(imageUrl: string, filename: string, blobBaseUrl: string | null, serverUrl: string): string {
+function resolveImageUrl(
+  imageUrl: string,
+  filename: string,
+  blobBaseUrl: string | null,
+  serverUrl: string,
+): string {
   // If the URL is already absolute, use it directly
   if (imageUrl.startsWith('http')) return imageUrl
 
@@ -168,7 +173,9 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
             const response = await fetch(fetchUrl)
 
             if (!response.ok) {
-              console.error(`Image fetch failed for ${participant.email}: ${response.status} ${response.statusText} (URL: ${fetchUrl})`)
+              console.error(
+                `Image fetch failed for ${participant.email}: ${response.status} ${response.statusText} (URL: ${fetchUrl})`,
+              )
               continue
             }
 
@@ -181,7 +188,10 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
               finalBuffer = await optimizeSignature(imageBuffer)
               extension = 'jpeg'
             } catch (sharpError) {
-              console.warn(`Sharp optimization failed for ${participant.email}, using raw PNG:`, sharpError)
+              console.warn(
+                `Sharp optimization failed for ${participant.email}, using raw PNG:`,
+                sharpError,
+              )
               finalBuffer = imageBuffer
               extension = 'png'
             }

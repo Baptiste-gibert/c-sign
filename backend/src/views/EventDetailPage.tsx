@@ -41,10 +41,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList, Palette, FileSpreadsheet, Search, RefreshCw } from 'lucide-react'
+import {
+  Loader2,
+  AlertCircle,
+  ChevronLeft,
+  UserPlus,
+  Download,
+  Pencil,
+  Users,
+  Pen,
+  QrCode,
+  Printer,
+  Settings,
+  ClipboardList,
+  Palette,
+  FileSpreadsheet,
+  Search,
+  RefreshCw,
+} from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
-const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
+const BENEFICIARY_TYPE_KEYS = [
+  'asv',
+  'autre',
+  'eleveur',
+  'etudiant',
+  'pharmacien',
+  'technicien',
+  'veterinaire',
+] as const
 
 export function EventDetailPage() {
   const { t, i18n } = useTranslation(['organizer', 'common'])
@@ -53,7 +78,12 @@ export function EventDetailPage() {
   const locale = i18n.language === 'en' ? enUS : fr
 
   const { data: event, isLoading, isError, error } = useEvent(id || '')
-  const { mutate: updateEvent, isPending: isUpdating, isError: isUpdateError, error: updateError } = useUpdateEvent(id || '')
+  const {
+    mutate: updateEvent,
+    isPending: isUpdating,
+    isError: isUpdateError,
+    error: updateError,
+  } = useUpdateEvent(id || '')
   const { mutate: addParticipant } = useAddParticipant(id || '')
   const { mutate: removeParticipant } = useRemoveParticipant(id || '')
   const { mutate: addWalkIn } = useAddWalkIn(id || '')
@@ -74,7 +104,11 @@ export function EventDetailPage() {
   const [editingCnov, setEditingCnov] = useState(false)
   const [cnovValue, setCnovValue] = useState('')
   const [editingTheme, setEditingTheme] = useState(false)
-  const [themeValue, setThemeValue] = useState<{ themeId?: string; customAccent?: string; mode?: 'dark' | 'light' } | null>(null)
+  const [themeValue, setThemeValue] = useState<{
+    themeId?: string
+    customAccent?: string
+    mode?: 'dark' | 'light'
+  } | null>(null)
   const [editingQr, setEditingQr] = useState(false)
   const [qrMode, setQrMode] = useState<'event' | 'day' | 'session'>('day')
 
@@ -97,7 +131,8 @@ export function EventDetailPage() {
 
   // Compute global metrics from attendance data
   const globalMetrics = useMemo(() => {
-    if (!attendanceData) return { uniqueSigners: 0, totalSigned: 0, totalSlots: 0, totalSessions: 0, globalPct: 0 }
+    if (!attendanceData)
+      return { uniqueSigners: 0, totalSigned: 0, totalSlots: 0, totalSessions: 0, globalPct: 0 }
 
     const uniqueSignerSet = new Set<string>()
     let totalSigned = 0
@@ -117,7 +152,13 @@ export function EventDetailPage() {
 
     const globalPct = totalSlots > 0 ? Math.round((totalSigned / totalSlots) * 100) : 0
 
-    return { uniqueSigners: uniqueSignerSet.size, totalSigned, totalSlots, totalSessions, globalPct }
+    return {
+      uniqueSigners: uniqueSignerSet.size,
+      totalSigned,
+      totalSlots,
+      totalSessions,
+      globalPct,
+    }
   }, [attendanceData])
 
   if (isLoading) {
@@ -131,12 +172,16 @@ export function EventDetailPage() {
   if (isError || !event) {
     return (
       <div className="space-y-4">
-        <button onClick={() => navigate('/dashboard')} className="flex items-center gap-0.5 text-xs text-gray-400 hover:text-gray-600 transition-colors">
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-0.5 text-xs text-gray-400 transition-colors hover:text-gray-600"
+        >
           <ChevronLeft className="h-3.5 w-3.5" />
           {t('organizer:eventDetail.backToDashboard')}
         </button>
         <div className="text-red-600">
-          {t('common:errors.error')}: {error instanceof Error ? error.message : t('organizer:eventDetail.eventNotFound')}
+          {t('common:errors.error')}:{' '}
+          {error instanceof Error ? error.message : t('organizer:eventDetail.eventNotFound')}
         </div>
       </div>
     )
@@ -211,10 +256,12 @@ export function EventDetailPage() {
     })
   }
 
-  const participants: Participant[] = (event.participants || []).map((p: any) => {
-    if (typeof p === 'object') return p
-    return { id: p } as Participant
-  }).filter((p: Participant) => p.lastName)
+  const participants: Participant[] = (event.participants || [])
+    .map((p: any) => {
+      if (typeof p === 'object') return p
+      return { id: p } as Participant
+    })
+    .filter((p: Participant) => p.lastName)
 
   const isLocked = event.status === 'finalized'
 
@@ -243,7 +290,10 @@ export function EventDetailPage() {
         statusErrorMessage = updateError.message
       }
     } catch {
-      if (updateError.message.includes('Failed to fetch') || updateError.message.includes('network')) {
+      if (
+        updateError.message.includes('Failed to fetch') ||
+        updateError.message.includes('network')
+      ) {
         statusErrorMessage = t('common:errors.connectionError')
       } else {
         statusErrorMessage = updateError.message
@@ -256,7 +306,9 @@ export function EventDetailPage() {
   // QR count for display
   const dayCount = attendanceData?.attendanceDays.length || event.selectedDates?.length || 0
   const qrCount = qrMode === 'event' ? 1 : qrMode === 'day' ? dayCount : globalMetrics.totalSessions
-  const qrLabel = t(`organizer:eventDetail.${qrMode === 'event' ? 'actionOpen' : qrMode === 'day' ? 'tabAttendance' : 'sessions'}`)
+  const qrLabel = t(
+    `organizer:eventDetail.${qrMode === 'event' ? 'actionOpen' : qrMode === 'day' ? 'tabAttendance' : 'sessions'}`,
+  )
 
   return (
     <div className="space-y-4">
@@ -264,7 +316,7 @@ export function EventDetailPage() {
       <div className="space-y-1">
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-0.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="flex items-center gap-0.5 text-xs text-gray-400 transition-colors hover:text-gray-600"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           {t('organizer:eventDetail.backToDashboard')}
@@ -276,12 +328,20 @@ export function EventDetailPage() {
             <Badge
               className="text-[10px]"
               style={{
-                backgroundColor: statusContext[event.status as EventStatus].bgClass.includes('gray') ? '#f3f4f6' :
-                  statusContext[event.status as EventStatus].bgClass.includes('blue') ? '#dbeafe' :
-                  statusContext[event.status as EventStatus].bgClass.includes('amber') ? '#fef3c7' : '#dcfce7',
-                color: statusContext[event.status as EventStatus].textClass.includes('gray') ? '#6b7280' :
-                  statusContext[event.status as EventStatus].textClass.includes('blue') ? '#2563eb' :
-                  statusContext[event.status as EventStatus].textClass.includes('amber') ? '#d97706' : '#16a34a',
+                backgroundColor: statusContext[event.status as EventStatus].bgClass.includes('gray')
+                  ? '#f3f4f6'
+                  : statusContext[event.status as EventStatus].bgClass.includes('blue')
+                    ? '#dbeafe'
+                    : statusContext[event.status as EventStatus].bgClass.includes('amber')
+                      ? '#fef3c7'
+                      : '#dcfce7',
+                color: statusContext[event.status as EventStatus].textClass.includes('gray')
+                  ? '#6b7280'
+                  : statusContext[event.status as EventStatus].textClass.includes('blue')
+                    ? '#2563eb'
+                    : statusContext[event.status as EventStatus].textClass.includes('amber')
+                      ? '#d97706'
+                      : '#16a34a',
               }}
             >
               {t(`common:status.${event.status}`)}
@@ -291,14 +351,14 @@ export function EventDetailPage() {
           <Button
             variant="outline"
             size="sm"
-            className="h-7 text-[10px] gap-1"
+            className="h-7 gap-1 text-[10px]"
             onClick={handleDownload}
             disabled={downloadMutation.isPending}
           >
             {downloadMutation.isPending ? (
-              <Loader2 className="w-3 h-3 animate-spin" />
+              <Loader2 className="h-3 w-3 animate-spin" />
             ) : (
-              <Download className="w-3 h-3" />
+              <Download className="h-3 w-3" />
             )}
             {t('organizer:eventDetail.downloadXlsx')}
           </Button>
@@ -309,16 +369,16 @@ export function EventDetailPage() {
           {event.selectedDates && event.selectedDates.length > 0 && (
             <>
               <span>
-                {event.selectedDates.map((d: any) =>
-                  format(new Date(d.date), 'd MMM yyyy', { locale })
-                ).join(', ')}
+                {event.selectedDates
+                  .map((d: any) => format(new Date(d.date), 'd MMM yyyy', { locale }))
+                  .join(', ')}
               </span>
               <span>·</span>
             </>
           )}
           <span>{event.location}</span>
           <span>·</span>
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+          <Badge variant="outline" className="px-1.5 py-0 text-[10px]">
             {t(`organizer:expenseTypes.${event.expenseType}`, event.expenseType)}
           </Badge>
           <span>·</span>
@@ -342,7 +402,10 @@ export function EventDetailPage() {
           {!editingCnov && !event.cnovDeclarationNumber && !isLocked && (
             <>
               <span>·</span>
-              <button onClick={() => setEditingCnov(true)} className="text-blue-600 hover:text-blue-800 underline">
+              <button
+                onClick={() => setEditingCnov(true)}
+                className="text-blue-600 underline hover:text-blue-800"
+              >
                 {t('organizer:eventDetail.addCnov')}
               </button>
             </>
@@ -351,17 +414,22 @@ export function EventDetailPage() {
 
         {/* CNOV inline edit */}
         {editingCnov && (
-          <div className="flex items-center gap-2 mt-2">
+          <div className="mt-2 flex items-center gap-2">
             <Input
               value={cnovValue}
               onChange={(e) => setCnovValue(e.target.value)}
               placeholder={t('organizer:eventForm.cnovPlaceholder')}
-              className="w-64 h-8 text-xs"
+              className="h-8 w-64 text-xs"
             />
             <Button size="sm" className="h-7 text-[10px]" onClick={handleSaveCnov}>
               {t('organizer:eventDetail.saveCnov')}
             </Button>
-            <Button size="sm" variant="outline" className="h-7 text-[10px]" onClick={handleCancelCnov}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-[10px]"
+              onClick={handleCancelCnov}
+            >
               {t('organizer:eventDetail.cancelCnov')}
             </Button>
           </div>
@@ -369,9 +437,13 @@ export function EventDetailPage() {
       </div>
 
       {/* Status banner */}
-      <div className={`flex items-center justify-between ${ctx.bgClass} border ${ctx.borderClass} rounded-lg px-4 py-2.5`}>
+      <div
+        className={`flex items-center justify-between ${ctx.bgClass} border ${ctx.borderClass} rounded-lg px-4 py-2.5`}
+      >
         <p className={`text-xs ${ctx.textClass}`}>
-          {t(`organizer:eventDetail.status${(event.status as string).charAt(0).toUpperCase() + (event.status as string).slice(1)}`)}
+          {t(
+            `organizer:eventDetail.status${(event.status as string).charAt(0).toUpperCase() + (event.status as string).slice(1)}`,
+          )}
         </p>
         <StatusActionButton
           status={event.status as EventStatus}
@@ -382,10 +454,15 @@ export function EventDetailPage() {
 
       {/* Status error */}
       {statusErrorMessage && (
-        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-          <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-red-800 flex-1">{statusErrorMessage}</p>
-          <button onClick={() => setStatusErrorDismissed(true)} className="text-red-600 hover:text-red-800 text-sm">×</button>
+        <div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600" />
+          <p className="flex-1 text-xs text-red-800">{statusErrorMessage}</p>
+          <button
+            onClick={() => setStatusErrorDismissed(true)}
+            className="text-sm text-red-600 hover:text-red-800"
+          >
+            ×
+          </button>
         </div>
       )}
 
@@ -398,27 +475,27 @@ export function EventDetailPage() {
         <Card className="border border-gray-200 bg-white">
           <CardContent className="px-5 py-4">
             {/* Dual metrics row */}
-            <div className="flex items-center justify-between mb-2.5">
+            <div className="mb-2.5 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-gray-500" />
+                  <Users className="h-3.5 w-3.5 text-gray-500" />
                   <span className="text-xs text-gray-700">
-                    <span className="font-semibold">{globalMetrics.uniqueSigners}</span>/{participants.length}{' '}
-                    {t('organizer:eventDetail.participantsSigned')}
+                    <span className="font-semibold">{globalMetrics.uniqueSigners}</span>/
+                    {participants.length} {t('organizer:eventDetail.participantsSigned')}
                   </span>
                 </div>
                 <Separator orientation="vertical" className="h-3.5" />
                 <div className="flex items-center gap-1.5">
-                  <Pen className="w-3.5 h-3.5 text-gray-500" />
+                  <Pen className="h-3.5 w-3.5 text-gray-500" />
                   <span className="text-xs text-gray-700">
-                    <span className="font-semibold">{globalMetrics.totalSigned}</span>/{globalMetrics.totalSlots}{' '}
-                    {t('organizer:eventDetail.signaturesCollected')}
+                    <span className="font-semibold">{globalMetrics.totalSigned}</span>/
+                    {globalMetrics.totalSlots} {t('organizer:eventDetail.signaturesCollected')}
                   </span>
                 </div>
               </div>
               <Badge
                 variant="secondary"
-                className={`text-[10px] font-semibold px-2 py-0.5 ${
+                className={`px-2 py-0.5 text-[10px] font-semibold ${
                   globalMetrics.globalPct === 100
                     ? 'bg-emerald-100 text-emerald-700'
                     : 'bg-blue-50 text-blue-600'
@@ -429,7 +506,7 @@ export function EventDetailPage() {
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{
@@ -440,8 +517,10 @@ export function EventDetailPage() {
             </div>
 
             {/* Context line */}
-            <p className="text-[10px] text-gray-400 mt-2">
-              {dayCount} {t('common:plurals.days', { count: dayCount })} · {globalMetrics.totalSessions} {t('organizer:eventDetail.sessions')} · {qrCount} QR codes
+            <p className="mt-2 text-[10px] text-gray-400">
+              {dayCount} {t('common:plurals.days', { count: dayCount })} ·{' '}
+              {globalMetrics.totalSessions} {t('organizer:eventDetail.sessions')} · {qrCount} QR
+              codes
             </p>
           </CardContent>
         </Card>
@@ -449,26 +528,26 @@ export function EventDetailPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="attendance">
-        <TabsList className="w-full h-auto p-0 bg-white border border-gray-200 rounded-xl grid grid-cols-3 gap-0">
+        <TabsList className="grid h-auto w-full grid-cols-3 gap-0 rounded-xl border border-gray-200 bg-white p-0">
           <TabsTrigger
             value="attendance"
-            className="flex items-center justify-center gap-2 rounded-none rounded-l-xl px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+            className="flex items-center justify-center gap-2 rounded-none rounded-l-xl border-b-2 border-transparent px-4 py-3 text-sm font-medium text-gray-500 transition-colors data-[state=active]:border-b-blue-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"
           >
-            <ClipboardList className="w-4 h-4" />
+            <ClipboardList className="h-4 w-4" />
             {t('organizer:eventDetail.tabAttendance')}
           </TabsTrigger>
           <TabsTrigger
             value="participants"
-            className="flex items-center justify-center gap-2 rounded-none px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+            className="flex items-center justify-center gap-2 rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-gray-500 transition-colors data-[state=active]:border-b-blue-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"
           >
-            <Users className="w-4 h-4" />
+            <Users className="h-4 w-4" />
             {t('organizer:eventDetail.tabParticipants')} ({participants.length})
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="flex items-center justify-center gap-2 rounded-none rounded-r-xl px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-b-blue-600 data-[state=active]:shadow-none transition-colors"
+            className="flex items-center justify-center gap-2 rounded-none rounded-r-xl border-b-2 border-transparent px-4 py-3 text-sm font-medium text-gray-500 transition-colors data-[state=active]:border-b-blue-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"
           >
-            <Settings className="w-4 h-4" />
+            <Settings className="h-4 w-4" />
             {t('organizer:eventDetail.tabSettings')}
           </TabsTrigger>
         </TabsList>
@@ -476,7 +555,7 @@ export function EventDetailPage() {
         {/* Tab: Attendance & QR */}
         <TabsContent value="attendance">
           {event.status === 'draft' ? (
-            <div className="text-center py-8 text-neutral-500">
+            <div className="py-8 text-center text-neutral-500">
               {t('organizer:attendance.openEventPrompt')}
             </div>
           ) : (
@@ -485,10 +564,10 @@ export function EventDetailPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                   </span>
-                  <span className="text-[10px] text-emerald-600 font-medium">
+                  <span className="text-[10px] font-medium text-emerald-600">
                     {t('organizer:eventDetail.liveUpdates')}
                   </span>
                 </div>
@@ -497,81 +576,82 @@ export function EventDetailPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-7 text-[10px] gap-1"
+                      className="h-7 gap-1 text-[10px]"
                       onClick={handleRegenerateToken}
                       disabled={regenerateTokenMutation.isPending}
                     >
                       {regenerateTokenMutation.isPending ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <Loader2 className="h-3 w-3 animate-spin" />
                       ) : (
-                        <RefreshCw className="w-3 h-3" />
+                        <RefreshCw className="h-3 w-3" />
                       )}
                       {t('organizer:eventDetail.regenerateLink')}
                     </Button>
                   )}
-                    <Dialog>
+                  <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-7 text-[10px] gap-1"
-                      >
-                        <QrCode className="w-3 h-3" />
+                      <Button variant="outline" size="sm" className="h-7 gap-1 text-[10px]">
+                        <QrCode className="h-3 w-3" />
                         {t('organizer:eventDetail.downloadAllQr')}
                       </Button>
                     </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle className="flex items-center justify-between">
-                        <span>{t('organizer:qrCodes.title')}</span>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 text-[10px] gap-1 print:hidden"
-                          onClick={() => window.print()}
-                        >
-                          <Printer className="w-3 h-3" />
-                          {t('organizer:qrCodes.print')}
-                        </Button>
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-6 py-2">
-                      {attendanceData?.attendanceDays.map((day) => (
-                        <div key={day.id}>
-                          <h3 className="text-sm font-semibold text-gray-800 mb-3 capitalize">
-                            {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale })}
-                          </h3>
-                          {event.qrGranularity === 'session' ? (
-                            <div className="grid grid-cols-2 gap-4">
-                              {day.sessions.map((session) => (
-                                <div key={session.id} className="flex flex-col items-center gap-2 p-3 border rounded-lg">
-                                  <QRCodeSVG
-                                    value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}&session=${session.id}`}
-                                    size={160}
-                                    level="H"
-                                  />
-                                  <p className="text-xs font-medium text-gray-700 text-center">{session.name}</p>
-                                  <code className="text-[9px] text-gray-400 break-all text-center">
-                                    /sign/{event.signingToken}?day={day.id}&session={session.id}
-                                  </code>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
-                              <QRCodeSVG
-                                value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}`}
-                                size={200}
-                                level="H"
-                              />
-                              <code className="text-[9px] text-gray-400 break-all text-center">
-                                /sign/{event.signingToken}?day={day.id}
-                              </code>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                    <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center justify-between">
+                          <span>{t('organizer:qrCodes.title')}</span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 gap-1 text-[10px] print:hidden"
+                            onClick={() => window.print()}
+                          >
+                            <Printer className="h-3 w-3" />
+                            {t('organizer:qrCodes.print')}
+                          </Button>
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6 py-2">
+                        {attendanceData?.attendanceDays.map((day) => (
+                          <div key={day.id}>
+                            <h3 className="mb-3 text-sm font-semibold text-gray-800 capitalize">
+                              {format(new Date(day.date), 'EEEE d MMMM yyyy', { locale })}
+                            </h3>
+                            {event.qrGranularity === 'session' ? (
+                              <div className="grid grid-cols-2 gap-4">
+                                {day.sessions.map((session) => (
+                                  <div
+                                    key={session.id}
+                                    className="flex flex-col items-center gap-2 rounded-lg border p-3"
+                                  >
+                                    <QRCodeSVG
+                                      value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}&session=${session.id}`}
+                                      size={160}
+                                      level="H"
+                                    />
+                                    <p className="text-center text-xs font-medium text-gray-700">
+                                      {session.name}
+                                    </p>
+                                    <code className="text-center text-[9px] break-all text-gray-400">
+                                      /sign/{event.signingToken}?day={day.id}&session={session.id}
+                                    </code>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center gap-2 rounded-lg border p-4">
+                                <QRCodeSVG
+                                  value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}`}
+                                  size={200}
+                                  level="H"
+                                />
+                                <code className="text-center text-[9px] break-all text-gray-400">
+                                  /sign/{event.signingToken}?day={day.id}
+                                </code>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </div>
@@ -591,25 +671,24 @@ export function EventDetailPage() {
         <TabsContent value="participants">
           <div className="space-y-4">
             {/* Add participants section */}
-            <Card className="border border-gray-200 bg-white overflow-hidden p-0 gap-0">
-              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+            <Card className="gap-0 overflow-hidden border border-gray-200 bg-white p-0">
+              <CardHeader className="border-b border-gray-200 bg-gray-100 px-5 pt-4 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50">
-                    <Search className="w-4 h-4 text-blue-600" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
+                    <Search className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
                     <CardTitle className="text-sm font-semibold text-gray-900">
                       {t('organizer:participants.searchSimv')}
                     </CardTitle>
-                    <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:participants.searchSimvPlaceholder')}</p>
+                    <p className="mt-0.5 text-[11px] text-gray-400">
+                      {t('organizer:participants.searchSimvPlaceholder')}
+                    </p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="px-5 pt-4 pb-4">
-                <ParticipantSearch
-                  onSelect={handleAddFromSimv}
-                  disabled={isLocked}
-                />
+                <ParticipantSearch onSelect={handleAddFromSimv} disabled={isLocked} />
               </CardContent>
               {!isLocked && (
                 <>
@@ -617,77 +696,113 @@ export function EventDetailPage() {
                   <div className="px-5 py-3">
                     <button
                       onClick={() => setShowWalkInForm(!showWalkInForm)}
-                      className="flex items-center gap-2 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors w-full"
+                      className="flex w-full items-center gap-2 text-xs font-medium text-blue-600 transition-colors hover:text-blue-800"
                     >
                       <UserPlus className="h-3.5 w-3.5" />
                       {t('organizer:participants.addWithoutRegistration')}
                     </button>
 
                     {showWalkInForm && (
-                      <form onSubmit={handleAddWalkIn} className="mt-4 space-y-3 p-4 rounded-lg bg-gray-50 border border-gray-100">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <form
+                        onSubmit={handleAddWalkIn}
+                        className="mt-4 space-y-3 rounded-lg border border-gray-100 bg-gray-50 p-4"
+                      >
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           <div>
-                            <Label htmlFor="lastName" className="text-xs font-medium text-gray-700">{t('common:form.labels.lastName')} *</Label>
+                            <Label htmlFor="lastName" className="text-xs font-medium text-gray-700">
+                              {t('common:form.labels.lastName')} *
+                            </Label>
                             <Input
                               id="lastName"
                               value={walkInData.lastName}
-                              onChange={(e) => setWalkInData({ ...walkInData, lastName: e.target.value })}
+                              onChange={(e) =>
+                                setWalkInData({ ...walkInData, lastName: e.target.value })
+                              }
                               required
-                              className="h-9 text-xs mt-1"
+                              className="mt-1 h-9 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="firstName" className="text-xs font-medium text-gray-700">{t('common:form.labels.firstName')} *</Label>
+                            <Label
+                              htmlFor="firstName"
+                              className="text-xs font-medium text-gray-700"
+                            >
+                              {t('common:form.labels.firstName')} *
+                            </Label>
                             <Input
                               id="firstName"
                               value={walkInData.firstName}
-                              onChange={(e) => setWalkInData({ ...walkInData, firstName: e.target.value })}
+                              onChange={(e) =>
+                                setWalkInData({ ...walkInData, firstName: e.target.value })
+                              }
                               required
-                              className="h-9 text-xs mt-1"
+                              className="mt-1 h-9 text-xs"
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           <div>
-                            <Label htmlFor="email" className="text-xs font-medium text-gray-700">{t('common:form.labels.email')} *</Label>
+                            <Label htmlFor="email" className="text-xs font-medium text-gray-700">
+                              {t('common:form.labels.email')} *
+                            </Label>
                             <Input
                               id="email"
                               type="email"
                               value={walkInData.email}
-                              onChange={(e) => setWalkInData({ ...walkInData, email: e.target.value })}
+                              onChange={(e) =>
+                                setWalkInData({ ...walkInData, email: e.target.value })
+                              }
                               required
-                              className="h-9 text-xs mt-1"
+                              className="mt-1 h-9 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="city" className="text-xs font-medium text-gray-700">{t('common:form.labels.city')} *</Label>
+                            <Label htmlFor="city" className="text-xs font-medium text-gray-700">
+                              {t('common:form.labels.city')} *
+                            </Label>
                             <Input
                               id="city"
                               value={walkInData.city}
-                              onChange={(e) => setWalkInData({ ...walkInData, city: e.target.value })}
+                              onChange={(e) =>
+                                setWalkInData({ ...walkInData, city: e.target.value })
+                              }
                               required
-                              className="h-9 text-xs mt-1"
+                              className="mt-1 h-9 text-xs"
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           <div>
-                            <Label htmlFor="professionalNumber" className="text-xs font-medium text-gray-700">{t('organizer:walkIn.professionalNumber')}</Label>
+                            <Label
+                              htmlFor="professionalNumber"
+                              className="text-xs font-medium text-gray-700"
+                            >
+                              {t('organizer:walkIn.professionalNumber')}
+                            </Label>
                             <Input
                               id="professionalNumber"
                               value={walkInData.professionalNumber}
-                              onChange={(e) => setWalkInData({ ...walkInData, professionalNumber: e.target.value })}
-                              className="h-9 text-xs mt-1"
+                              onChange={(e) =>
+                                setWalkInData({ ...walkInData, professionalNumber: e.target.value })
+                              }
+                              className="mt-1 h-9 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="beneficiaryType" className="text-xs font-medium text-gray-700">{t('organizer:walkIn.beneficiaryType')} *</Label>
+                            <Label
+                              htmlFor="beneficiaryType"
+                              className="text-xs font-medium text-gray-700"
+                            >
+                              {t('organizer:walkIn.beneficiaryType')} *
+                            </Label>
                             <Select
                               value={walkInData.beneficiaryType}
-                              onValueChange={(value) => setWalkInData({ ...walkInData, beneficiaryType: value })}
+                              onValueChange={(value) =>
+                                setWalkInData({ ...walkInData, beneficiaryType: value })
+                              }
                               required
                             >
-                              <SelectTrigger id="beneficiaryType" className="h-9 text-xs mt-1">
+                              <SelectTrigger id="beneficiaryType" className="mt-1 h-9 text-xs">
                                 <SelectValue placeholder={t('organizer:walkIn.selectType')} />
                               </SelectTrigger>
                               <SelectContent>
@@ -701,8 +816,20 @@ export function EventDetailPage() {
                           </div>
                         </div>
                         <div className="flex gap-2 pt-1">
-                          <Button type="submit" size="sm" className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700">{t('common:actions.add')}</Button>
-                          <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={() => setShowWalkInForm(false)}>
+                          <Button
+                            type="submit"
+                            size="sm"
+                            className="h-8 bg-blue-600 px-4 text-xs hover:bg-blue-700"
+                          >
+                            {t('common:actions.add')}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => setShowWalkInForm(false)}
+                          >
                             {t('common:actions.cancel')}
                           </Button>
                         </div>
@@ -714,18 +841,18 @@ export function EventDetailPage() {
             </Card>
 
             {/* Participants table */}
-            <Card className="border border-gray-200 bg-white overflow-hidden p-0 gap-0">
-              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+            <Card className="gap-0 overflow-hidden border border-gray-200 bg-white p-0">
+              <CardHeader className="border-b border-gray-200 bg-gray-100 px-5 pt-4 pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-50">
-                      <Users className="w-4 h-4 text-indigo-600" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50">
+                      <Users className="h-4 w-4 text-indigo-600" />
                     </div>
                     <div>
                       <CardTitle className="text-sm font-semibold text-gray-900">
                         {t('organizer:participants.title')}
                       </CardTitle>
-                      <p className="text-[11px] text-gray-400 mt-0.5">
+                      <p className="mt-0.5 text-[11px] text-gray-400">
                         {participants.length > 0
                           ? `${participants.length} ${t('organizer:eventDetail.tabParticipants').toLowerCase()}`
                           : t('organizer:participants.noParticipants')}
@@ -750,38 +877,45 @@ export function EventDetailPage() {
         <TabsContent value="settings">
           <div className="space-y-4">
             {/* Theme card */}
-            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
-              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+            <Card className="gap-0 overflow-hidden border border-gray-200 bg-white p-0">
+              <CardHeader className="border-b border-gray-200 bg-gray-100 px-5 pt-4 pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50">
-                      <Palette className="w-4 h-4 text-violet-600" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50">
+                      <Palette className="h-4 w-4 text-violet-600" />
                     </div>
                     <div>
                       <CardTitle className="text-sm font-semibold text-gray-900">
                         {t('organizer:eventDetail.themeTitle')}
                       </CardTitle>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventCreate.themeDesc')}</p>
+                      <p className="mt-0.5 text-[11px] text-gray-400">
+                        {t('organizer:eventCreate.themeDesc')}
+                      </p>
                     </div>
                   </div>
                   {!isLocked && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-7 text-[10px] gap-1.5"
+                      className="h-7 gap-1.5 text-[10px]"
                       onClick={() => setEditingTheme(!editingTheme)}
                     >
-                      <Pencil className="w-3 h-3" />
-                      {editingTheme ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
+                      <Pencil className="h-3 w-3" />
+                      {editingTheme
+                        ? t('organizer:eventDetail.cancelTheme')
+                        : t('organizer:eventDetail.editTheme')}
                     </Button>
                   )}
                 </div>
               </CardHeader>
               <CardContent className="px-5 pt-4 pb-5">
                 {!editingTheme ? (
-                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 border border-gray-100">
-                    <div className="w-10 h-6 rounded-md shadow-sm border border-white/20" style={{ background: currentThemeColor }} />
-                    <span className="text-xs text-gray-700 font-medium">{currentThemeLabel}</span>
+                  <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5">
+                    <div
+                      className="h-6 w-10 rounded-md border border-white/20 shadow-sm"
+                      style={{ background: currentThemeColor }}
+                    />
+                    <span className="text-xs font-medium text-gray-700">{currentThemeLabel}</span>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -789,7 +923,7 @@ export function EventDetailPage() {
                     <div className="flex gap-2">
                       <Button
                         size="sm"
-                        className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700"
+                        className="h-8 bg-blue-600 px-4 text-xs hover:bg-blue-700"
                         onClick={handleSaveTheme}
                       >
                         {t('organizer:eventDetail.saveTheme')}
@@ -809,40 +943,47 @@ export function EventDetailPage() {
             </Card>
 
             {/* QR Granularity card */}
-            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
-              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+            <Card className="gap-0 overflow-hidden border border-gray-200 bg-white p-0">
+              <CardHeader className="border-b border-gray-200 bg-gray-100 px-5 pt-4 pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-50">
-                      <QrCode className="w-4 h-4 text-cyan-600" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-50">
+                      <QrCode className="h-4 w-4 text-cyan-600" />
                     </div>
                     <div>
                       <CardTitle className="text-sm font-semibold text-gray-900">
                         {t('organizer:eventDetail.qrGranularityTitle')}
                       </CardTitle>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventCreate.qrGranularityDesc')}</p>
+                      <p className="mt-0.5 text-[11px] text-gray-400">
+                        {t('organizer:eventCreate.qrGranularityDesc')}
+                      </p>
                     </div>
                   </div>
                   {!isLocked && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-7 text-[10px] gap-1.5"
+                      className="h-7 gap-1.5 text-[10px]"
                       onClick={() => setEditingQr(!editingQr)}
                     >
-                      <Pencil className="w-3 h-3" />
-                      {editingQr ? t('organizer:eventDetail.cancelTheme') : t('organizer:eventDetail.editTheme')}
+                      <Pencil className="h-3 w-3" />
+                      {editingQr
+                        ? t('organizer:eventDetail.cancelTheme')
+                        : t('organizer:eventDetail.editTheme')}
                     </Button>
                   )}
                 </div>
               </CardHeader>
               <CardContent className="px-5 pt-4 pb-5">
                 {!editingQr ? (
-                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 border border-gray-100">
-                    <Badge variant="secondary" className="text-[10px] px-2 py-0.5 bg-cyan-50 text-cyan-700 border-0">
+                  <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5">
+                    <Badge
+                      variant="secondary"
+                      className="border-0 bg-cyan-50 px-2 py-0.5 text-[10px] text-cyan-700"
+                    >
                       {qrCount} QR
                     </Badge>
-                    <span className="text-xs text-gray-700 font-medium">
+                    <span className="text-xs font-medium text-gray-700">
                       {qrMode === 'event'
                         ? t('organizer:eventCreate.qrEventDesc')
                         : qrMode === 'day'
@@ -855,29 +996,44 @@ export function EventDetailPage() {
                     <div className="grid grid-cols-3 gap-2.5">
                       {(['event', 'day', 'session'] as const).map((opt) => {
                         const isSelected = qrMode === opt
-                        const count = opt === 'event' ? 1 : opt === 'day' ? dayCount : globalMetrics.totalSessions
+                        const count =
+                          opt === 'event'
+                            ? 1
+                            : opt === 'day'
+                              ? dayCount
+                              : globalMetrics.totalSessions
                         return (
                           <button
                             key={opt}
                             type="button"
-                            className={`text-left rounded-xl border-2 p-3.5 transition-all ${
-                              isSelected ? 'border-blue-500 bg-blue-50/50' : 'border-gray-100 hover:border-gray-200 bg-white'
+                            className={`rounded-xl border-2 p-3.5 text-left transition-all ${
+                              isSelected
+                                ? 'border-blue-500 bg-blue-50/50'
+                                : 'border-gray-100 bg-white hover:border-gray-200'
                             }`}
                             onClick={() => setQrMode(opt)}
                           >
-                            <div className="flex items-center justify-between mb-1">
-                              <span className={`text-xs font-semibold ${isSelected ? 'text-blue-700' : 'text-gray-800'}`}>
-                                {t(`organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}`)}
+                            <div className="mb-1 flex items-center justify-between">
+                              <span
+                                className={`text-xs font-semibold ${isSelected ? 'text-blue-700' : 'text-gray-800'}`}
+                              >
+                                {t(
+                                  `organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}`,
+                                )}
                               </span>
                               <Badge
                                 variant="secondary"
-                                className={`text-[9px] px-1.5 py-0 ${isSelected ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'}`}
+                                className={`px-1.5 py-0 text-[9px] ${isSelected ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'}`}
                               >
                                 {count}
                               </Badge>
                             </div>
-                            <p className={`text-[10px] leading-snug ${isSelected ? 'text-blue-600/70' : 'text-gray-400'}`}>
-                              {t(`organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}Desc`)}
+                            <p
+                              className={`text-[10px] leading-snug ${isSelected ? 'text-blue-600/70' : 'text-gray-400'}`}
+                            >
+                              {t(
+                                `organizer:eventCreate.qr${opt.charAt(0).toUpperCase() + opt.slice(1)}Desc`,
+                              )}
                             </p>
                           </button>
                         )
@@ -886,7 +1042,7 @@ export function EventDetailPage() {
                     <div className="flex gap-2">
                       <Button
                         size="sm"
-                        className="h-8 text-xs px-4 bg-blue-600 hover:bg-blue-700"
+                        className="h-8 bg-blue-600 px-4 text-xs hover:bg-blue-700"
                         onClick={handleSaveQrGranularity}
                       >
                         {t('organizer:eventDetail.saveTheme')}
@@ -906,29 +1062,31 @@ export function EventDetailPage() {
             </Card>
 
             {/* Export card */}
-            <Card className="border border-gray-200 bg-white p-0 gap-0 overflow-hidden">
-              <CardHeader className="px-5 pt-4 pb-3 border-b border-gray-200 bg-gray-100">
+            <Card className="gap-0 overflow-hidden border border-gray-200 bg-white p-0">
+              <CardHeader className="border-b border-gray-200 bg-gray-100 px-5 pt-4 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-50">
-                    <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50">
+                    <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
                   </div>
                   <div>
                     <CardTitle className="text-sm font-semibold text-gray-900">Export</CardTitle>
-                    <p className="text-[11px] text-gray-400 mt-0.5">{t('organizer:eventDetail.xlsxDesc')}</p>
+                    <p className="mt-0.5 text-[11px] text-gray-400">
+                      {t('organizer:eventDetail.xlsxDesc')}
+                    </p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="px-5 pt-4 pb-5">
                 <Button
                   size="sm"
-                  className="h-9 text-xs gap-2 px-4 bg-emerald-600 hover:bg-emerald-700"
+                  className="h-9 gap-2 bg-emerald-600 px-4 text-xs hover:bg-emerald-700"
                   onClick={handleDownload}
                   disabled={downloadMutation.isPending}
                 >
                   {downloadMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Download className="w-4 h-4" />
+                    <Download className="h-4 w-4" />
                   )}
                   {t('organizer:eventDetail.downloadXlsx')}
                 </Button>

@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo } from 'react'
-import { generateThemeWithMode, BUILT_IN_THEMES, DEFAULT_THEME_ID, type ThemeDefinition, type ThemeMode } from '@/config/themes'
+import {
+  generateThemeWithMode,
+  BUILT_IN_THEMES,
+  DEFAULT_THEME_ID,
+  type ThemeDefinition,
+  type ThemeMode,
+} from '@/config/themes'
 
 // ============================================================================
 // Context
@@ -24,7 +30,12 @@ type ThemeProviderProps = {
   mode?: ThemeMode
 }
 
-export function ThemeProvider({ children, themeId, customAccent, mode = 'dark' }: ThemeProviderProps) {
+export function ThemeProvider({
+  children,
+  themeId,
+  customAccent,
+  mode = 'dark',
+}: ThemeProviderProps) {
   // Resolve theme: built-in themeId > custom accent > default, then apply mode
   const theme = useMemo(() => {
     if (themeId && BUILT_IN_THEMES[themeId]) {
@@ -35,10 +46,17 @@ export function ThemeProvider({ children, themeId, customAccent, mode = 'dark' }
       return generateThemeWithMode(customAccent, 'Custom', 'custom', '', mode)
     }
     const defaultTheme = BUILT_IN_THEMES[DEFAULT_THEME_ID]
-    return generateThemeWithMode(defaultTheme.accentHex, defaultTheme.name, defaultTheme.id, defaultTheme.emoji, mode)
+    return generateThemeWithMode(
+      defaultTheme.accentHex,
+      defaultTheme.name,
+      defaultTheme.id,
+      defaultTheme.emoji,
+      mode,
+    )
   }, [themeId, customAccent, mode])
 
-  const resolvedThemeId = themeId && BUILT_IN_THEMES[themeId] ? themeId : customAccent ? 'custom' : DEFAULT_THEME_ID
+  const resolvedThemeId =
+    themeId && BUILT_IN_THEMES[themeId] ? themeId : customAccent ? 'custom' : DEFAULT_THEME_ID
 
   // Convert CSS custom properties to React.CSSProperties
   const cssVars = {
