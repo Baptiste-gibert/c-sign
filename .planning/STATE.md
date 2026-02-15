@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Organizers can collect legally-valid digital signatures from external participants (veterinarians, pharmacists) on any device, without requiring them to log in or install anything.
-**Current focus:** Phase 7 - UI Design & Style Guide Application
+**Current focus:** Phase 8 - Security & Access (planned, ready to execute)
 
 ## Current Position
 
-Phase: 7 of 7 (UI Design & Style Guide Application)
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-02-14 — Completed 07-03 (Organizer Theme Selection)
+Phase: 8 of 8 (Security & Access)
+Plan: 0 of 6 in current phase
+Status: Planned — ready for execution
+Last activity: 2026-02-15 — Phase 8 planned (6 plans, 3 waves)
 
-Progress: [▓▓▓▓▓▓▓▓▓▓▓] 96%
+Progress: [▓▓▓▓▓▓▓▓▓▓░] 92%
 
 ## Performance Metrics
 
@@ -114,6 +114,7 @@ Recent decisions affecting current work:
 ### Roadmap Evolution
 
 - Phase 7 added: UI Design & Style Guide Application
+- Phase 8 added: Security & Access
 
 ### Pending Todos
 
