@@ -1,3 +1,5 @@
+import { getCsrfToken } from './security/csrf-client'
+
 const API_BASE = '/api'
 
 export async function fetchAttendanceDay(dayId: string) {
@@ -24,9 +26,13 @@ export async function fetchSessionsByDay(dayId: string) {
 }
 
 export async function createParticipant(data: Record<string, unknown>) {
+  const csrfToken = getCsrfToken()
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+
   const res = await fetch(`${API_BASE}/participants`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -37,10 +43,15 @@ export async function createParticipant(data: Record<string, unknown>) {
 }
 
 export async function uploadSignatureImage(blob: Blob) {
+  const csrfToken = getCsrfToken()
+  const headers: Record<string, string> = {}
+  if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+
   const formData = new FormData()
   formData.append('file', blob, `signature-${Date.now()}.png`)
   const res = await fetch(`${API_BASE}/media`, {
     method: 'POST',
+    headers,
     body: formData,
   })
   if (!res.ok) throw new Error('Erreur upload signature')
@@ -53,9 +64,13 @@ export async function createSignature(data: {
   image: number | string
   rightToImage: boolean
 }) {
+  const csrfToken = getCsrfToken()
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+
   const res = await fetch(`${API_BASE}/signatures`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(data),
   })
   if (!res.ok) {
