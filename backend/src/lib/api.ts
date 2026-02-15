@@ -2,6 +2,11 @@ import { getCsrfToken } from './security/csrf-client'
 
 const API_BASE = '/api'
 
+interface SecurityHeaders {
+  fingerprint?: string
+  captchaToken?: string
+}
+
 export async function fetchEventByToken(token: string) {
   const res = await fetch(`${API_BASE}/events?where[signingToken][equals]=${token}&depth=1&limit=1`)
   if (!res.ok) throw new Error('Evenement introuvable')
@@ -33,10 +38,12 @@ export async function fetchSessionsByDay(dayId: string) {
   return res.json()
 }
 
-export async function createParticipant(data: Record<string, unknown>) {
+export async function createParticipant(data: Record<string, unknown>, securityHeaders?: SecurityHeaders) {
   const csrfToken = getCsrfToken()
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+  if (securityHeaders?.fingerprint) headers['X-Device-Fingerprint'] = securityHeaders.fingerprint
+  if (securityHeaders?.captchaToken) headers['X-Captcha-Token'] = securityHeaders.captchaToken
 
   const res = await fetch(`${API_BASE}/participants`, {
     method: 'POST',
@@ -50,10 +57,12 @@ export async function createParticipant(data: Record<string, unknown>) {
   return res.json()
 }
 
-export async function uploadSignatureImage(blob: Blob) {
+export async function uploadSignatureImage(blob: Blob, securityHeaders?: SecurityHeaders) {
   const csrfToken = getCsrfToken()
   const headers: Record<string, string> = {}
   if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+  if (securityHeaders?.fingerprint) headers['X-Device-Fingerprint'] = securityHeaders.fingerprint
+  if (securityHeaders?.captchaToken) headers['X-Captcha-Token'] = securityHeaders.captchaToken
 
   const formData = new FormData()
   formData.append('file', blob, `signature-${Date.now()}.png`)
@@ -71,10 +80,12 @@ export async function createSignature(data: {
   session: number | string
   image: number | string
   rightToImage: boolean
-}) {
+}, securityHeaders?: SecurityHeaders) {
   const csrfToken = getCsrfToken()
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+  if (securityHeaders?.fingerprint) headers['X-Device-Fingerprint'] = securityHeaders.fingerprint
+  if (securityHeaders?.captchaToken) headers['X-Captcha-Token'] = securityHeaders.captchaToken
 
   const res = await fetch(`${API_BASE}/signatures`, {
     method: 'POST',

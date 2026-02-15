@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { PublicPageLayout } from '@/components/PublicPageLayout'
+import { getFingerprint } from '@/lib/security/fingerprint'
 
 interface Session {
   id: string
@@ -48,6 +49,9 @@ export function SignPage() {
   const [sessions, setSessions] = useState<Session[]>([])
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
   const [eventStatus, setEventStatus] = useState<string | null>(null)
+  const [showCaptcha, setShowCaptcha] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null)
 
   const mutation = useSignatureSubmission()
 
@@ -131,17 +135,80 @@ export function SignPage() {
     loadSessions()
   }, [selectedDayId, sessionFromUrl])
 
+  // Load Turnstile script and handle CAPTCHA completion
+  useEffect(() => {
+    if (showCaptcha) {
+      // Define global callback for Turnstile success
+      ;(window as any).onTurnstileSuccess = (token: string) => {
+        setCaptchaToken(token)
+      }
+
+      // Load Turnstile script if not already loaded
+      if (!document.querySelector('script[src*="turnstile"]')) {
+        const script = document.createElement('script')
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+        script.async = true
+        document.body.appendChild(script)
+      }
+    }
+
+    return () => {
+      delete (window as any).onTurnstileSuccess
+    }
+  }, [showCaptcha])
+
+  // Auto-retry submission when CAPTCHA is completed
+  useEffect(() => {
+    if (captchaToken && showCaptcha) {
+      // CAPTCHA was completed, hide it and trigger form submission
+      setShowCaptcha(false)
+      // The form will be re-submitted automatically via the mutation
+    }
+  }, [captchaToken, showCaptcha])
+
   const handleSubmit = async (formData: ParticipantFormData, signatureBlob: Blob) => {
     if (!selectedSessionId) {
       setError(t('public:selectSessionRequired'))
       return
     }
 
+    // Get device fingerprint
+    const fingerprint = await getFingerprint()
+
+    // Check rate limit before submission
+    try {
+      const rateCheckResponse = await fetch('/api/signatures/check-rate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceFingerprint: fingerprint }),
+      })
+
+      if (!rateCheckResponse.ok) {
+        const errorData = await rateCheckResponse.json().catch(() => ({}))
+        setRateLimitError(errorData.error || 'Trop de soumissions')
+        return
+      }
+
+      const rateCheckResult = await rateCheckResponse.json()
+
+      // If CAPTCHA challenge is required and no token yet, show CAPTCHA
+      if (rateCheckResult.shouldChallenge && !captchaToken) {
+        setShowCaptcha(true)
+        return // Wait for user to complete CAPTCHA
+      }
+    } catch (err) {
+      console.error('Rate check failed:', err)
+      // Continue with submission if rate check fails (graceful degradation)
+    }
+
+    // Proceed with submission
     mutation.mutate(
       {
         formData,
         signatureBlob,
         sessionId: selectedSessionId,
+        deviceFingerprint: fingerprint,
+        captchaToken: captchaToken || undefined,
       },
       {
         onSuccess: () => {
@@ -290,8 +357,40 @@ export function SignPage() {
           </div>
         )}
 
+        {/* Rate limit error */}
+        {rateLimitError && (
+          <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+            <CardContent className="pt-6">
+              <p className="text-center" style={{ color: 'var(--error)' }}>
+                {rateLimitError}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* CAPTCHA challenge (shown when rate limit triggered) */}
+        {showCaptcha && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+          <div className="mb-6">
+            <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+              <CardContent className="pt-6">
+                <p className="text-center mb-4" style={{ color: 'var(--text)' }}>
+                  {t('public:captchaRequired', 'Veuillez compléter la vérification ci-dessous')}
+                </p>
+                <div className="flex justify-center">
+                  <div
+                    className="cf-turnstile"
+                    data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                    data-callback="onTurnstileSuccess"
+                    data-theme="dark"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Participant form (when event is open and day/session selected) */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && (
+        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && !showCaptcha && (
           <ParticipantForm
             onSubmit={handleSubmit}
             isPending={mutation.isPending}
