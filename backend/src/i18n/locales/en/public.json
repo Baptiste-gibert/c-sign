@@ -16,6 +16,8 @@
   "noSessionConfigured": "No session configured for this day",
   "selectSessionRequired": "Please select a session",
   "selectSession": "Select the session",
+  "selectDay": "Select the day",
+  "invalidDay": "Invalid day or expired link",
   "eventFinalized": "This event is finalized. Signatures are no longer accepted.",
   "eventNotOpen": "This event is not yet open for signatures.",
   "eventReopened": "This event has been reopened. You can sign.",

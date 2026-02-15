@@ -2,7 +2,7 @@ import { useParams, useNavigate } from '@/lib/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { fetchAttendanceDay, fetchSessionsByDay } from '@/lib/api'
+import { fetchEventByToken, fetchSessionsByDay } from '@/lib/api'
 import { useSignatureSubmission } from '@/hooks/use-signature-submission'
 import { ParticipantForm } from '@/components/ParticipantForm'
 import type { ParticipantFormData } from '@/lib/schemas'
@@ -17,9 +17,16 @@ interface Session {
   name: string
 }
 
+interface AttendanceDay {
+  id: string
+  date: string
+}
+
 interface Event {
+  id: string
   title: string
   status?: string
+  attendanceDays: AttendanceDay[]
   theme?: {
     themeId?: string
     customAccent?: string
@@ -27,42 +34,83 @@ interface Event {
   } | null
 }
 
-interface AttendanceDay {
-  id: string
-  date: string
-  event: Event
-}
-
 export function SignPage() {
   const { t, i18n } = useTranslation(['public', 'common'])
-  const { dayId } = useParams<{ dayId: string }>()
+  const { token } = useParams<{ token: string }>()
   const searchParams = useSearchParams()
+  const dayFromUrl = searchParams?.get('day') ?? null
   const sessionFromUrl = searchParams?.get('session') ?? null
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [day, setDay] = useState<AttendanceDay | null>(null)
+  const [event, setEvent] = useState<Event | null>(null)
+  const [selectedDayId, setSelectedDayId] = useState<string | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
   const [eventStatus, setEventStatus] = useState<string | null>(null)
 
   const mutation = useSignatureSubmission()
 
+  // Load event by token
   useEffect(() => {
-    if (!dayId) return
+    if (!token) return
 
-    const loadData = async () => {
+    const loadEvent = async () => {
       try {
         setLoading(true)
         setError(null)
 
-        const [dayData, sessionsData] = await Promise.all([
-          fetchAttendanceDay(dayId),
-          fetchSessionsByDay(dayId),
-        ])
+        const eventData = await fetchEventByToken(token)
+        setEvent(eventData)
+        setEventStatus(eventData.status || null)
 
-        setDay(dayData)
-        setEventStatus(dayData.event?.status || null)
+        // Check if event is open or reopened
+        if (eventData.status !== 'open' && eventData.status !== 'reopened') {
+          setLoading(false)
+          return
+        }
+
+        // Handle day selection
+        const days = eventData.attendanceDays || []
+        if (days.length === 0) {
+          setError(t('public:noSessionConfigured'))
+          setLoading(false)
+          return
+        }
+
+        // If URL has a day param, use that specific day
+        if (dayFromUrl) {
+          const matchingDay = days.find((d: AttendanceDay) => String(d.id) === dayFromUrl)
+          if (matchingDay) {
+            setSelectedDayId(matchingDay.id)
+          } else {
+            setError(t('public:invalidDay'))
+            setLoading(false)
+            return
+          }
+        } else if (days.length === 1) {
+          // Auto-select if only one day
+          setSelectedDayId(days[0].id)
+        }
+        // Otherwise, user needs to select a day (will show day selector)
+
+        setLoading(false)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : t('common:errors.error'))
+        setLoading(false)
+      }
+    }
+
+    loadEvent()
+  }, [token, dayFromUrl])
+
+  // Load sessions when a day is selected
+  useEffect(() => {
+    if (!selectedDayId) return
+
+    const loadSessions = async () => {
+      try {
+        const sessionsData = await fetchSessionsByDay(selectedDayId)
         setSessions(sessionsData.docs || [])
 
         // Auto-select session from URL param, or if only one session
@@ -77,13 +125,11 @@ export function SignPage() {
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : t('common:errors.error'))
-      } finally {
-        setLoading(false)
       }
     }
 
-    loadData()
-  }, [dayId])
+    loadSessions()
+  }, [selectedDayId, sessionFromUrl])
 
   const handleSubmit = async (formData: ParticipantFormData, signatureBlob: Blob) => {
     if (!selectedSessionId) {
@@ -100,9 +146,9 @@ export function SignPage() {
       {
         onSuccess: () => {
           const params = new URLSearchParams({ participantName: formData.firstName })
-          if (day?.event.theme?.themeId) params.set('themeId', day.event.theme.themeId)
-          if (day?.event.theme?.customAccent) params.set('customAccent', day.event.theme.customAccent)
-          if (day?.event.theme?.mode) params.set('mode', day.event.theme.mode)
+          if (event?.theme?.themeId) params.set('themeId', event.theme.themeId)
+          if (event?.theme?.customAccent) params.set('customAccent', event.theme.customAccent)
+          if (event?.theme?.mode) params.set('mode', event.theme.mode)
           navigate(`/success?${params.toString()}`)
         },
       }
@@ -110,8 +156,9 @@ export function SignPage() {
   }
 
   // Format date for header
-  const formattedDate = day
-    ? new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
+  const selectedDay = event?.attendanceDays?.find((d) => d.id === selectedDayId)
+  const formattedDate = selectedDay
+    ? new Date(selectedDay.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -131,7 +178,7 @@ export function SignPage() {
     )
   }
 
-  if (error && !day) {
+  if (error && !event) {
     return (
       <ThemeProvider>
         <PublicPageLayout>
@@ -148,9 +195,9 @@ export function SignPage() {
   }
 
   return (
-    <ThemeProvider themeId={day?.event.theme?.themeId} customAccent={day?.event.theme?.customAccent} mode={day?.event.theme?.mode || 'dark'}>
+    <ThemeProvider themeId={event?.theme?.themeId} customAccent={event?.theme?.customAccent} mode={event?.theme?.mode || 'dark'}>
       <PublicPageLayout
-        eventTitle={day?.event.title}
+        eventTitle={event?.title}
         eventDate={formattedDate}
         headerRight={<LanguageSwitcher />}
       >
@@ -167,8 +214,50 @@ export function SignPage() {
           </Card>
         )}
 
-        {/* Session selection */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && sessions.length > 1 && !sessionFromUrl && (
+        {/* Day selection (when event has multiple days and no day selected) */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') && !selectedDayId && event && event.attendanceDays && event.attendanceDays.length > 1 && (
+          <div className="mb-6">
+            <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <Label className="text-[13px]" style={{ color: 'var(--text)' }}>
+                    {t('public:selectDay')} *
+                  </Label>
+                  <div className="space-y-2">
+                    {event.attendanceDays.map((day) => {
+                      const dayDate = new Date(day.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                      return (
+                        <label
+                          key={day.id}
+                          className="flex items-center space-x-2 cursor-pointer min-h-[44px] text-[13px]"
+                          style={{ color: 'var(--text)' }}
+                        >
+                          <input
+                            type="radio"
+                            name="day"
+                            value={day.id}
+                            checked={selectedDayId === String(day.id)}
+                            onChange={(e) => setSelectedDayId(e.target.value)}
+                            className="min-w-[20px] min-h-[20px]"
+                          />
+                          <span>{dayDate}</span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Session selection (when day is selected and event is open) */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && sessions.length > 1 && !sessionFromUrl && (
           <div className="mb-6">
             <Card style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border-c)' }}>
               <CardContent className="pt-6">
@@ -201,8 +290,8 @@ export function SignPage() {
           </div>
         )}
 
-        {/* Participant form */}
-        {(eventStatus === 'open' || eventStatus === 'reopened') && (
+        {/* Participant form (when event is open and day/session selected) */}
+        {(eventStatus === 'open' || eventStatus === 'reopened') && selectedDayId && (
           <ParticipantForm
             onSubmit={handleSubmit}
             isPending={mutation.isPending}

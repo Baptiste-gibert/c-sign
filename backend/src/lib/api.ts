@@ -2,6 +2,14 @@ import { getCsrfToken } from './security/csrf-client'
 
 const API_BASE = '/api'
 
+export async function fetchEventByToken(token: string) {
+  const res = await fetch(`${API_BASE}/events?where[signingToken][equals]=${token}&depth=1&limit=1`)
+  if (!res.ok) throw new Error('Evenement introuvable')
+  const data = await res.json()
+  if (!data.docs || data.docs.length === 0) throw new Error('Lien de signature invalide ou expire')
+  return data.docs[0]
+}
+
 export async function fetchAttendanceDay(dayId: string) {
   const res = await fetch(`${API_BASE}/attendance-days/${dayId}?depth=0`)
   if (!res.ok) throw new Error('Journée introuvable')
