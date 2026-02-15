@@ -8,7 +8,7 @@ export const Users: CollectionConfig = {
   auth: {
     tokenExpiration: 86400, // 24 hours in seconds
     maxLoginAttempts: 5,
-    lockTime: 0, // 0 = indefinite lock (admin-only unlock)
+    lockTime: 365 * 24 * 60 * 60 * 1000, // ~1 year in ms = effectively indefinite (admin-only unlock)
     cookies: {
       secure: process.env.NODE_ENV === 'production', // HTTPS-only in prod, allow HTTP in dev
       sameSite: 'Strict',
