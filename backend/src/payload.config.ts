@@ -26,6 +26,9 @@ export default buildConfig({
   },
   collections: [Users, Events, AttendanceDays, Sessions, Participants, Signatures, Media],
   editor: lexicalEditor(),
+  graphQL: {
+    disable: process.env.NODE_ENV === 'production',
+  },
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts')

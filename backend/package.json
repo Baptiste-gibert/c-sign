@@ -11,6 +11,7 @@
     "seed": "echo 'Note: Direct tsx execution has Payload 3.x compatibility issues. Use: npm run dev, then curl http://localhost:3000/api/seed'"
   },
   "dependencies": {
+    "@edge-csrf/nextjs": "^2.5.2",
     "@fontsource/inter": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-postgres": "^3.0.0",
@@ -35,7 +36,9 @@
     "graphql": "^16.9.0",
     "i18next": "^25.8.7",
     "i18next-browser-languagedetector": "^8.2.1",
+    "isomorphic-dompurify": "^3.0.0-rc.2",
     "lucide-react": "^0.468.0",
+    "nanoid": "^5.1.6",
     "next": "15.4.11",
     "nodemailer": "^8.0.1",
     "payload": "^3.0.0",
