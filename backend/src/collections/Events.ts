@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
-import { organizerScoped } from '@/access/organizerScoped'
+import { organizerScoped, organizerScopedRead } from '@/access/organizerScoped'
 import { afterEventChange } from '@/hooks/events/afterChange'
 import { afterFinalize } from '@/hooks/events/afterFinalize'
 import { afterEventRead } from '@/hooks/events/afterRead'
@@ -13,7 +13,7 @@ export const Events: CollectionConfig = {
   },
   access: {
     create: ({ req: { user } }) => !!user,
-    read: () => true, // Public: signing page needs event title/date context
+    read: organizerScopedRead, // Public: open, Admin: all, Organizer: own events only
     update: organizerScoped,
     delete: organizerScoped,
   },
