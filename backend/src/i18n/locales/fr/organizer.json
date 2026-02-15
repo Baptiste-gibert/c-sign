@@ -147,7 +147,10 @@
     "tabParticipants": "Participants",
     "tabSettings": "Parametres",
     "fullDay": "Journee entiere",
-    "sessions": "sessions"
+    "sessions": "sessions",
+    "regenerateLink": "Regenerer le lien",
+    "regenerateLinkConfirm": "Regenerer le lien invalidera l'ancien QR code. Continuer ?",
+    "linkRegenerated": "Lien regenere avec succes"
   },
   "qrCodes": {
     "title": "QR Codes pour signature",

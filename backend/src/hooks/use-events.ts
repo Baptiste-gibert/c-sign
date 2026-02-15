@@ -16,6 +16,7 @@ export interface PayloadEvent {
   theme?: { themeId?: string; customAccent?: string; mode?: 'dark' | 'light' } | null
   qrGranularity?: 'event' | 'day' | 'session'
   daySessionConfig?: Array<{ date: string; fullDay: boolean; sessions: Array<{ name: string; startTime: string; endTime: string }> }>
+  signingToken?: string
   signatureCount?: number
   participantCount?: number
   createdBy: string | { id: string }
@@ -101,6 +102,19 @@ export function useUpdateEvent(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['events', id] })
+    },
+  })
+}
+
+export function useRegenerateToken() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (eventId: string) => {
+      const res = await apiFetch(`/api/events/${eventId}/regenerate-token`, { method: 'POST' })
+      return res.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
     },
   })
 }

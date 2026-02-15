@@ -3,7 +3,7 @@ import { useParams, useNavigate } from '@/lib/navigation'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
-import { useEvent, useUpdateEvent, type PayloadEvent } from '@/hooks/use-events'
+import { useEvent, useUpdateEvent, useRegenerateToken, type PayloadEvent } from '@/hooks/use-events'
 import { useDownloadExport } from '@/hooks/use-export'
 import { useAttendanceDashboard } from '@/hooks/use-attendance'
 import {
@@ -41,7 +41,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList, Palette, FileSpreadsheet, Search } from 'lucide-react'
+import { Loader2, AlertCircle, ChevronLeft, UserPlus, Download, Pencil, Users, Pen, QrCode, Printer, Settings, ClipboardList, Palette, FileSpreadsheet, Search, RefreshCw } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
 const BENEFICIARY_TYPE_KEYS = ['asv', 'autre', 'eleveur', 'etudiant', 'pharmacien', 'technicien', 'veterinaire'] as const
@@ -58,6 +58,7 @@ export function EventDetailPage() {
   const { mutate: removeParticipant } = useRemoveParticipant(id || '')
   const { mutate: addWalkIn } = useAddWalkIn(id || '')
   const downloadMutation = useDownloadExport()
+  const regenerateTokenMutation = useRegenerateToken()
   const { data: attendanceData } = useAttendanceDashboard(id || '')
 
   const [showWalkInForm, setShowWalkInForm] = useState(false)
@@ -168,6 +169,12 @@ export function EventDetailPage() {
   const handleSaveQrGranularity = () => {
     updateEvent({ qrGranularity: qrMode })
     setEditingQr(false)
+  }
+
+  const handleRegenerateToken = () => {
+    if (window.confirm(t('organizer:eventDetail.regenerateLinkConfirm'))) {
+      regenerateTokenMutation.mutate(id!)
+    }
   }
 
   const handleAddFromSimv = (participant: SimvParticipant) => {
@@ -474,7 +481,7 @@ export function EventDetailPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Live indicator + Download all QR */}
+              {/* Live indicator + Download all QR + Regenerate */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <span className="relative flex h-2 w-2">
@@ -485,17 +492,34 @@ export function EventDetailPage() {
                     {t('organizer:eventDetail.liveUpdates')}
                   </span>
                 </div>
-                <Dialog>
-                  <DialogTrigger asChild>
+                <div className="flex items-center gap-2">
+                  {(event.status === 'open' || event.status === 'reopened') && (
                     <Button
                       variant="outline"
                       size="sm"
                       className="h-7 text-[10px] gap-1"
+                      onClick={handleRegenerateToken}
+                      disabled={regenerateTokenMutation.isPending}
                     >
-                      <QrCode className="w-3 h-3" />
-                      {t('organizer:eventDetail.downloadAllQr')}
+                      {regenerateTokenMutation.isPending ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-3 h-3" />
+                      )}
+                      {t('organizer:eventDetail.regenerateLink')}
                     </Button>
-                  </DialogTrigger>
+                  )}
+                    <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-[10px] gap-1"
+                      >
+                        <QrCode className="w-3 h-3" />
+                        {t('organizer:eventDetail.downloadAllQr')}
+                      </Button>
+                    </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle className="flex items-center justify-between">
@@ -522,13 +546,13 @@ export function EventDetailPage() {
                               {day.sessions.map((session) => (
                                 <div key={session.id} className="flex flex-col items-center gap-2 p-3 border rounded-lg">
                                   <QRCodeSVG
-                                    value={`${window.location.origin}/sign/${day.id}?session=${session.id}`}
+                                    value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}&session=${session.id}`}
                                     size={160}
                                     level="H"
                                   />
                                   <p className="text-xs font-medium text-gray-700 text-center">{session.name}</p>
                                   <code className="text-[9px] text-gray-400 break-all text-center">
-                                    /sign/{day.id}?session={session.id}
+                                    /sign/{event.signingToken}?day={day.id}&session={session.id}
                                   </code>
                                 </div>
                               ))}
@@ -536,26 +560,28 @@ export function EventDetailPage() {
                           ) : (
                             <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
                               <QRCodeSVG
-                                value={`${window.location.origin}/sign/${day.id}`}
+                                value={`${window.location.origin}/sign/${event.signingToken}?day=${day.id}`}
                                 size={200}
                                 level="H"
                               />
                               <code className="text-[9px] text-gray-400 break-all text-center">
-                                /sign/{day.id}
+                                /sign/{event.signingToken}?day={day.id}
                               </code>
                             </div>
                           )}
                         </div>
                       ))}
                     </div>
-                  </DialogContent>
-                </Dialog>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
 
               <AttendanceDashboard
                 eventId={event.id}
                 participants={participants}
                 qrGranularity={event.qrGranularity}
+                signingToken={event.signingToken}
               />
             </div>
           )}

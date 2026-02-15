@@ -21,9 +21,10 @@ interface AttendanceDashboardProps {
   eventId: string
   participants: Participant[]
   qrGranularity?: 'event' | 'day' | 'session'
+  signingToken?: string
 }
 
-export function AttendanceDashboard({ eventId, participants, qrGranularity }: AttendanceDashboardProps) {
+export function AttendanceDashboard({ eventId, participants, qrGranularity, signingToken }: AttendanceDashboardProps) {
   const { t, i18n } = useTranslation(['organizer', 'common'])
   const { data, isLoading, isError, error } = useAttendanceDashboard(eventId)
   const locale = i18n.language === 'en' ? enUS : fr
@@ -187,7 +188,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                       </DialogHeader>
                       <div className="flex flex-col items-center gap-4 py-4">
                         <QRCodeSVG
-                          value={`${window.location.origin}/sign/${day.id}`}
+                          value={`${window.location.origin}/sign/${signingToken}?day=${day.id}`}
                           size={256}
                           level="H"
                         />
@@ -195,7 +196,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                           {t('organizer:qrCodes.scanPrompt')}
                         </p>
                         <code className="text-xs bg-neutral-100 px-2 py-1 rounded">
-                          {window.location.origin}/sign/{day.id}
+                          {window.location.origin}/sign/{signingToken}?day={day.id}
                         </code>
                       </div>
                     </DialogContent>
@@ -252,7 +253,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                                 </DialogHeader>
                                 <div className="flex flex-col items-center gap-4 py-4">
                                   <QRCodeSVG
-                                    value={`${window.location.origin}/sign/${day.id}?session=${session.id}`}
+                                    value={`${window.location.origin}/sign/${signingToken}?day=${day.id}&session=${session.id}`}
                                     size={256}
                                     level="H"
                                   />
@@ -260,7 +261,7 @@ export function AttendanceDashboard({ eventId, participants, qrGranularity }: At
                                     {t('organizer:qrCodes.scanPrompt')}
                                   </p>
                                   <code className="text-xs bg-neutral-100 px-2 py-1 rounded break-all text-center">
-                                    {window.location.origin}/sign/{day.id}?session={session.id}
+                                    {window.location.origin}/sign/{signingToken}?day={day.id}&session={session.id}
                                   </code>
                                 </div>
                               </DialogContent>
