@@ -1,13 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../access/isAdmin'
 import { isAdminOrSelf } from '../access/isAdminOrSelf'
+import { validatePassword } from '../lib/security/validators'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    tokenExpiration: 86400, // 24 hours in seconds
+    maxLoginAttempts: 5,
+    lockTime: 0, // 0 = indefinite lock (admin-only unlock)
+    cookies: {
+      secure: process.env.NODE_ENV === 'production', // HTTPS-only in prod, allow HTTP in dev
+      sameSite: 'Strict',
+    },
+  },
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'firstName', 'lastName', 'role']
+  },
+  hooks: {
+    beforeChange: [validatePassword],
   },
   access: {
     create: isAdmin,
@@ -15,7 +27,7 @@ export const Users: CollectionConfig = {
     update: isAdminOrSelf,
     delete: isAdmin,
     admin: ({ req: { user } }) => {
-      return user?.role === 'admin' || user?.role === 'organizer'
+      return user?.role === 'admin'
     }
   },
   fields: [
