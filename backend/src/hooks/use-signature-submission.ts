@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { createParticipant, uploadSignatureImage, createSignature } from '@/lib/api'
+
+import { createParticipant, createSignature, uploadSignatureImage } from '@/lib/api'
 import type { ParticipantFormData } from '@/lib/schemas'
 
 interface SubmissionData {

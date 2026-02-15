@@ -1,5 +1,4 @@
 import js from '@eslint/js'
-import nextPlugin from 'eslint-config-next'
 import prettierConfig from 'eslint-config-prettier'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tseslint from 'typescript-eslint'

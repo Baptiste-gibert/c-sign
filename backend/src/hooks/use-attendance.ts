@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { apiFetch } from '@/lib/api-fetch'
 
 interface AttendanceDay {
@@ -40,7 +41,11 @@ interface AttendanceDashboardData {
 }
 
 interface PayloadSignaturesResponse {
-  docs: any[]
+  docs: Array<{
+    id: string
+    participant: { id: string; lastName: string; firstName: string }
+    createdAt: string
+  }>
 }
 
 interface PayloadSessionsResponse {

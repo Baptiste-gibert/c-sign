@@ -1,15 +1,14 @@
 import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-
-// Import translation files
-import commonFr from './locales/fr/common.json'
-import publicFr from './locales/fr/public.json'
-import organizerFr from './locales/fr/organizer.json'
+import { initReactI18next } from 'react-i18next'
 
 import commonEn from './locales/en/common.json'
-import publicEn from './locales/en/public.json'
 import organizerEn from './locales/en/organizer.json'
+import publicEn from './locales/en/public.json'
+// Import translation files
+import commonFr from './locales/fr/common.json'
+import organizerFr from './locales/fr/organizer.json'
+import publicFr from './locales/fr/public.json'
 
 // Read cached language on client to match SSR output.
 // LanguageDetector is NOT used at init (lng is set explicitly) to prevent

@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { format } from 'date-fns'
+import { enUS, fr } from 'date-fns/locale'
+import { Loader2, Plus, Search } from 'lucide-react'
 import Link from 'next/link'
-import { useNavigate } from '@/lib/navigation'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useEvents } from '@/hooks/use-events'
-import { statusConfig, type EventStatus } from '@/config/status'
-import { Button } from '@/components/ui/button'
+
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
@@ -16,9 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Plus, Loader2, Search } from 'lucide-react'
-import { format } from 'date-fns'
-import { fr, enUS } from 'date-fns/locale'
+import { type EventStatus, statusConfig } from '@/config/status'
+import { useEvents } from '@/hooks/use-events'
+import { useNavigate } from '@/lib/navigation'
 
 function FormatEventDates({
   dates,

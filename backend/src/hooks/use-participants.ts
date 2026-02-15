@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 import { apiFetch } from '@/lib/api-fetch'
 
 export interface SimvParticipant {
@@ -153,19 +154,22 @@ export function useAddWalkIn(eventId: string) {
     onMutate: async (newParticipant) => {
       await queryClient.cancelQueries({ queryKey: ['events', eventId] })
       const previousEvent = queryClient.getQueryData(['events', eventId])
-      queryClient.setQueryData(['events', eventId], (old: any) => {
-        if (!old) return old
-        return {
-          ...old,
-          participants: [
-            ...(old.participants || []),
-            {
-              id: 'temp-' + Date.now(),
-              ...newParticipant,
-            },
-          ],
-        }
-      })
+      queryClient.setQueryData(
+        ['events', eventId],
+        (old: { participants?: Participant[] } | undefined) => {
+          if (!old) return old
+          return {
+            ...old,
+            participants: [
+              ...(old.participants || []),
+              {
+                id: 'temp-' + Date.now(),
+                ...newParticipant,
+              },
+            ],
+          }
+        },
+      )
       return { previousEvent }
     },
     onError: (_err, _newParticipant, context) => {

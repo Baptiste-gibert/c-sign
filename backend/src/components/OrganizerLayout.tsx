@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { useNavigate } from '@/lib/navigation'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '@/hooks/use-auth'
-import { Button } from '@/components/ui/button'
+
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
+import { useNavigate } from '@/lib/navigation'
 
 export function OrganizerLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation('organizer')

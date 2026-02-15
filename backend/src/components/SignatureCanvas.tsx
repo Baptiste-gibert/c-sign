@@ -1,6 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, useState } from 'react'
-import SignatureCanvasLib from 'react-signature-canvas'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import SignatureCanvasLib from 'react-signature-canvas'
+
 import { Button } from '@/components/ui/button'
 
 export interface SignatureCanvasHandle {

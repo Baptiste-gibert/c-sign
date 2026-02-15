@@ -1,13 +1,14 @@
 'use client'
 
-import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 import { CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { PublicPageLayout } from '@/components/PublicPageLayout'
 import { Button } from '@/components/ui/button'
 import { ThemeProvider } from '@/contexts/ThemeContext'
-import { PublicPageLayout } from '@/components/PublicPageLayout'
 
 function SuccessContent() {
   const { t } = useTranslation('public')

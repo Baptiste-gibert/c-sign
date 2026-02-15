@@ -1,12 +1,13 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useAttendanceDashboard } from '@/hooks/use-attendance'
 import { format } from 'date-fns'
-import { fr, enUS } from 'date-fns/locale'
+import { enUS, fr } from 'date-fns/locale'
+import { Calendar, Check, ChevronDown, Circle, Loader2, QrCode } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
-import { Check, Circle, ChevronDown, Calendar, QrCode, Loader2 } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -14,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import { useAttendanceDashboard } from '@/hooks/use-attendance'
 import type { Participant } from '@/hooks/use-participants'
 
 interface AttendanceDashboardProps {

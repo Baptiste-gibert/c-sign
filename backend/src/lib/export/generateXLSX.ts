@@ -1,6 +1,6 @@
-import path from 'path'
-import type { Payload } from 'payload'
 import ExcelJS from 'exceljs'
+import type { Payload } from 'payload'
+
 import { optimizeSignature } from './optimizeSignature'
 
 /**
@@ -96,8 +96,7 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
     fgColor: { argb: 'FFE0E0E0' },
   }
 
-  // Track current row number
-  let currentRow = 5
+  // Track current row number (used to be currentRow = 5, but never reassigned or used)
 
   // Resolve image URL strategy
   const blobBaseUrl = getBlobBaseUrl()
@@ -198,17 +197,17 @@ export async function generateEventXLSX(payload: Payload, eventId: string): Prom
 
             // Add image to workbook
             const imageId = workbook.addImage({
-              buffer: finalBuffer as any,
+              buffer: finalBuffer as never,
               extension,
             })
 
             // Place image in signature column (column index 9, 0-indexed)
             // ExcelJS uses 0-indexed coordinates for anchors
             worksheet.addImage(imageId, {
-              tl: { col: 9, row: row.number - 1 } as any,
-              br: { col: 10, row: row.number } as any,
+              tl: { col: 9, row: row.number - 1 },
+              br: { col: 10, row: row.number },
               editAs: 'oneCell',
-            })
+            } as never)
           } catch (error) {
             console.error(`Failed to embed signature image for ${participant.email}:`, error)
             // Continue without image - don't fail the entire export

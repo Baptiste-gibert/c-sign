@@ -1,4 +1,5 @@
-import { REST_GET, REST_POST, REST_DELETE, REST_PATCH, REST_PUT } from '@payloadcms/next/routes'
+import { REST_DELETE, REST_GET, REST_PATCH, REST_POST, REST_PUT } from '@payloadcms/next/routes'
+
 import config from '@/payload.config'
 
 export const GET = REST_GET(config)

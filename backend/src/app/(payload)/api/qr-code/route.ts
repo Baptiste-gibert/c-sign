@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import QRCode from 'qrcode'
 import { getPayload } from 'payload'
+import QRCode from 'qrcode'
+
 import config from '@/payload.config'
 
 export async function GET(req: NextRequest) {

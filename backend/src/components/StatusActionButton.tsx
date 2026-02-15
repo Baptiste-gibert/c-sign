@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/button'
-import { statusContext, type EventStatus } from '@/config/status'
+import { type EventStatus, statusContext } from '@/config/status'
 
 interface StatusActionButtonProps {
   status: EventStatus

@@ -1,7 +1,7 @@
 'use client'
 
-import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { OrganizerLayout } from '@/components/OrganizerLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { EventCreatePage } from '@/views/EventCreatePage'
 
 export default function EventCreate() {

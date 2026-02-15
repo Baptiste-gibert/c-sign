@@ -1,10 +1,12 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState, useMemo } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { createParticipantSchema, type ParticipantFormData } from '@/lib/schemas'
+
 import { SignatureCanvas, type SignatureCanvasHandle } from '@/components/SignatureCanvas'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -14,8 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { createParticipantSchema, type ParticipantFormData } from '@/lib/schemas'
 
 interface ParticipantFormProps {
   onSubmit: (data: ParticipantFormData, signatureBlob: Blob) => void

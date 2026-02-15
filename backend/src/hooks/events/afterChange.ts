@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook } from 'payload'
 
-export const afterEventChange: CollectionAfterChangeHook = async ({ doc, req, operation }) => {
+export const afterEventChange: CollectionAfterChangeHook = async ({ doc, req }) => {
   // Prevent infinite loop
   if (req.context.preventLoop) {
     return doc
@@ -50,7 +50,14 @@ export const afterEventChange: CollectionAfterChangeHook = async ({ doc, req, op
       allAttendanceDayIds.push(newDay.id)
 
       // Check if daySessionConfig has session config for this date
-      const dayConfig = (doc.daySessionConfig as any[])?.find((cfg: any) => {
+      const dayConfig = (
+        doc.daySessionConfig as
+          | Array<{
+              date: string
+              sessions?: Array<{ name?: string; startTime?: string; endTime?: string }>
+            }>
+          | undefined
+      )?.find((cfg) => {
         const cfgDate = new Date(cfg.date).toISOString().split('T')[0]
         return cfgDate === dateStr
       })

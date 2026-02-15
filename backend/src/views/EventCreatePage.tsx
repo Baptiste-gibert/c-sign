@@ -1,8 +1,9 @@
-import { useNavigate } from '@/lib/navigation'
-import { useTranslation } from 'react-i18next'
-import { useCreateEvent } from '@/hooks/use-events'
-import { EventForm } from '@/components/EventForm'
 import { ChevronLeft } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+
+import { EventForm } from '@/components/EventForm'
+import { useCreateEvent } from '@/hooks/use-events'
+import { useNavigate } from '@/lib/navigation'
 import type { EventFormData } from '@/lib/schemas'
 
 export function EventCreatePage() {

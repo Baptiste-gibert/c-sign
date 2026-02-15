@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
-import config from '@/payload.config'
+
 import { generateSigningToken } from '@/lib/security/tokens'
+import config from '@/payload.config'
 
 /**
  * POST /api/events/[id]/regenerate-token

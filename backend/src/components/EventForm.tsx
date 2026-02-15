@@ -1,12 +1,14 @@
-import { useState, useMemo } from 'react'
-import { useForm, FormProvider, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMemo, useState } from 'react'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { createEventSchema, type EventFormData } from '@/lib/schemas'
-import { useAuth } from '@/hooks/use-auth'
+
+import { type AttendanceDay, DaySessionEditor } from '@/components/DaySessionEditor'
+import { ThemeSelector } from '@/components/ThemeSelector'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
+import { SectionStep } from '@/components/ui/section-step'
 import {
   Select,
   SelectContent,
@@ -14,12 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SectionStep } from '@/components/ui/section-step'
-import { DaySessionEditor, type AttendanceDay } from '@/components/DaySessionEditor'
-import { ThemeSelector } from '@/components/ThemeSelector'
+import { useAuth } from '@/hooks/use-auth'
+import { createEventSchema, type EventFormData } from '@/lib/schemas'
 
 interface EventFormProps {
-  onSubmit: (data: any) => void
+  onSubmit: (data: EventFormData) => void
   isSubmitting?: boolean
 }
 
@@ -80,17 +81,10 @@ export function EventForm({ onSubmit, isSubmitting = false }: EventFormProps) {
       date: new Date(d.date + 'T12:00:00').toISOString(),
     }))
     onSubmit({
-      title: formData.title,
-      location: formData.location,
-      organizerName: formData.organizerName,
-      organizerEmail: formData.organizerEmail,
-      expenseType: formData.expenseType,
-      cnovDeclarationNumber: formData.cnovDeclarationNumber,
-      theme: formData.theme,
+      ...formData,
       selectedDates,
       daySessionConfig: formData.days,
-      qrGranularity: formData.qrGranularity,
-    })
+    } as EventFormData)
   }
 
   return (

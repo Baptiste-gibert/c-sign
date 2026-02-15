@@ -1,5 +1,6 @@
-import { z } from 'zod'
 import type { CollectionBeforeChangeHook } from 'payload'
+import { z } from 'zod'
+
 import type { User } from '../../payload-types'
 
 /**

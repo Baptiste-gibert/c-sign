@@ -1,7 +1,7 @@
+import { Search } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search } from 'lucide-react'
-import { useSimvSearch, type SimvParticipant } from '@/hooks/use-participants'
+
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -12,6 +12,7 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { type SimvParticipant, useSimvSearch } from '@/hooks/use-participants'
 
 interface ParticipantSearchProps {
   onSelect: (participant: SimvParticipant) => void

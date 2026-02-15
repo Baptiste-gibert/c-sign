@@ -1,7 +1,9 @@
-import React from 'react'
-import type { Metadata } from 'next'
-import { Providers } from '@/components/Providers'
 import './globals.css'
+
+import type { Metadata } from 'next'
+import React from 'react'
+
+import { Providers } from '@/components/Providers'
 
 export const metadata: Metadata = {
   title: 'c-sign - Feuille de Presence Digitale',

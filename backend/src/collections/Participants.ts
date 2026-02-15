@@ -1,7 +1,8 @@
-import type { CollectionConfig, CollectionBeforeChangeHook } from 'payload'
-import { sanitizeParticipantInput } from '@/lib/security/sanitize'
+import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+
 import { verifyTurnstileToken } from '@/lib/security/captcha'
 import { checkRateLimit } from '@/lib/security/rateLimit'
+import { sanitizeParticipantInput } from '@/lib/security/sanitize'
 
 /**
  * Server-side CAPTCHA verification for participant creation.

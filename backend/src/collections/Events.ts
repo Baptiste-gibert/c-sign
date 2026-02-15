@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin } from '@/access/isAdmin'
+
 import { organizerScoped, organizerScopedRead } from '@/access/organizerScoped'
 import { afterEventChange } from '@/hooks/events/afterChange'
 import { afterFinalize } from '@/hooks/events/afterFinalize'
@@ -198,7 +198,7 @@ export const Events: CollectionConfig = {
         return data
       },
       // Validate status transitions
-      async ({ data, req, operation, originalDoc }) => {
+      async ({ data, operation, originalDoc }) => {
         // Only validate transitions on update when status is changing
         if (
           operation === 'update' &&

@@ -1,39 +1,35 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useParams, useNavigate } from '@/lib/navigation'
-import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
-import { fr, enUS } from 'date-fns/locale'
-import { useEvent, useUpdateEvent, useRegenerateToken, type PayloadEvent } from '@/hooks/use-events'
-import { useDownloadExport } from '@/hooks/use-export'
-import { useAttendanceDashboard } from '@/hooks/use-attendance'
+import { enUS, fr } from 'date-fns/locale'
 import {
-  useAddParticipant,
-  useRemoveParticipant,
-  useAddWalkIn,
-  type SimvParticipant,
-  type Participant,
-} from '@/hooks/use-participants'
+  AlertCircle,
+  ChevronLeft,
+  ClipboardList,
+  Download,
+  FileSpreadsheet,
+  Loader2,
+  Palette,
+  Pen,
+  Pencil,
+  Printer,
+  QrCode,
+  RefreshCw,
+  Search,
+  Settings,
+  UserPlus,
+  Users,
+} from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { AttendanceDashboard } from '@/components/AttendanceDashboard'
 import { ParticipantSearch } from '@/components/ParticipantSearch'
 import { ParticipantTable } from '@/components/ParticipantTable'
-import { AttendanceDashboard } from '@/components/AttendanceDashboard'
 import { StatusActionButton } from '@/components/StatusActionButton'
 import { ThemeSelector } from '@/components/ThemeSelector'
-import { BUILT_IN_THEMES } from '@/config/themes'
-import { statusContext, type EventStatus } from '@/config/status'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Dialog,
   DialogContent,
@@ -41,25 +37,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
-  Loader2,
-  AlertCircle,
-  ChevronLeft,
-  UserPlus,
-  Download,
-  Pencil,
-  Users,
-  Pen,
-  QrCode,
-  Printer,
-  Settings,
-  ClipboardList,
-  Palette,
-  FileSpreadsheet,
-  Search,
-  RefreshCw,
-} from 'lucide-react'
-import { QRCodeSVG } from 'qrcode.react'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { type EventStatus, statusContext } from '@/config/status'
+import { BUILT_IN_THEMES } from '@/config/themes'
+import { useAttendanceDashboard } from '@/hooks/use-attendance'
+import { useEvent, useRegenerateToken, useUpdateEvent } from '@/hooks/use-events'
+import { useDownloadExport } from '@/hooks/use-export'
+import {
+  type Participant,
+  type SimvParticipant,
+  useAddParticipant,
+  useAddWalkIn,
+  useRemoveParticipant,
+} from '@/hooks/use-participants'
+import { useNavigate, useParams } from '@/lib/navigation'
 
 const BENEFICIARY_TYPE_KEYS = [
   'asv',
@@ -193,7 +194,8 @@ export function EventDetailPage() {
   }
 
   const handleDownload = () => {
-    downloadMutation.mutate(id!)
+    if (!id) return
+    downloadMutation.mutate(id)
   }
 
   const handleSaveCnov = () => {
@@ -217,8 +219,9 @@ export function EventDetailPage() {
   }
 
   const handleRegenerateToken = () => {
+    if (!id) return
     if (window.confirm(t('organizer:eventDetail.regenerateLinkConfirm'))) {
-      regenerateTokenMutation.mutate(id!)
+      regenerateTokenMutation.mutate(id)
     }
   }
 
@@ -256,9 +259,13 @@ export function EventDetailPage() {
     })
   }
 
-  const participants: Participant[] = (event.participants || [])
-    .map((p: any) => {
-      if (typeof p === 'object') return p
+  const participants: Participant[] = (
+    (event.participants || []) as Array<
+      string | { id: string; lastName: string; firstName: string }
+    >
+  )
+    .map((p) => {
+      if (typeof p === 'object') return p as Participant
       return { id: p } as Participant
     })
     .filter((p: Participant) => p.lastName)
@@ -306,9 +313,6 @@ export function EventDetailPage() {
   // QR count for display
   const dayCount = attendanceData?.attendanceDays.length || event.selectedDates?.length || 0
   const qrCount = qrMode === 'event' ? 1 : qrMode === 'day' ? dayCount : globalMetrics.totalSessions
-  const qrLabel = t(
-    `organizer:eventDetail.${qrMode === 'event' ? 'actionOpen' : qrMode === 'day' ? 'tabAttendance' : 'sessions'}`,
-  )
 
   return (
     <div className="space-y-4">
@@ -370,7 +374,9 @@ export function EventDetailPage() {
             <>
               <span>
                 {event.selectedDates
-                  .map((d: any) => format(new Date(d.date), 'd MMM yyyy', { locale }))
+                  .map((d: { id: string; date: string }) =>
+                    format(new Date(d.date), 'd MMM yyyy', { locale }),
+                  )
                   .join(', ')}
               </span>
               <span>·</span>

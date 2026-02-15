@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
 import { getPayload } from 'payload'
-import config from '@/payload.config'
+
 import { generateEventXLSX } from '@/lib/export/generateXLSX'
+import config from '@/payload.config'
 
 /**
  * Manual XLSX download endpoint for finalized events
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const filename = `feuille-presence-${titleSlug}-${dateStr}.xlsx`
 
     // Return XLSX as download
-    return new Response(xlsxBuffer as any, {
+    return new Response(xlsxBuffer as unknown as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -14,7 +14,9 @@ export const afterEventRead: CollectionAfterReadHook = async ({ doc, req }) => {
     }
 
     // Get attendance day IDs (could be objects or strings depending on depth)
-    const dayIds = attendanceDays.map((d: any) => (typeof d === 'object' ? d.id : d))
+    const dayIds = attendanceDays.map((d: string | { id: string }) =>
+      typeof d === 'object' ? d.id : d,
+    )
 
     // Find all sessions for these attendance days
     const sessions = await req.payload.find({

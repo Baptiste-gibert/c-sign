@@ -1,5 +1,6 @@
 // Bypass Payload's loadEnv issue with tsx by importing config directly
 import { getPayload } from 'payload'
+
 import { seed } from './index'
 
 const run = async () => {

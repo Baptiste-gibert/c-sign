@@ -1,6 +1,7 @@
-import type { CollectionAfterChangeHook } from 'payload'
-import { generateEventXLSX } from '@/lib/export/generateXLSX'
+import type { CollectionAfterChangeHook, PayloadRequest } from 'payload'
+
 import { buildFinalizeEmailTemplate } from '@/lib/email/templates'
+import { generateEventXLSX } from '@/lib/export/generateXLSX'
 
 /**
  * Hook that triggers XLSX export and email delivery when event is finalized
@@ -29,8 +30,15 @@ export const afterFinalize: CollectionAfterChangeHook = async ({
  * Generate XLSX and send email with attachment
  */
 async function generateAndEmailExport(
-  req: any,
-  doc: any,
+  req: PayloadRequest,
+  doc: {
+    id: string
+    title: string
+    organizerEmail: string
+    organizerName: string
+    location: string
+    expenseType: string
+  },
   isRefinalization: boolean,
 ): Promise<void> {
   console.log(`${isRefinalization ? 'Re-finalizing' : 'Finalizing'} event ${doc.id} (${doc.title})`)

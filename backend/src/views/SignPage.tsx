@@ -1,16 +1,17 @@
-import { useParams, useNavigate } from '@/lib/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { fetchEventByToken, fetchSessionsByDay } from '@/lib/api'
-import { useSignatureSubmission } from '@/hooks/use-signature-submission'
+
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { ParticipantForm } from '@/components/ParticipantForm'
-import type { ParticipantFormData } from '@/lib/schemas'
+import { PublicPageLayout } from '@/components/PublicPageLayout'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { ThemeProvider } from '@/contexts/ThemeContext'
-import { PublicPageLayout } from '@/components/PublicPageLayout'
+import { useSignatureSubmission } from '@/hooks/use-signature-submission'
+import { fetchEventByToken, fetchSessionsByDay } from '@/lib/api'
+import { useNavigate, useParams } from '@/lib/navigation'
+import type { ParticipantFormData } from '@/lib/schemas'
 import { getFingerprint } from '@/lib/security/fingerprint'
 
 interface Session {
@@ -142,7 +143,9 @@ export function SignPage() {
   useEffect(() => {
     if (showCaptcha) {
       // Define global callback for Turnstile success
-      ;(window as any).onTurnstileSuccess = (token: string) => {
+      ;(window as { onTurnstileSuccess?: (token: string) => void }).onTurnstileSuccess = (
+        token: string,
+      ) => {
         setCaptchaToken(token)
       }
 
@@ -156,7 +159,7 @@ export function SignPage() {
     }
 
     return () => {
-      delete (window as any).onTurnstileSuccess
+      delete (window as { onTurnstileSuccess?: (token: string) => void }).onTurnstileSuccess
     }
   }, [showCaptcha])
 

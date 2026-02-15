@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { getPayload } from 'payload'
+
 import config from '@/payload.config'
 
 /**
@@ -28,7 +29,24 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
     'http://localhost:3000'
 
-  const debug: any = {
+  const debug: {
+    serverUrl: string
+    blobBaseUrl: string
+    env: Record<string, string>
+    signatures: Array<{
+      participantEmail: string
+      imageField: string
+      imageUrl?: string
+      imageFilename?: string
+      oldResolvedUrl?: string
+      newResolvedUrl?: string
+      fetchStatus?: number
+      fetchOk?: boolean
+      fetchContentType?: string | null
+      fetchContentLength?: string | null
+      fetchError?: string
+    }>
+  } = {
     serverUrl,
     blobBaseUrl: blobBaseUrl || '(not available)',
     env: {
@@ -72,7 +90,19 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       for (const sig of sigs.docs) {
         const participant = sig.participant
         const image = sig.image
-        const entry: any = {
+        const entry: {
+          participantEmail: string
+          imageField: string
+          imageUrl?: string
+          imageFilename?: string
+          oldResolvedUrl?: string
+          newResolvedUrl?: string
+          fetchStatus?: number
+          fetchOk?: boolean
+          fetchContentType?: string | null
+          fetchContentLength?: string | null
+          fetchError?: string
+        } = {
           participantEmail: typeof participant === 'object' ? participant.email : participant,
           imageField:
             image === null
@@ -106,8 +136,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
             entry.fetchOk = res.ok
             entry.fetchContentType = res.headers.get('content-type')
             entry.fetchContentLength = res.headers.get('content-length')
-          } catch (err: any) {
-            entry.fetchError = err.message
+          } catch (err: unknown) {
+            entry.fetchError = err instanceof Error ? err.message : 'Unknown error'
           }
         }
 

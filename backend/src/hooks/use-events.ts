@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 import { apiFetch } from '@/lib/api-fetch'
 
 export interface PayloadEvent {
@@ -74,7 +75,7 @@ export function useCreateEvent(options?: { onSuccess?: (event: PayloadEvent) => 
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (eventData: any) => {
+    mutationFn: async (eventData: Partial<PayloadEvent>) => {
       const res = await apiFetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,7 +95,7 @@ export function useUpdateEvent(id: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (eventData: any) => {
+    mutationFn: async (eventData: Partial<PayloadEvent>) => {
       const res = await apiFetch(`/api/events/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

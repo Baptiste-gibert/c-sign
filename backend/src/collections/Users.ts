@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+
 import { isAdmin } from '../access/isAdmin'
 import { isAdminOrSelf } from '../access/isAdminOrSelf'
 import { validatePassword } from '../lib/security/validators'

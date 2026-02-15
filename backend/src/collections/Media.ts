@@ -1,6 +1,6 @@
+import { fileTypeFromBuffer } from 'file-type'
 import type { CollectionConfig } from 'payload'
 import type { CollectionBeforeChangeHook } from 'payload'
-import { fileTypeFromBuffer } from 'file-type'
 import sharp from 'sharp'
 
 /**
@@ -36,7 +36,7 @@ const validateAndSanitizeUpload: CollectionBeforeChangeHook = async ({ data, req
 
     // Replace original file data with sanitized version
     req.file.data = reEncoded
-  } catch (error) {
+  } catch {
     throw new Error('Fichier image invalide ou corrompu')
   }
 

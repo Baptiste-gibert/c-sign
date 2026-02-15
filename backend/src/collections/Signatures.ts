@@ -1,4 +1,5 @@
-import type { CollectionConfig, CollectionBeforeChangeHook } from 'payload'
+import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+
 import { isAdmin } from '@/access/isAdmin'
 import { verifyTurnstileToken } from '@/lib/security/captcha'
 import { checkRateLimit } from '@/lib/security/rateLimit'

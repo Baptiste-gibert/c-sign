@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query'
-import { ApiError } from '@/lib/api-fetch'
 import '@/i18n'
+
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useState } from 'react'
+
+import { ApiError } from '@/lib/api-fetch'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => {

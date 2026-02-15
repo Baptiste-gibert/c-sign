@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/use-auth'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
+import { useAuth } from '@/hooks/use-auth'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()

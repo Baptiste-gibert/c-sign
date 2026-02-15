@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo } from 'react'
+
 import {
-  generateThemeWithMode,
   BUILT_IN_THEMES,
   DEFAULT_THEME_ID,
+  generateThemeWithMode,
   type ThemeDefinition,
   type ThemeMode,
 } from '@/config/themes'

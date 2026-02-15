@@ -3,14 +3,15 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  useReactTable,
   type SortingState,
+  useReactTable,
 } from '@tanstack/react-table'
+import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -193,7 +194,10 @@ export function ParticipantTable({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={(header.column.columnDef.meta as any)?.className}
+                    className={
+                      (header.column.columnDef.meta as { className?: string } | undefined)
+                        ?.className
+                    }
                   >
                     {header.isPlaceholder
                       ? null
@@ -209,7 +213,9 @@ export function ParticipantTable({
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className={(cell.column.columnDef.meta as any)?.className}
+                    className={
+                      (cell.column.columnDef.meta as { className?: string } | undefined)?.className
+                    }
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
