@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@edge-csrf/nextjs": "^2.5.2",
+    "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@fontsource/inter": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-postgres": "^3.0.0",
