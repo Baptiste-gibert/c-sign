@@ -20,6 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Advanced Features** - Event history, reopening, walk-ins, CNOV metadata
 - [ ] **Phase 7: UI Design & Style Guide Application** - Dark-mode themed, per-event color customization (96% complete)
 - [x] **Phase 8: Security & Access** - Auth hardening, signing tokens, input sanitization, rate limiting, CSRF
+- [ ] **Phase 9: Code Quality** - ESLint strict config, Prettier, dependency audit, pre-commit hooks
 
 ## Phase Details
 
@@ -136,7 +137,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -198,3 +199,22 @@ Plans:
 - [ ] 08-05-PLAN.md — Signing tokens frontend: URL migration to /sign/[token], organizer UI updates, regeneration
 - [ ] 08-06-PLAN.md — Rate limiting and CAPTCHA: device fingerprinting, Turnstile integration, abuse detection
 - [ ] 08-07-PLAN.md — [GAP CLOSURE] Server-side CAPTCHA verification in Signatures and Participants collection hooks
+
+### Phase 9: Code Quality
+
+**Goal:** Automated code quality tooling (ESLint strict, Prettier, depcheck) with strict enforcement and zero violations across the entire codebase, plus pre-commit hooks for continuous enforcement.
+**Depends on:** Phase 8
+**Plans:** 3 plans
+
+**Success Criteria** (what must be TRUE):
+  1. ESLint 9 flat config with typescript-eslint/strict produces zero errors
+  2. Prettier formats all files with zero violations
+  3. TypeScript compiles clean with strict mode
+  4. No eslint-disable comments exist in the codebase
+  5. All unused dependencies removed from package.json
+  6. Pre-commit hook enforces linting and formatting on every commit
+
+Plans:
+- [ ] 09-01-PLAN.md — Tooling setup: install deps, ESLint 9 flat config, Prettier config, npm scripts, format codebase
+- [ ] 09-02-PLAN.md — Fix all ESLint violations: auto-fix + manual fixes for 26 `any` types and remaining errors
+- [ ] 09-03-PLAN.md — Dependency audit with depcheck + husky/lint-staged pre-commit hooks
