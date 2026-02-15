@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 8 of 8 (Security & Access)
-Plan: 4 of 6 in current phase
+Plan: 5 of 6 in current phase
 Status: In Progress — executing phase 8
-Last activity: 2026-02-15 — Completed 08-04 (Signing Tokens)
+Last activity: 2026-02-15 — Completed 08-05 (Frontend Token Migration)
 
-Progress: [▓▓▓▓▓▓▓▓▓▓░] 94%
+Progress: [▓▓▓▓▓▓▓▓▓▓░] 96%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
+- Total plans completed: 26
 - Average duration: 5 min
-- Total execution time: 12.5 hours
+- Total execution time: 12.6 hours
 
 **By Phase:**
 
@@ -34,11 +34,11 @@ Progress: [▓▓▓▓▓▓▓▓▓▓░] 94%
 | 05    | 3     | 29m    | 10m      |
 | 06    | 3     | 6m     | 2m       |
 | 07    | 3     | 6m     | 2m       |
-| 08    | 4     | 19m    | 5m       |
+| 08    | 5     | 24m    | 5m       |
 
 **Recent Trend:**
-- Last 5 plans: 07-03 (1m), 08-01 (3m), 08-02 (5m), 08-03 (5m), 08-04 (6m)
-- Trend: Phase 8 Security & Access in progress; signing tokens prevent URL enumeration attacks
+- Last 5 plans: 08-01 (3m), 08-02 (5m), 08-03 (5m), 08-04 (6m), 08-05 (5m)
+- Trend: Phase 8 Security & Access in progress; token-based URLs eliminate enumeration attack vector
 
 *Updated after each plan completion*
 | Phase 07 P03 | 71 | 2 tasks | 7 files |
@@ -47,6 +47,8 @@ Progress: [▓▓▓▓▓▓▓▓▓▓░] 94%
 | Phase 08 P02 | 5 | 2 tasks | 4 files |
 | Phase 08 P03 | 5 | 2 tasks | 6 files |
 | Phase 08 P04 | 6 | 2 tasks | 4 files |
+| Phase 08 P05 | 5 | 2 tasks | 11 files |
+| Phase 08 P05 | 5 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -128,10 +130,12 @@ Recent decisions affecting current work:
 - 08-04: Dedicated API route for token regeneration (/api/events/[id]/regenerate-token) provides explicit action semantics
 - 08-04: QR code endpoint supports both eventId (new) and dayId (legacy) for backward compatibility during migration
 - 08-04: New URL format is /sign/{token} with optional ?day={dayId} query param for existing signing page compatibility
+- 08-05: URL format /sign/{token}?day={dayId} keeps token primary, dayId as query param for backward compatibility
 - 08-02: Magic byte validation using file-type package prevents MIME type spoofing
 - 08-02: Sharp re-encoding to PNG with compressionLevel 9 destroys polyglot payloads
 - 08-02: Removed webp from allowed MIME types - PNG/JPEG only per security requirements
 - [Phase 08]: Double-submit CSRF cookie pattern used instead of @edge-csrf/nextjs library (deprecated package)
+- [Phase 08-05]: URL format /sign/{token}?day={dayId} keeps token primary, dayId as query param for backward compatibility
 
 ### Roadmap Evolution
 
@@ -149,6 +153,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-15T13:50:37Z
-Stopped at: Completed 08-04-PLAN.md (Signing Tokens)
+Last session: 2026-02-15T13:58:51Z
+Stopped at: Completed 08-05-PLAN.md (Frontend Token Migration)
 Resume file: None
