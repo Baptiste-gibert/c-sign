@@ -1,0 +1,31 @@
+{
+  "ignores": [
+    "@payloadcms/*",
+    "@types/*",
+    "sharp",
+    "cross-env",
+    "tsx",
+    "graphql",
+    "eslint",
+    "typescript",
+    "eslint-config-next",
+    "eslint-config-prettier",
+    "eslint-plugin-simple-import-sort",
+    "typescript-eslint",
+    "@eslint/js",
+    "husky",
+    "lint-staged",
+    "depcheck",
+    "@tailwindcss/postcss",
+    "@fontsource/inter",
+    "tailwindcss",
+    "prettier-plugin-tailwindcss",
+    "file-type"
+  ],
+  "ignore-patterns": [
+    "dist",
+    "build",
+    ".next",
+    "node_modules"
+  ]
+}
