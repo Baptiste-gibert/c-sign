@@ -172,7 +172,7 @@ Plans:
 
 **Goal:** Application is hardened for public deployment with defense-in-depth security: auth lockout, unguessable signing URLs, input sanitization, device-based rate limiting, CSRF protection, and production-safe configuration.
 **Depends on:** Phase 7
-**Plans:** 6 plans
+**Plans:** 7 plans
 
 **Success Criteria** (what must be TRUE):
   1. Organizer sessions expire after 24 hours with strict cookie security
@@ -195,3 +195,4 @@ Plans:
 - [ ] 08-04-PLAN.md — Signing tokens backend: nanoid generation, Events signingToken field, QR code update
 - [ ] 08-05-PLAN.md — Signing tokens frontend: URL migration to /sign/[token], organizer UI updates, regeneration
 - [ ] 08-06-PLAN.md — Rate limiting and CAPTCHA: device fingerprinting, Turnstile integration, abuse detection
+- [ ] 08-07-PLAN.md — [GAP CLOSURE] Server-side CAPTCHA verification in Signatures and Participants collection hooks
