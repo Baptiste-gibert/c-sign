@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 
 ## Current Position
 
-Phase: 8 of 8 (Security & Access)
-Plan: 7 of 7 in current phase
-Status: Complete — phase 8 finished (including gap closure 08-07)
-Last activity: 2026-02-15 — Completed 08-07 (CAPTCHA Verification Wiring - gap closure)
+Phase: 9 of 9 (Code Quality)
+Plan: 1 of 3 in current phase
+Status: In Progress — phase 9 started
+Last activity: 2026-02-15 — Completed 09-01 (Code Quality Tooling Setup)
 
-Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
+Progress: [▓▓▓▓▓▓▓▓▓▓▓] 97%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 28
+- Total plans completed: 29
 - Average duration: 5 min
 - Total execution time: 12.7 hours
 
@@ -35,10 +35,11 @@ Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
 | 06    | 3     | 6m     | 2m       |
 | 07    | 3     | 6m     | 2m       |
 | 08    | 7     | 29m    | 4m       |
+| 09    | 1     | 4m     | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 08-03 (5m), 08-04 (6m), 08-05 (5m), 08-06 (3m), 08-07 (2m)
-- Trend: Phase 8 complete; all security gaps closed including server-side CAPTCHA enforcement
+- Last 5 plans: 08-04 (6m), 08-05 (5m), 08-06 (3m), 08-07 (2m), 09-01 (4m)
+- Trend: Phase 9 started; code quality tooling foundation established
 
 *Updated after each plan completion*
 | Phase 07 P03 | 71 | 2 tasks | 7 files |
@@ -51,6 +52,7 @@ Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
 | Phase 08 P05 | 5 | 2 tasks | 11 files |
 | Phase 08 P06 | 3 | 2 tasks | 8 files |
 | Phase 08 P07 | 2 | 2 tasks | 2 files |
+| Phase 09 P01 | 4 | 2 tasks | 73 files |
 
 ## Accumulated Context
 
@@ -143,11 +145,17 @@ Recent decisions affecting current work:
 - [Phase 08-06]: Turnstile CAPTCHA in managed mode (invisible by default, interactive when suspicious)
 - [Phase 08-07]: CAPTCHA token optional in hooks: if present must be valid, if absent rate limit re-check determines rejection
 - [Phase 08-07]: Authenticated users bypass CAPTCHA in Participants (organizers creating via dashboard not challenged)
+- [Phase 09-01]: @eslint/js version 9 (not 10) for ESLint 9.x compatibility
+- [Phase 09-01]: ESLint 9 flat config pattern with tseslint.config() helper
+- [Phase 09-01]: Prettier placed last in config to disable conflicting formatting rules
+- [Phase 09-01]: Tailwind plugin requires tailwindStylesheet path to globals.css in (frontend) route group
+- [Phase 09-01]: Format entire codebase upfront (Plan 01) before fixing lint errors (Plan 02)
 
 ### Roadmap Evolution
 
 - Phase 7 added: UI Design & Style Guide Application
 - Phase 8 added: Security & Access
+- Phase 9 added: Code Quality
 
 ### Pending Todos
 
@@ -160,6 +168,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-15T14:25:37Z
-Stopped at: Completed 08-07-PLAN.md (CAPTCHA Verification Wiring - gap closure)
+Last session: 2026-02-15T16:15:32Z
+Stopped at: Completed 09-01-PLAN.md (Code Quality Tooling Setup)
 Resume file: None
