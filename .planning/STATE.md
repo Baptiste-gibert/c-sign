@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 8 of 8 (Security & Access)
-Plan: 0 of 6 in current phase
-Status: Planned — ready for execution
-Last activity: 2026-02-15 — Phase 8 planned (6 plans, 3 waves)
+Plan: 1 of 6 in current phase
+Status: In Progress — executing phase 8
+Last activity: 2026-02-15 — Completed 08-01 (Auth & Password Hardening)
 
-Progress: [▓▓▓▓▓▓▓▓▓▓░] 92%
+Progress: [▓▓▓▓▓▓▓▓▓▓░] 93%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 22
+- Total plans completed: 23
 - Average duration: 5 min
-- Total execution time: 12.2 hours
+- Total execution time: 12.3 hours
 
 **By Phase:**
 
@@ -34,14 +34,16 @@ Progress: [▓▓▓▓▓▓▓▓▓▓░] 92%
 | 05    | 3     | 29m    | 10m      |
 | 06    | 3     | 6m     | 2m       |
 | 07    | 3     | 6m     | 2m       |
+| 08    | 1     | 3m     | 3m       |
 
 **Recent Trend:**
-- Last 5 plans: 06-02 (3m), 06-03 (2m), 07-01 (2m), 07-02 (3m), 07-03 (1m)
-- Trend: Phase 7 nearing completion; theme system fully integrated
+- Last 5 plans: 06-03 (2m), 07-01 (2m), 07-02 (3m), 07-03 (1m), 08-01 (3m)
+- Trend: Phase 8 Security & Access in progress; auth hardening complete
 
 *Updated after each plan completion*
 | Phase 07 P03 | 71 | 2 tasks | 7 files |
 | Phase 07 P02 | 180 | 2 tasks | 5 files |
+| Phase 08 P01 | 209 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -110,6 +112,12 @@ Recent decisions affecting current work:
 - 06-03: CNOV field is optional string in createEventSchema — no validation rules needed
 - 06-03: CNOV inline edit uses state sync via useEffect — ensures UI reflects server state after updates
 - 06-03: CNOV edit controls hidden when isLocked — maintains finalized event immutability for non-reopened events
+- 08-01: Auth sessions expire after 24 hours (tokenExpiration: 86400) requiring re-login
+- 08-01: Account lockout after 5 failed login attempts with indefinite lock (lockTime: 0, admin-only unlock)
+- 08-01: Secure cookies conditional on NODE_ENV (HTTPS in production, HTTP allowed in dev)
+- 08-01: Admin panel access restricted to admin role only (organizers use frontend exclusively)
+- 08-01: Password policy enforced via beforeChange hook (8+ chars, mixed case, digit requirement)
+- 08-01: Password field accessed via type casting in validators (not exposed in generated Payload types)
 
 ### Roadmap Evolution
 
@@ -127,6 +135,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-14T13:09:09Z
-Stopped at: Completed 07-03-PLAN.md (Organizer Theme Selection)
+Last session: 2026-02-15T13:44:36Z
+Stopped at: Completed 08-01-PLAN.md (Authentication & Password Hardening)
 Resume file: None
