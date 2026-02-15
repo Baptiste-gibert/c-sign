@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 8 of 8 (Security & Access)
-Plan: 6 of 6 in current phase
-Status: Complete — phase 8 finished
-Last activity: 2026-02-15 — Completed 08-06 (Rate Limiting & Bot Protection)
+Plan: 7 of 7 in current phase
+Status: Complete — phase 8 finished (including gap closure 08-07)
+Last activity: 2026-02-15 — Completed 08-07 (CAPTCHA Verification Wiring - gap closure)
 
 Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27
+- Total plans completed: 28
 - Average duration: 5 min
 - Total execution time: 12.7 hours
 
@@ -34,11 +34,11 @@ Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
 | 05    | 3     | 29m    | 10m      |
 | 06    | 3     | 6m     | 2m       |
 | 07    | 3     | 6m     | 2m       |
-| 08    | 6     | 27m    | 5m       |
+| 08    | 7     | 29m    | 4m       |
 
 **Recent Trend:**
-- Last 5 plans: 08-02 (5m), 08-03 (5m), 08-04 (6m), 08-05 (5m), 08-06 (3m)
-- Trend: Phase 8 complete; comprehensive security hardening with rate limiting and bot protection
+- Last 5 plans: 08-03 (5m), 08-04 (6m), 08-05 (5m), 08-06 (3m), 08-07 (2m)
+- Trend: Phase 8 complete; all security gaps closed including server-side CAPTCHA enforcement
 
 *Updated after each plan completion*
 | Phase 07 P03 | 71 | 2 tasks | 7 files |
@@ -50,6 +50,7 @@ Progress: [▓▓▓▓▓▓▓▓▓▓▓] 100%
 | Phase 08 P05 | 5 | 2 tasks | 11 files |
 | Phase 08 P05 | 5 | 2 tasks | 11 files |
 | Phase 08 P06 | 3 | 2 tasks | 8 files |
+| Phase 08 P07 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,8 @@ Recent decisions affecting current work:
 - [Phase 08-06]: Device-based rate limiting (not IP-based) prevents blocking legitimate users on shared WiFi
 - [Phase 08-06]: Two-tier rate limit: 10 req/min triggers CAPTCHA, 20 req/min hard blocks
 - [Phase 08-06]: Turnstile CAPTCHA in managed mode (invisible by default, interactive when suspicious)
+- [Phase 08-07]: CAPTCHA token optional in hooks: if present must be valid, if absent rate limit re-check determines rejection
+- [Phase 08-07]: Authenticated users bypass CAPTCHA in Participants (organizers creating via dashboard not challenged)
 
 ### Roadmap Evolution
 
@@ -157,6 +160,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-15T14:05:18Z
-Stopped at: Completed 08-06-PLAN.md (Rate Limiting & Bot Protection)
+Last session: 2026-02-15T14:25:37Z
+Stopped at: Completed 08-07-PLAN.md (CAPTCHA Verification Wiring - gap closure)
 Resume file: None
