@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sanitizeParticipantInput } from '@/lib/security/sanitize'
 
 export const Participants: CollectionConfig = {
   slug: 'participants',
@@ -11,6 +12,9 @@ export const Participants: CollectionConfig = {
     read: () => true, // Public: needed for duplicate checking
     update: ({ req: { user } }) => !!user, // Only authenticated users
     delete: ({ req: { user } }) => !!user, // Only authenticated users
+  },
+  hooks: {
+    beforeChange: [sanitizeParticipantInput],
   },
   fields: [
     {
