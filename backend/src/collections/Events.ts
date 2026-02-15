@@ -4,6 +4,7 @@ import { organizerScoped, organizerScopedRead } from '@/access/organizerScoped'
 import { afterEventChange } from '@/hooks/events/afterChange'
 import { afterFinalize } from '@/hooks/events/afterFinalize'
 import { afterEventRead } from '@/hooks/events/afterRead'
+import { generateSigningToken } from '@/lib/security/tokens'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -59,6 +60,17 @@ export const Events: CollectionConfig = {
                 { label: 'Finalise', value: 'finalized' },
                 { label: 'Rouvert', value: 'reopened' },
               ],
+            },
+            {
+              name: 'signingToken',
+              type: 'text',
+              unique: true,
+              index: true,
+              label: 'Jeton de signature',
+              admin: {
+                readOnly: true,
+                description: 'Jeton de signature unique pour les URLs publiques (genere automatiquement)',
+              },
             },
             {
               name: 'theme',
@@ -176,6 +188,13 @@ export const Events: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
+      // Generate signing token on creation
+      ({ data, operation }) => {
+        if (operation === 'create' && !data.signingToken) {
+          data.signingToken = generateSigningToken()
+        }
+        return data
+      },
       // Validate status transitions
       async ({ data, req, operation, originalDoc }) => {
         // Only validate transitions on update when status is changing
