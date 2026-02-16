@@ -4,6 +4,8 @@ dist/
 .env.local
 *.log
 media/
+.DS_Store
+*.tsbuildinfo
 
 # QA reports (screenshots, run artifacts)
 qa-reports/runs/
